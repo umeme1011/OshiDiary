@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Y6W-OH-hqX">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Menu View Controller-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController id="Y6W-OH-hqX" customClass="MenuViewController" customModule="OshiDiary" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7Pf-hA-M8s">
+                                <rect key="frame" x="0.0" y="0.0" width="300" height="852"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="kuma_default" translatesAutoresizingMaskIntoConstraints="NO" id="kgy-TX-GEO">
+                                        <rect key="frame" x="34" y="67" width="60" height="60"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="60" id="ICI-ba-exz"/>
+                                            <constraint firstAttribute="width" constant="60" id="nqx-ug-HjY"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="30"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Jz-D9-uMe">
+                                        <rect key="frame" x="34" y="67" width="60" height="60"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="60" id="3TG-cB-uIB"/>
+                                            <constraint firstAttribute="width" constant="60" id="q7N-a9-8MC"/>
+                                        </constraints>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="30"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </button>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="9JE-i9-pmT">
+                                        <rect key="frame" x="25" y="173" width="259" height="166"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vxs-K2-l6W">
+                                                <rect key="frame" x="0.0" y="0.0" width="259" height="34"/>
+                                                <subviews>
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="schedule" translatesAutoresizingMaskIntoConstraints="NO" id="5SK-HY-JXV">
+                                                        <rect key="frame" x="0.0" y="0.0" width="45" height="34"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="45" id="Weg-BW-bhX"/>
+                                                        </constraints>
+                                                    </imageView>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HmA-cv-Wcb">
+                                                        <rect key="frame" x="45" y="0.0" width="214" height="34"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="34" id="c9P-Ge-frU"/>
+                                                        </constraints>
+                                                        <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" title="スケジュール">
+                                                            <fontDescription key="titleFontDescription" type="boldSystem" pointSize="18"/>
+                                                        </buttonConfiguration>
+                                                        <connections>
+                                                            <segue destination="DbA-2O-IIZ" kind="presentation" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="VHx-3b-oZG"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PlW-gz-0iI">
+                                                <rect key="frame" x="0.0" y="44" width="259" height="34"/>
+                                                <subviews>
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="diary" translatesAutoresizingMaskIntoConstraints="NO" id="9Qd-8w-GAI">
+                                                        <rect key="frame" x="0.0" y="0.0" width="45" height="34"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="45" id="EvB-VB-gVO"/>
+                                                        </constraints>
+                                                    </imageView>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wUY-g9-F5g">
+                                                        <rect key="frame" x="45" y="0.0" width="214" height="34"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="34" id="yc4-JY-tFJ"/>
+                                                        </constraints>
+                                                        <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" title="日記">
+                                                            <fontDescription key="titleFontDescription" type="boldSystem" pointSize="18"/>
+                                                        </buttonConfiguration>
+                                                        <connections>
+                                                            <segue destination="z3B-XM-c5e" kind="presentation" identifier="toDiaryCalendar" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="m6O-bO-ktG"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4sF-pe-NMn">
+                                                <rect key="frame" x="0.0" y="88" width="259" height="34"/>
+                                                <subviews>
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="human" translatesAutoresizingMaskIntoConstraints="NO" id="2ed-Aa-fZf">
+                                                        <rect key="frame" x="0.0" y="0.0" width="45" height="34"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="45" id="rQQ-hV-Zdd"/>
+                                                        </constraints>
+                                                    </imageView>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vsm-2K-5jK">
+                                                        <rect key="frame" x="45" y="0.0" width="214" height="34"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="34" id="74W-cz-LAV"/>
+                                                        </constraints>
+                                                        <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" title="プロフィール">
+                                                            <fontDescription key="titleFontDescription" type="boldSystem" pointSize="18"/>
+                                                        </buttonConfiguration>
+                                                    </button>
+                                                </subviews>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nAa-sq-LkG">
+                                                <rect key="frame" x="0.0" y="132" width="259" height="34"/>
+                                                <subviews>
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="setting" translatesAutoresizingMaskIntoConstraints="NO" id="uHf-Mg-nun">
+                                                        <rect key="frame" x="0.0" y="0.0" width="45" height="34"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="45" id="oxM-Gv-TJU"/>
+                                                        </constraints>
+                                                    </imageView>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MNG-2L-Kd4">
+                                                        <rect key="frame" x="45" y="0.0" width="214" height="34"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="34" id="rux-HU-HL9"/>
+                                                        </constraints>
+                                                        <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" title="設定">
+                                                            <fontDescription key="titleFontDescription" type="boldSystem" pointSize="18"/>
+                                                        </buttonConfiguration>
+                                                        <connections>
+                                                            <segue destination="3KD-6v-Fmk" kind="presentation" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="49l-QU-bZG"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6hM-Vk-4p6">
+                                        <rect key="frame" x="16" y="776" width="268" height="34"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MJ6-be-ugG">
+                                                <rect key="frame" x="0.0" y="0.0" width="268" height="34"/>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="plain" image="setting"/>
+                                            </button>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="34" id="xxb-EH-LYq"/>
+                                        </constraints>
+                                    </stackView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BTS" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cnU-le-ewH">
+                                        <rect key="frame" x="34" y="135" width="250" height="22"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="22" id="dt6-Bx-krV"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="18"/>
+                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IfE-cU-Jsx">
+                                        <rect key="frame" x="94" y="81" width="50" height="35"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="35" id="TNy-Vr-C3D"/>
+                                            <constraint firstAttribute="width" constant="50" id="eSB-kz-S8D"/>
+                                        </constraints>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="arrow.left.arrow.right" catalog="system"/>
+                                        <connections>
+                                            <segue destination="Xlp-1x-HMa" kind="presentation" id="F4z-9x-PIg"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstItem="6hM-Vk-4p6" firstAttribute="leading" secondItem="7Pf-hA-M8s" secondAttribute="leading" constant="16" id="3E7-fb-r2D"/>
+                                    <constraint firstAttribute="width" constant="300" id="9fl-qZ-LSE"/>
+                                    <constraint firstItem="IfE-cU-Jsx" firstAttribute="top" secondItem="7Pf-hA-M8s" secondAttribute="top" constant="81" id="GD9-F5-afT"/>
+                                    <constraint firstAttribute="trailing" secondItem="6hM-Vk-4p6" secondAttribute="trailing" constant="16" id="IF0-ih-PAP"/>
+                                    <constraint firstItem="cnU-le-ewH" firstAttribute="top" secondItem="kgy-TX-GEO" secondAttribute="bottom" constant="8" id="ISl-UK-4mm"/>
+                                    <constraint firstItem="9JE-i9-pmT" firstAttribute="leading" secondItem="7Pf-hA-M8s" secondAttribute="leading" constant="25" id="TDd-lO-ZCK"/>
+                                    <constraint firstItem="cnU-le-ewH" firstAttribute="leading" secondItem="7Pf-hA-M8s" secondAttribute="leading" constant="34" id="Uhk-Xd-fnp"/>
+                                    <constraint firstItem="4Jz-D9-uMe" firstAttribute="leading" secondItem="7Pf-hA-M8s" secondAttribute="leading" constant="34" id="VAG-88-iqa"/>
+                                    <constraint firstAttribute="bottom" secondItem="6hM-Vk-4p6" secondAttribute="bottom" constant="42" id="VzE-Mr-vA5"/>
+                                    <constraint firstItem="kgy-TX-GEO" firstAttribute="leading" secondItem="7Pf-hA-M8s" secondAttribute="leading" constant="34" id="YPb-hF-6Ww"/>
+                                    <constraint firstItem="kgy-TX-GEO" firstAttribute="top" secondItem="7Pf-hA-M8s" secondAttribute="top" constant="67" id="Zvr-rF-LjV"/>
+                                    <constraint firstAttribute="trailing" secondItem="cnU-le-ewH" secondAttribute="trailing" constant="16" id="aKd-gp-8X3"/>
+                                    <constraint firstItem="IfE-cU-Jsx" firstAttribute="leading" secondItem="kgy-TX-GEO" secondAttribute="trailing" id="b3s-mC-qyD"/>
+                                    <constraint firstItem="4Jz-D9-uMe" firstAttribute="top" secondItem="7Pf-hA-M8s" secondAttribute="top" constant="67" id="cHG-tI-Vdt"/>
+                                    <constraint firstItem="9JE-i9-pmT" firstAttribute="top" secondItem="cnU-le-ewH" secondAttribute="bottom" constant="16" id="idD-cN-GSQ"/>
+                                    <constraint firstAttribute="trailing" secondItem="9JE-i9-pmT" secondAttribute="trailing" constant="16" id="mrA-wA-6Xx"/>
+                                </constraints>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="V2U-pA-g9K" appends="YES" id="O3R-tn-XGN"/>
+                                </connections>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="7Pf-hA-M8s" secondAttribute="bottom" id="Jmg-QI-qta"/>
+                            <constraint firstItem="7Pf-hA-M8s" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="Re4-v4-jeW"/>
+                            <constraint firstItem="7Pf-hA-M8s" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="VGw-yP-UN5"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="baseView" destination="7Pf-hA-M8s" id="pt4-tq-rf1"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <swipeGestureRecognizer direction="left" id="V2U-pA-g9K">
+                    <connections>
+                        <action selector="swipeLeft:" destination="Y6W-OH-hqX" id="EVe-nY-Ks9"/>
+                    </connections>
+                </swipeGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="139.69465648854961" y="3.5211267605633805"/>
+        </scene>
+        <!--OshiList-->
+        <scene sceneID="L7K-wh-LMs">
+            <objects>
+                <viewControllerPlaceholder storyboardName="OshiList" id="Xlp-1x-HMa" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ps8-9q-XNV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="620" y="-188"/>
+        </scene>
+        <!--ScheduleCalendar-->
+        <scene sceneID="djP-Nt-UNd">
+            <objects>
+                <viewControllerPlaceholder storyboardName="ScheduleCalendar" id="DbA-2O-IIZ" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dq2-d8-PRU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="715" y="-99"/>
+        </scene>
+        <!--DiaryCalendar-->
+        <scene sceneID="fHL-5A-knI">
+            <objects>
+                <viewControllerPlaceholder storyboardName="DiaryCalendar" id="z3B-XM-c5e" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="MqZ-qb-v6q" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="650" y="-31"/>
+        </scene>
+        <!--Setting-->
+        <scene sceneID="kwr-vj-dru">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Setting" id="3KD-6v-Fmk" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fmb-EY-JUi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="621" y="101"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="arrow.left.arrow.right" catalog="system" width="120" height="128"/>
+        <image name="diary" width="64" height="64"/>
+        <image name="human" width="64" height="64"/>
+        <image name="kuma_default" width="120" height="120"/>
+        <image name="schedule" width="64" height="64"/>
+        <image name="setting" width="64" height="64"/>
+    </resources>
+</document>
