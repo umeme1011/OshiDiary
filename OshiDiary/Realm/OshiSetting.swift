@@ -7,7 +7,7 @@
 
 import RealmSwift
 
-class Setting: RealmSwift.Object {
+class OshiSetting: RealmSwift.Object {
     @objc dynamic var id: Int = 0
     @objc dynamic var name: String?
     @objc dynamic var imageColorCd: Int = 0

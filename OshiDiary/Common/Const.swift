@@ -16,6 +16,7 @@ class Const {
     class File {
         static let OSHI_DIR_NAME = "oshi_id" // ID付与
         static let DEFAULT_IMAGE_NAME = "kuma_default"
+        static let COMMON_DIR_NAME = "common"
 
         class Setting {
             static let SETTING_DIR_NAME = "setting"
@@ -27,7 +28,8 @@ class Const {
         
         class Realm {
             static let REALM_DIR_NAME = "realm"
-            static let REALM_NAME = "oshi_id"    // ID付与
+            static let OSHI_REALM_NAME = "oshi_id"    // ID付与
+            static let COMMON_REALM_NAME = "common.realm"
         }
 
     }

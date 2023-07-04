@@ -45,7 +45,7 @@
 		C3F598452A4C803000705BE0 /* OshiListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F598442A4C803000705BE0 /* OshiListViewController.swift */; };
 		C3F598472A4D117C00705BE0 /* OshiListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F598462A4D117C00705BE0 /* OshiListTableViewCell.swift */; };
 		C3F598492A4D11B300705BE0 /* OshiListAddTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F598482A4D11B200705BE0 /* OshiListAddTableViewCell.swift */; };
-		C3F5984C2A4D621500705BE0 /* Setting.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F5984B2A4D621500705BE0 /* Setting.swift */; };
+		C3F5984C2A4D621500705BE0 /* OshiSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F5984B2A4D621500705BE0 /* OshiSetting.swift */; };
 		C3F5984F2A4D648300705BE0 /* CommonMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F5984E2A4D648300705BE0 /* CommonMethod.swift */; };
 		C3F598512A4D661300705BE0 /* Const.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F598502A4D661300705BE0 /* Const.swift */; };
 		D082EE23749EC01E8BABF7CA /* Pods_OshiDiary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FFD4F9961AF96132CD3485B /* Pods_OshiDiary.framework */; };
@@ -94,7 +94,7 @@
 		C3F598442A4C803000705BE0 /* OshiListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OshiListViewController.swift; sourceTree = "<group>"; };
 		C3F598462A4D117C00705BE0 /* OshiListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OshiListTableViewCell.swift; sourceTree = "<group>"; };
 		C3F598482A4D11B200705BE0 /* OshiListAddTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OshiListAddTableViewCell.swift; sourceTree = "<group>"; };
-		C3F5984B2A4D621500705BE0 /* Setting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Setting.swift; sourceTree = "<group>"; };
+		C3F5984B2A4D621500705BE0 /* OshiSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OshiSetting.swift; sourceTree = "<group>"; };
 		C3F5984E2A4D648300705BE0 /* CommonMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonMethod.swift; sourceTree = "<group>"; };
 		C3F598502A4D661300705BE0 /* Const.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Const.swift; sourceTree = "<group>"; };
 		DD2B14EE28CB000A69BCA50E /* Pods-OshiDiary.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OshiDiary.release.xcconfig"; path = "Target Support Files/Pods-OshiDiary/Pods-OshiDiary.release.xcconfig"; sourceTree = "<group>"; };
@@ -221,7 +221,7 @@
 		C3F5984A2A4D61E300705BE0 /* Realm */ = {
 			isa = PBXGroup;
 			children = (
-				C3F5984B2A4D621500705BE0 /* Setting.swift */,
+				C3F5984B2A4D621500705BE0 /* OshiSetting.swift */,
 			);
 			path = Realm;
 			sourceTree = "<group>";
@@ -368,7 +368,7 @@
 				C3F5984F2A4D648300705BE0 /* CommonMethod.swift in Sources */,
 				C310CD952A441E040049C510 /* DiaryEditViewController.swift in Sources */,
 				C369D87C2A4376B000DBDE8A /* DiaryCalendarViewController.swift in Sources */,
-				C3F5984C2A4D621500705BE0 /* Setting.swift in Sources */,
+				C3F5984C2A4D621500705BE0 /* OshiSetting.swift in Sources */,
 				C369D8622A42E69D00DBDE8A /* AppDelegate.swift in Sources */,
 				C3F598512A4D661300705BE0 /* Const.swift in Sources */,
 				C369D87A2A42EC7F00DBDE8A /* DiaryCalendarOverViewController.swift in Sources */,

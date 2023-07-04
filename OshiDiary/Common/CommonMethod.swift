@@ -156,7 +156,28 @@ class CommonMethod {
         // パス
         let fileName: String = Const.File.OSHI_DIR_NAME + oshiIdStr
                     + "/" + Const.File.Realm.REALM_DIR_NAME
-                    + "/" + Const.File.Realm.REALM_NAME + oshiIdStr + ".realm"
+                    + "/" + Const.File.Realm.OSHI_REALM_NAME + oshiIdStr + ".realm"
+        let path = getDocPath().appendingPathComponent(fileName)
+        return path
+    }
+    
+    /**
+     共通Realm作成
+     */
+    static func createCommonRealm() -> Realm {
+        return createRealm(path: getCommonRealmPath())
+    }
+    
+    /**
+     共通Realmファイルパス取得
+     */
+    static func getCommonRealmPath() -> URL {
+        // Realm用ディレクトリ作成
+        createDir(name: Const.File.COMMON_DIR_NAME + "/" + Const.File.Realm.REALM_DIR_NAME)
+        // パス
+        let fileName: String = Const.File.COMMON_DIR_NAME
+                            + "/" + Const.File.Realm.REALM_DIR_NAME
+                            + "/" + Const.File.Realm.COMMON_REALM_NAME
         let path = getDocPath().appendingPathComponent(fileName)
         return path
     }

@@ -6,11 +6,16 @@
 //
 
 import UIKit
+import RealmSwift
 
 class OshiListViewController: UIViewController {
     
     @IBOutlet weak var listTV: UITableView!
     @IBOutlet weak var editBtn: UIButton!
+    
+    var myUD: MyUserDefaults!
+    var oshiId: Int!
+    var commonRealm: Realm!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,6 +23,9 @@ class OshiListViewController: UIViewController {
         self.listTV.delegate = self
         self.listTV.dataSource = self
         
+        myUD = MyUserDefaults.init()
+        oshiId = myUD.getOshiId()
+        commonRealm = CommonMethod.createCommonRealm()
     }
 
     /**
@@ -32,6 +40,36 @@ class OshiListViewController: UIViewController {
             self.editBtn.setTitle("完了", for: .normal)
         }
     }
+    
+    /**
+     推し追加ボタン押下
+     */
+    @IBAction func tapOshiAddBtn(_ sender: Any) {
+//        // UDに新しいIDを設定
+//        var id: Int = 1
+//        if let oshiSetting: OshiSetting = commonRealm.objects(OshiSetting.self)
+//            .sorted(byKeyPath: OshiSetting.Types.id.rawValue, ascending: false).first {
+//            id = oshiSetting.id + 1
+//        }
+//        myUD.setOshiId(id: id)
+    }
+    
+    /**
+     値渡し
+     */
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+
+        switch segue.identifier {
+        // 設定画面へ
+        case "toSetting":
+            // 遷移先のVC取得
+            let vc:SettingViewController = segue.destination as? SettingViewController ?? SettingViewController()
+            vc.isNew = true
+        default:
+            return
+        }
+    }
+
 }
 
 extension OshiListViewController: UITableViewDelegate, UITableViewDataSource {

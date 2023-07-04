@@ -113,6 +113,10 @@
                                                     <rect key="frame" x="20" y="12.666666666666664" width="111" height="35"/>
                                                     <state key="normal" title="Button"/>
                                                     <buttonConfiguration key="configuration" style="plain" title="推しを追加"/>
+                                                    <connections>
+                                                        <action selector="tapOshiAddBtn:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="WZr-bQ-JQV"/>
+                                                        <segue destination="dyF-RU-wBg" kind="presentation" identifier="toSetting" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="gf4-dH-NJr"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                             <constraints>
@@ -148,6 +152,14 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="89.312977099236633" y="-2.1126760563380285"/>
+        </scene>
+        <!--Setting-->
+        <scene sceneID="wzC-Ir-ATY">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Setting" id="dyF-RU-wBg" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kXz-7k-6qD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="587" y="-36"/>
         </scene>
     </scenes>
     <resources>
