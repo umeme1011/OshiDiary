@@ -369,6 +369,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="backgroundIV" destination="NyR-de-cY0" id="Fbd-35-ECK"/>
                         <outlet property="listTV" destination="x4J-r9-nCa" id="jPs-Q2-YrQ"/>
                     </connections>
                 </viewController>

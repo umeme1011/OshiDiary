@@ -180,18 +180,18 @@
 		C369D8752A42EB1E00DBDE8A /* Storyboard */ = {
 			isa = PBXGroup;
 			children = (
-				C369D8672A42E69D00DBDE8A /* Main.storyboard */,
-				C369D86C2A42E6A700DBDE8A /* LaunchScreen.storyboard */,
 				C369D8772A42EBCE00DBDE8A /* DiaryCalendar.storyboard */,
-				C310CD8B2A44051E0049C510 /* DiaryList.storyboard */,
 				C310CD922A441DE00049C510 /* DiaryEdit.storyboard */,
+				C310CD8B2A44051E0049C510 /* DiaryList.storyboard */,
 				C310CD9A2A4813470049C510 /* ImageDetail.storyboard */,
+				C369D86C2A42E6A700DBDE8A /* LaunchScreen.storyboard */,
+				C369D8672A42E69D00DBDE8A /* Main.storyboard */,
 				C310CDA02A491D690049C510 /* Menu.storyboard */,
+				C3F598422A4C7F7D00705BE0 /* OshiList.storyboard */,
 				C35B953B2A49DCA9008BB23F /* ScheduleCalendar.storyboard */,
 				C35B95412A4B1D7B008BB23F /* ScheduleEdit.storyboard */,
 				C3F598362A4BFD1C00705BE0 /* ScheduleList.storyboard */,
 				C3F5983C2A4C074C00705BE0 /* Setting.storyboard */,
-				C3F598422A4C7F7D00705BE0 /* OshiList.storyboard */,
 			);
 			path = Storyboard;
 			sourceTree = "<group>";
@@ -199,21 +199,21 @@
 		C369D8762A42EB3900DBDE8A /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				C369D8652A42E69D00DBDE8A /* MainViewController.swift */,
 				C369D8792A42EC7F00DBDE8A /* DiaryCalendarOverViewController.swift */,
 				C369D87B2A4376B000DBDE8A /* DiaryCalendarViewController.swift */,
-				C310CD8D2A44053F0049C510 /* DiaryListViewController.swift */,
-				C310CD8F2A4405A40049C510 /* DiaryListOverViewController.swift */,
 				C310CD942A441E040049C510 /* DiaryEditViewController.swift */,
+				C310CD8F2A4405A40049C510 /* DiaryListOverViewController.swift */,
+				C310CD8D2A44053F0049C510 /* DiaryListViewController.swift */,
 				C310CD9C2A4814050049C510 /* ImageDetailViewController.swift */,
+				C369D8652A42E69D00DBDE8A /* MainViewController.swift */,
 				C310CDA22A491DA00049C510 /* MenuViewController.swift */,
-				C35B953D2A49DCC8008BB23F /* ScheduleCalendarViewController.swift */,
+				C3F598442A4C803000705BE0 /* OshiListViewController.swift */,
 				C35B953F2A4AD24E008BB23F /* ScheduleCalendarOverViewControlle.swift */,
+				C35B953D2A49DCC8008BB23F /* ScheduleCalendarViewController.swift */,
 				C35B95432A4B1D9E008BB23F /* ScheduleEditViewController.swift */,
 				C3F598382A4BFD5F00705BE0 /* ScheduleListOverViewController.swift */,
 				C3F5983A2A4BFD7C00705BE0 /* ScheduleListViewController.swift */,
 				C3F5983E2A4C076C00705BE0 /* SettingViewController.swift */,
-				C3F598442A4C803000705BE0 /* OshiListViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";

@@ -13,6 +13,11 @@ class DiaryCalendarViewController: UIViewController {
     
     @IBOutlet weak var calendar: FSCalendar!
     @IBOutlet weak var listTV: UITableView!
+    @IBOutlet weak var backgroundIV: UIImageView!
+    
+    var backgroundImageArray: [UIImage] = [UIImage]()
+    var myUD: MyUserDefaults!
+    var oshiId: Int!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,6 +26,9 @@ class DiaryCalendarViewController: UIViewController {
         self.calendar.dataSource = self
         self.listTV.delegate = self
         self.listTV.dataSource = self
+        
+        myUD = MyUserDefaults.init()
+        oshiId = myUD.getOshiId()
         
         // calendarの曜日部分を日本語表記に変更
         self.calendar.calendarWeekdayView.weekdayLabels[0].text = "日"
@@ -42,6 +50,9 @@ class DiaryCalendarViewController: UIViewController {
         // calendarの曜日部分の色を変更
         self.calendar.calendarWeekdayView.weekdayLabels[0].textColor = .systemRed
         self.calendar.calendarWeekdayView.weekdayLabels[6].textColor = .systemBlue
+        
+        // ランダムに背景画像を設定
+        backgroundIV.image = CommonMethod.roadBackgroundImage(oshiId: oshiId).randomElement()
     }
 }
 

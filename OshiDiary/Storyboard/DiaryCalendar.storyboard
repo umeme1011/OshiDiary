@@ -346,6 +346,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="backgroundIV" destination="AZN-cj-Vq4" id="qVL-9q-WmX"/>
                         <outlet property="calendar" destination="AME-Iq-Zer" id="uXo-MG-ds2"/>
                         <outlet property="listTV" destination="DyO-qA-eWD" id="YX3-fU-pIW"/>
                     </connections>

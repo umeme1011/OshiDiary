@@ -11,12 +11,24 @@ import FSCalendar
 class DiaryListViewController: UIViewController {
     
     @IBOutlet weak var listTV: UITableView!
+    @IBOutlet weak var backgroundIV: UIImageView!
+    
+    var backgroundImageArray: [UIImage] = [UIImage]()
+    var myUD: MyUserDefaults!
+    var oshiId: Int!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.listTV.delegate = self
         self.listTV.dataSource = self
+        
+        myUD = MyUserDefaults.init()
+        oshiId = myUD.getOshiId()
+        
+        // ランダムに背景画像を設定
+        backgroundIV.image = CommonMethod.roadBackgroundImage(oshiId: oshiId).randomElement()
+
     }
 }
 

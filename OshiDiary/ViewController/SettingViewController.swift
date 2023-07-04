@@ -27,7 +27,7 @@ class SettingViewController: UIViewController {
     var tapImageAddBtn: Bool!
     var imageArray: [UIImage] = [UIImage]()
     var myUD: MyUserDefaults!
-    var oshiId: String!
+    var oshiId: Int!
     var oshiRealm: Realm!
 
     override func viewDidLoad() {
@@ -37,10 +37,10 @@ class SettingViewController: UIViewController {
         imageCV.dataSource = self
         
         myUD = MyUserDefaults.init()
-        oshiId = String(myUD.getOshiId())
+        oshiId = myUD.getOshiId()
         
         // Realm
-        oshiRealm = CommonMethod.createOshiRealm()
+        oshiRealm = CommonMethod.createOshiRealm(oshiId: oshiId)
         
         // イメージカラー設定
         baseView.backgroundColor = Const.Color().getImageColor(cd: myUD.getImageColorCd())
@@ -71,25 +71,29 @@ class SettingViewController: UIViewController {
         }
         
         // アイコン画像読込
-        let iconFileName = Const.File.OSHI_DIR_NAME + oshiId
+        let oshiIdStr: String = String(oshiId)
+        let iconFileName = Const.File.OSHI_DIR_NAME + oshiIdStr
                         + "/" + Const.File.Setting.SETTING_DIR_NAME
                         + "/" + Const.File.Setting.ICON_FILE_NAME
         iconIV.image = CommonMethod.roadImageFile(name: iconFileName, defaultName: Const.File.DEFAULT_IMAGE_NAME)
         
         // 背景画像読込
-        let bacgroundFileName = Const.File.OSHI_DIR_NAME + oshiId
-                            + "/" + Const.File.Setting.SETTING_DIR_NAME
-                            + "/" + Const.File.Setting.BACKGROUND_IMAGE_DIR_NAME
-                            + "/" + Const.File.Setting.BACKGROUND_IMAGE_FILE_NAME
-        var cnt = 1
-        var image: UIImage!
-        while cnt <= Const.Limit.Premium.BACKGROUND_IMAGE_COUNT {
-            if CommonMethod.isFileExists(name: bacgroundFileName + String(cnt) + ".jpg") {
-                image = CommonMethod.roadImageFile(name: bacgroundFileName + String(cnt) + ".jpg", defaultName: "")
-                imageArray.append(image)
-            }
-            cnt += 1
-        }
+//        let bacgroundFileName = Const.File.OSHI_DIR_NAME + oshiIdStr
+//                            + "/" + Const.File.Setting.SETTING_DIR_NAME
+//                            + "/" + Const.File.Setting.BACKGROUND_IMAGE_DIR_NAME
+//                            + "/" + Const.File.Setting.BACKGROUND_IMAGE_FILE_NAME
+//        var cnt = 1
+//        var image: UIImage!
+//        while cnt <= Const.Limit.Premium.BACKGROUND_IMAGE_COUNT {
+//            if CommonMethod.isFileExists(name: bacgroundFileName + String(cnt) + ".jpg") {
+//                image = CommonMethod.roadImageFile(name: bacgroundFileName + String(cnt) + ".jpg", defaultName: "")
+//                imageArray.append(image)
+//            }
+//            cnt += 1
+//        }
+        imageArray = CommonMethod.roadBackgroundImage(oshiId: oshiId)
+        // ランダム表示
+        backgroundIV.image = imageArray.randomElement()
     }
 
     /**
@@ -114,19 +118,20 @@ class SettingViewController: UIViewController {
      保存ボタン押下
      */
     @IBAction func tapSaveBtn(_ sender: Any) {
+        let oshiIdStr: String = String(oshiId)
         
         // 設定用のディレクトリ作成
-        CommonMethod.createDir(name: Const.File.OSHI_DIR_NAME + oshiId
+        CommonMethod.createDir(name: Const.File.OSHI_DIR_NAME + oshiIdStr
                                + "/" + Const.File.Setting.SETTING_DIR_NAME)
         
         // アイコン画像保存
         CommonMethod.saveImageFile(image: iconIV.image!
-                                   , name: Const.File.OSHI_DIR_NAME + oshiId
+                                   , name: Const.File.OSHI_DIR_NAME + oshiIdStr
                                    + "/" + Const.File.Setting.SETTING_DIR_NAME
                                    + "/" + Const.File.Setting.ICON_FILE_NAME)
         
         // 背景画像ディレクトリ削除、作成
-        let dirName = Const.File.OSHI_DIR_NAME + oshiId
+        let dirName = Const.File.OSHI_DIR_NAME + oshiIdStr
                     + "/" + Const.File.Setting.SETTING_DIR_NAME
                     + "/" + Const.File.Setting.BACKGROUND_IMAGE_DIR_NAME
         CommonMethod.removeFile(name: dirName)

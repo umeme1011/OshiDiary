@@ -108,6 +108,30 @@ class CommonMethod {
     }
     
     /**
+     背景画像読込
+     */
+    static func roadBackgroundImage(oshiId: Int) -> [UIImage] {
+        var ret: [UIImage] = [UIImage]()
+        let oshiIdStr: String = String(oshiId)
+        
+        let bacgroundFileName: String = Const.File.OSHI_DIR_NAME + oshiIdStr
+                            + "/" + Const.File.Setting.SETTING_DIR_NAME
+                            + "/" + Const.File.Setting.BACKGROUND_IMAGE_DIR_NAME
+                            + "/" + Const.File.Setting.BACKGROUND_IMAGE_FILE_NAME
+        var cnt = 1
+        var image: UIImage!
+        while cnt <= Const.Limit.Premium.BACKGROUND_IMAGE_COUNT {
+            if CommonMethod.isFileExists(name: bacgroundFileName + String(cnt) + ".jpg") {
+                image = CommonMethod.roadImageFile(name: bacgroundFileName + String(cnt) + ".jpg", defaultName: "")
+                ret.append(image)
+            }
+            cnt += 1
+        }
+
+        return ret
+    }
+    
+    /**
      Realm作成
      */
     static func createRealm(path: URL) -> Realm {
@@ -118,22 +142,22 @@ class CommonMethod {
     /**
      推しRealm作成
      */
-    static func createOshiRealm() -> Realm {
-        return createRealm(path: getOshiRealmPath())
+    static func createOshiRealm(oshiId: Int) -> Realm {
+        return createRealm(path: getOshiRealmPath(oshiId: oshiId))
     }
 
     /**
      推しRealmファイルパス取得
      */
-    static func getOshiRealmPath() -> URL {
-        let myUD: MyUserDefaults = MyUserDefaults.init()
-        let oshiId: String = String(myUD.getOshiId())
+    static func getOshiRealmPath(oshiId: Int) -> URL {
+        let oshiIdStr: String = String(oshiId)
         // Realm用ディレクトリ作成
-        createDir(name: Const.File.OSHI_DIR_NAME + oshiId + "/" + Const.File.Realm.REALM_DIR_NAME)
+        createDir(name: Const.File.OSHI_DIR_NAME + oshiIdStr + "/" + Const.File.Realm.REALM_DIR_NAME)
         // パス
-        let path = getDocPath().appendingPathComponent(Const.File.OSHI_DIR_NAME + oshiId
-                                                       + "/" + Const.File.Realm.REALM_DIR_NAME
-                                                       + "/" + Const.File.Realm.REALM_NAME + oshiId + ".realm")
+        let fileName: String = Const.File.OSHI_DIR_NAME + oshiIdStr
+                    + "/" + Const.File.Realm.REALM_DIR_NAME
+                    + "/" + Const.File.Realm.REALM_NAME + oshiIdStr + ".realm"
+        let path = getDocPath().appendingPathComponent(fileName)
         return path
     }
 
