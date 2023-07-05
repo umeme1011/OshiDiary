@@ -26,6 +26,8 @@ class OshiListViewController: UIViewController {
         myUD = MyUserDefaults.init()
         oshiId = myUD.getOshiId()
         commonRealm = CommonMethod.createCommonRealm()
+        
+        
     }
 
     /**
@@ -45,13 +47,6 @@ class OshiListViewController: UIViewController {
      推し追加ボタン押下
      */
     @IBAction func tapOshiAddBtn(_ sender: Any) {
-//        // UDに新しいIDを設定
-//        var id: Int = 1
-//        if let oshiSetting: OshiSetting = commonRealm.objects(OshiSetting.self)
-//            .sorted(byKeyPath: OshiSetting.Types.id.rawValue, ascending: false).first {
-//            id = oshiSetting.id + 1
-//        }
-//        myUD.setOshiId(id: id)
     }
     
     /**

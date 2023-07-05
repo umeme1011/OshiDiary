@@ -26,7 +26,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BxG-D6-uYn">
                                 <rect key="frame" x="0.0" y="59" width="393" height="50"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="kuma_default" translatesAutoresizingMaskIntoConstraints="NO" id="cOo-VE-jdy">
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="kuma_default" translatesAutoresizingMaskIntoConstraints="NO" id="cOo-VE-jdy">
                                         <rect key="frame" x="16" y="2.6666666666666643" width="45" height="45"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="45" id="Gzt-3w-hzm"/>
@@ -162,6 +162,7 @@
                     </view>
                     <connections>
                         <outlet property="baseView" destination="D00-Hy-SuP" id="OkG-uv-RfF"/>
+                        <outlet property="iconIV" destination="cOo-VE-jdy" id="DyA-2O-n3H"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

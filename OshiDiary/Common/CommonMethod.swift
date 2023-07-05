@@ -108,6 +108,21 @@ class CommonMethod {
     }
     
     /**
+     アイコン画像読込
+     */
+    static func roadIconImage(oshiId: Int) -> UIImage {
+        var ret: UIImage!
+        
+        let oshiIdStr: String = String(oshiId)
+        let iconFileName = Const.File.OSHI_DIR_NAME + oshiIdStr
+                        + "/" + Const.File.Setting.SETTING_DIR_NAME
+                        + "/" + Const.File.Setting.ICON_FILE_NAME
+        ret = CommonMethod.roadImageFile(name: iconFileName, defaultName: Const.File.DEFAULT_IMAGE_NAME)
+        
+        return ret
+    }
+    
+    /**
      背景画像読込
      */
     static func roadBackgroundImage(oshiId: Int) -> [UIImage] {

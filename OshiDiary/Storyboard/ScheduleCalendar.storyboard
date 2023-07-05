@@ -25,7 +25,7 @@
                                         <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="kuma_default" translatesAutoresizingMaskIntoConstraints="NO" id="i8y-Ec-18h">
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="kuma_default" translatesAutoresizingMaskIntoConstraints="NO" id="i8y-Ec-18h">
                                         <rect key="frame" x="16" y="3" width="45" height="45"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="45" id="Anh-x8-m6z"/>
@@ -151,6 +151,7 @@
                     </view>
                     <connections>
                         <outlet property="baseView" destination="2Yk-ZX-Vc5" id="0Tr-4G-QeC"/>
+                        <outlet property="iconIV" destination="i8y-Ec-18h" id="Z5c-lw-MV3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

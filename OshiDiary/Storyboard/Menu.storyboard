@@ -18,7 +18,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7Pf-hA-M8s">
                                 <rect key="frame" x="0.0" y="0.0" width="300" height="852"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="kuma_default" translatesAutoresizingMaskIntoConstraints="NO" id="kgy-TX-GEO">
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="kuma_default" translatesAutoresizingMaskIntoConstraints="NO" id="kgy-TX-GEO">
                                         <rect key="frame" x="34" y="67" width="60" height="60"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="ICI-ba-exz"/>
@@ -169,7 +169,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IfE-cU-Jsx">
-                                        <rect key="frame" x="94" y="81" width="50" height="35"/>
+                                        <rect key="frame" x="234" y="81" width="50" height="35"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="35" id="TNy-Vr-C3D"/>
                                             <constraint firstAttribute="width" constant="50" id="eSB-kz-S8D"/>
@@ -196,10 +196,10 @@
                                     <constraint firstItem="kgy-TX-GEO" firstAttribute="leading" secondItem="7Pf-hA-M8s" secondAttribute="leading" constant="34" id="YPb-hF-6Ww"/>
                                     <constraint firstItem="kgy-TX-GEO" firstAttribute="top" secondItem="7Pf-hA-M8s" secondAttribute="top" constant="67" id="Zvr-rF-LjV"/>
                                     <constraint firstAttribute="trailing" secondItem="cnU-le-ewH" secondAttribute="trailing" constant="16" id="aKd-gp-8X3"/>
-                                    <constraint firstItem="IfE-cU-Jsx" firstAttribute="leading" secondItem="kgy-TX-GEO" secondAttribute="trailing" id="b3s-mC-qyD"/>
                                     <constraint firstItem="4Jz-D9-uMe" firstAttribute="top" secondItem="7Pf-hA-M8s" secondAttribute="top" constant="67" id="cHG-tI-Vdt"/>
                                     <constraint firstItem="9JE-i9-pmT" firstAttribute="top" secondItem="cnU-le-ewH" secondAttribute="bottom" constant="16" id="idD-cN-GSQ"/>
                                     <constraint firstAttribute="trailing" secondItem="9JE-i9-pmT" secondAttribute="trailing" constant="16" id="mrA-wA-6Xx"/>
+                                    <constraint firstAttribute="trailing" secondItem="IfE-cU-Jsx" secondAttribute="trailing" constant="16" id="zoC-5x-rVo"/>
                                 </constraints>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="V2U-pA-g9K" appends="YES" id="O3R-tn-XGN"/>
@@ -216,6 +216,7 @@
                     </view>
                     <connections>
                         <outlet property="baseView" destination="7Pf-hA-M8s" id="pt4-tq-rf1"/>
+                        <outlet property="iconIV" destination="kgy-TX-GEO" id="V9o-Bn-nLi"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

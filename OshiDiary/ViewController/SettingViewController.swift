@@ -58,6 +58,7 @@ class SettingViewController: UIViewController {
                                                                     attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
             // イメージカラー白を選択
             imageColorBtn1.setTitle("✓", for: .normal)
+            imageColorCd = Const.Color.imageColorCd.WHITE
             // イメージカラー白を設定
             baseView.backgroundColor = UIColor.white
 
@@ -67,20 +68,32 @@ class SettingViewController: UIViewController {
 
             if let oshiSetting: OshiSetting = commonRealm.objects(OshiSetting.self)
                 .filter("\(OshiSetting.Types.id.rawValue) = %@", oshiId!).first {
-                // 名前を設定
-                nameTF.text = oshiSetting.name
+                if oshiSetting.name == "" {
+                    // プレースホルダー
+                    nameTF.attributedPlaceholder = NSAttributedString(string: "名前を記入",
+                                                                            attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+                } else {
+                    // 名前を設定
+                    nameTF.text = oshiSetting.name
+                }
+                
                 // イメージカラー選択
                 switch oshiSetting.imageColorCd {
                 case Const.Color.imageColorCd.WHITE:
                     imageColorBtn1.setTitle("✓", for: .normal)
+                    imageColorCd = Const.Color.imageColorCd.WHITE
                 case Const.Color.imageColorCd.MISTYROSE:
                     imageColorBtn2.setTitle("✓", for: .normal)
+                    imageColorCd = Const.Color.imageColorCd.MISTYROSE
                 case Const.Color.imageColorCd.LIGHTCYAN:
                     imageColorBtn3.setTitle("✓", for: .normal)
+                    imageColorCd = Const.Color.imageColorCd.LIGHTCYAN
                 case Const.Color.imageColorCd.LAVENDER:
                     imageColorBtn4.setTitle("✓", for: .normal)
+                    imageColorCd = Const.Color.imageColorCd.LAVENDER
                 default:
                     imageColorBtn1.setTitle("✓", for: .normal)
+                    imageColorCd = Const.Color.imageColorCd.WHITE
                 }
                 
                 // イメージカラー設定
