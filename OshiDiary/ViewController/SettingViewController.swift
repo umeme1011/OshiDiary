@@ -308,7 +308,7 @@ extension SettingViewController: UICollectionViewDelegate, UICollectionViewDataS
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        // 最後乗セルは追加ボタンを表示
+        // 最後のセルは追加ボタンを表示
         if indexPath.row == imageArray.count {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "addCell", for: indexPath) as! ImageAddCollectionViewCell
             

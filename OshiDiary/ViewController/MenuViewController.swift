@@ -73,12 +73,13 @@ class MenuViewController: UIViewController {
     func changeVisual() {
         
         // 名前設定
-        let oshiSetting: OshiSetting = commonRealm.objects(OshiSetting.self)
-            .filter("\(OshiSetting.Types.id.rawValue) = %@", myUD.getOshiId()).first!
-        nameLbl.text = oshiSetting.name
-        // イメージカラー設定
-        baseView.backgroundColor = Const.Color().getImageColor(cd: myUD.getImageColorCd())
-        // アイコン画像設定
-        iconIV.image = CommonMethod.roadIconImage(oshiId: myUD.getOshiId())
+        if let oshiSetting: OshiSetting = commonRealm.objects(OshiSetting.self)
+            .filter("\(OshiSetting.Types.id.rawValue) = %@", myUD.getOshiId()).first {
+            nameLbl.text = oshiSetting.name
+            // イメージカラー設定
+            baseView.backgroundColor = Const.Color().getImageColor(cd: myUD.getImageColorCd())
+            // アイコン画像設定
+            iconIV.image = CommonMethod.roadIconImage(oshiId: myUD.getOshiId())
+        }
     }
 }

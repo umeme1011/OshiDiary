@@ -8,6 +8,7 @@
 import UIKit
 import FSCalendar
 import CalculateCalendarLogic
+import RealmSwift
 
 class DiaryCalendarViewController: UIViewController {
     
@@ -18,6 +19,9 @@ class DiaryCalendarViewController: UIViewController {
     var backgroundImageArray: [UIImage] = [UIImage]()
     var myUD: MyUserDefaults!
     var oshiId: Int!
+    var oshiRealm: Realm!
+    var diaries: Results<Diary>!
+    var diary: Diary!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +33,7 @@ class DiaryCalendarViewController: UIViewController {
         
         myUD = MyUserDefaults.init()
         oshiId = myUD.getOshiId()
+        oshiRealm = CommonMethod.createOshiRealm(oshiId: oshiId)
         
         // calendarの曜日部分を日本語表記に変更
         calendar.calendarWeekdayView.weekdayLabels[0].text = "日"
@@ -53,12 +58,36 @@ class DiaryCalendarViewController: UIViewController {
         
         // ランダムに背景画像を設定
         self.changeVisual()
+        
+        // 日記データ取得
+        diaries = oshiRealm.objects(Diary.self)
+            .sorted(byKeyPath: Diary.Types.date.rawValue, ascending: true)
+        
+    }
+    
+    /**
+     画面再描画
+     */
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        listTV.reloadData()
     }
     
     func changeVisual() {
         // ランダムに背景画像を設定
         backgroundIV.image = CommonMethod.roadBackgroundImage(oshiId: myUD.getOshiId()).randomElement()
     }
+    
+    // データ渡し
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // 編集画面にデータを渡す
+        if segue.identifier == "toDiaryEdit" {
+            let vc: DiaryEditViewController = segue.destination as! DiaryEditViewController
+            vc.diary = diary
+            vc.isNew = false
+        }
+    }
+
 }
 
 extension DiaryCalendarViewController: FSCalendarDelegate, FSCalendarDataSource, FSCalendarDelegateAppearance {
@@ -121,20 +150,33 @@ extension DiaryCalendarViewController: FSCalendarDelegate, FSCalendarDataSource,
 
 extension DiaryCalendarViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return diaries.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier:  "cell", for:indexPath as IndexPath)
             as! ListTableViewCell
         
-        cell.dateLbl.text = "20"
-        cell.weekLbl.text = "日"
-        cell.titleLbl.text = "ああああああああああ"
-        cell.contentLbl.text = "いいいいいいいいいいいいいいい"
+        let current = Calendar.current
+        
+        cell.dateLbl.text = String(current.component(.day, from: diaries[indexPath.row].date))
+        cell.weekLbl.text = CommonMethod.weekFormatter(date: diaries[indexPath.row].date)
+        cell.titleLbl.text = diaries[indexPath.row].title
+        cell.contentLbl.text = diaries[indexPath.row].content
         
         return cell
     }
 
-
+    // セルがタップされた時の処理
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // タップしたセルを取得
+        if let cell: UITableViewCell = listTV.cellForRow(at: indexPath) {
+            // 選択状態を解除
+            cell.isSelected = false
+        }
+        // 編集画面へ遷移
+        diary = diaries[indexPath.row]
+        performSegue(withIdentifier: "toDiaryEdit", sender: nil)
+    }
+    
 }

@@ -10,9 +10,13 @@ import RealmSwift
 class Diary: RealmSwift.Object {
     @objc dynamic var id: Int = 0
     @objc dynamic var date: Date = Date()
-    @objc dynamic var year: Int = 0
-    @objc dynamic var month: Int = 0
-    @objc dynamic var day: Int = 0
+//    @objc dynamic var year: Int = 0
+//    @objc dynamic var month: Int = 0
+//    @objc dynamic var day: Int = 0
+//    @objc dynamic var week: Int = 0
+//    @objc dynamic var hour: Int = 0
+//    @objc dynamic var minute: Int = 0
+//    @objc dynamic var second: Int = 0
     @objc dynamic var title: String = ""
     @objc dynamic var content: String = ""
     @objc dynamic var createDate = Date()
@@ -27,9 +31,13 @@ class Diary: RealmSwift.Object {
     enum Types: String {
         case id
         case date
-        case year
-        case month
-        case day
+//        case year
+//        case month
+//        case day
+//        case week
+//        case hour
+//        case minuts
+//        case second
         case title
         case content
         case createDate

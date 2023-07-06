@@ -7,27 +7,34 @@
 
 import UIKit
 import PhotosUI
+import RealmSwift
 
-class DiaryEditViewController: UIViewController, UITextViewDelegate {
+class DiaryEditViewController: UIViewController {
     
     @IBOutlet weak var baseView: UIView!
+    @IBOutlet weak var dateLbl: UILabel!
     @IBOutlet weak var titleTF: UITextField!
-    @IBOutlet weak var textView: PlaceHolderTextView!
+    @IBOutlet weak var contentTV: PlaceHolderTextView!
     @IBOutlet weak var contentsViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var imageCV: UICollectionView!
     
     var imageArray: [UIImage] = [UIImage]()
     var selectedNo: Int!
-    
     var myUD: MyUserDefaults!
+    var oshiId: Int!
+    var oshiRealm: Realm!
+    var diary: Diary!
+    var isNew: Bool = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        textView.delegate = self
+        contentTV.delegate = self
         imageCV.delegate = self
         imageCV.dataSource = self
         
         myUD = MyUserDefaults.init()
+        oshiId = myUD.getOshiId()
+        oshiRealm = CommonMethod.createOshiRealm(oshiId: oshiId)
         
         // イメージカラー設定
         baseView.backgroundColor = Const.Color().getImageColor(cd: myUD.getImageColorCd())
@@ -44,35 +51,49 @@ class DiaryEditViewController: UIViewController, UITextViewDelegate {
 
         // keyboad toolbar
         let newToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 40))
-        let newImageItem = UIBarButtonItem(image: UIImage(systemName: "photo"), style:.plain, target: self, action: #selector(tapImageBtn))
+//        let newImageItem = UIBarButtonItem(image: UIImage(systemName: "photo"), style:.plain, target: self, action: #selector(tapImageBtn))
         let newSpacelItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
         let newCloseItem = UIBarButtonItem(image: UIImage(systemName: "arrowtriangle.down.fill"), style:.plain, target: self, action: #selector(tapCloseBtn))
-        newToolbar.setItems([newImageItem, newSpacelItem, newCloseItem], animated: true)
-        textView.inputAccessoryView = newToolbar
+//        newToolbar.setItems([newImageItem, newSpacelItem, newCloseItem], animated: true)
+        newToolbar.setItems([newSpacelItem, newCloseItem], animated: true)
+
+        titleTF.inputAccessoryView = newToolbar
+        contentTV.inputAccessoryView = newToolbar
         
-        // プレースホルダー
-        titleTF.attributedPlaceholder = NSAttributedString(string: "タイトルを記入",
-                                                                attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-        textView.placeHolder = "推しとの思い出をのこそう♡"
+        // 新規作成
+        if isNew {
+            // プレースホルダー
+            titleTF.attributedPlaceholder = NSAttributedString(string: "タイトルを記入",
+                                                                    attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+            contentTV.placeHolder = "推しとの思い出をのこそう♡"
+        
+        // 既存データ編集
+        } else {
+            dateLbl.text = CommonMethod.dateFormatter(date: diary.date)
+            titleTF.text = diary.title
+            contentTV.text = diary.content
+        }
+        
     }
     
     /**
-     画像ボタン
+     画像ボタン（未使用）
      */
-    @objc func tapImageBtn() {
-        var configuration = PHPickerConfiguration()
-        configuration.selectionLimit = 0 // 選択上限。0にすると無制限に。
-        configuration.filter = .images // 取得できるメディアの種類。
-        let picker = PHPickerViewController(configuration: configuration)
-        picker.delegate = self
-        present(picker, animated: true)
-    }
+//    @objc func tapImageBtn() {
+//        var configuration = PHPickerConfiguration()
+//        configuration.selectionLimit = myUD.getDiaryImageLimit() - imageArray.count // 選択上限
+//        configuration.filter = .images // 取得できるメディアの種類。
+//        let picker = PHPickerViewController(configuration: configuration)
+//        picker.delegate = self
+//        present(picker, animated: true)
+//    }
 
     /**
      キーボード閉じるボタン
      */
     @objc func tapCloseBtn() {
-        textView.endEditing(true)
+        titleTF.endEditing(true)
+        contentTV.endEditing(true)
     }
     
     /**
@@ -111,6 +132,51 @@ class DiaryEditViewController: UIViewController, UITextViewDelegate {
         alert.addAction(ok)
         self.present(alert, animated: true, completion: nil)
     }
+    
+    /**
+     投稿ボタン押下
+     */
+    @IBAction func tapPostBtn(_ sender: Any) {
+        
+        // 現在日時取得
+        let now = Date()
+        
+        // データがすでに存在していたら更新
+        if let diary: Diary = oshiRealm.objects(Diary.self)
+            .filter("\(Diary.Types.id.rawValue) = %@", self.diary.id).first {
+            try! oshiRealm.write {
+                diary.title = titleTF.text ?? ""
+                diary.content = contentTV.text
+                diary.updateDate = now
+            }
+
+        // 存在しない場合は登録
+        } else {
+            var diaryId = 1
+            // DiaryID発行
+            if let diary: Diary = oshiRealm.objects(Diary.self)
+                .sorted(byKeyPath: Diary.Types.id.rawValue, ascending: false).first {
+                diaryId = diary.id + 1
+            }
+
+            let newDiary = Diary()
+            try! oshiRealm.write {
+                newDiary.id = diaryId
+                newDiary.date = now
+                newDiary.title = titleTF.text ?? ""
+                newDiary.content = contentTV.text
+
+                oshiRealm.add(newDiary)
+            }
+        }
+        self.dismiss(animated: true)
+    }
+}
+
+extension DiaryEditViewController: UITextViewDelegate {
+}
+
+extension DiaryEditViewController: UITextFieldDelegate {
 }
 
 extension DiaryEditViewController: PHPickerViewControllerDelegate {
@@ -145,22 +211,40 @@ extension DiaryEditViewController: PHPickerViewControllerDelegate {
 extension DiaryEditViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return imageArray.count
+        if imageArray.count == myUD.getDiaryImageLimit() {
+            // 上限に達している場合は写真ボタン表示しない
+            return imageArray.count
+
+        } else {
+            return imageArray.count + 1
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! ImageCollectionViewCell
-
-        if !imageArray.isEmpty {
-            cell.imageIV.image = imageArray[indexPath.row]
+        if indexPath.row == imageArray.count {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "addCell", for: indexPath) as! ImageAddCollectionViewCell
             
-            // 削除ボタン押下アクションセット
-            cell.deleteBtn.tag = indexPath.row
-            cell.deleteBtn.addTarget(self, action: #selector(tapDeleteBtn), for: .touchUpInside)
+            // 追加ボタン押下アクションセット
+            cell.addBtn.tag = indexPath.row
+            cell.addBtn.addTarget(self, action: #selector(tapImageBtn), for: .touchUpInside)
 
+            return cell
+
+        } else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! ImageCollectionViewCell
+
+            if !imageArray.isEmpty {
+                cell.imageIV.image = imageArray[indexPath.row]
+                
+                // 削除ボタン押下アクションセット
+                cell.deleteBtn.tag = indexPath.row
+                cell.deleteBtn.addTarget(self, action: #selector(tapDeleteBtn), for: .touchUpInside)
+
+            }
+            return cell
         }
-        return cell
+        
     }
     
     /**
@@ -190,6 +274,19 @@ extension DiaryEditViewController: UICollectionViewDelegate, UICollectionViewDat
         imageArray.remove(at: row)
         imageCV.reloadData()
     }
+    
+    /**
+     画像ボタン
+     */
+    @objc private func tapImageBtn() {
+        var configuration = PHPickerConfiguration()
+        configuration.selectionLimit = myUD.getDiaryImageLimit() - imageArray.count // 選択上限
+        configuration.filter = .images // 取得できるメディアの種類。
+        let picker = PHPickerViewController(configuration: configuration)
+        picker.delegate = self
+        present(picker, animated: true)
+    }
+
     
 }
 

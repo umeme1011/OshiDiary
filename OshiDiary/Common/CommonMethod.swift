@@ -198,4 +198,48 @@ class CommonMethod {
         return path
     }
 
+    /**
+     日時フォーマッター
+     */
+    static func dateFormatter(date: Date) -> String {
+        var ret: String = ""
+        
+        let df = DateFormatter()
+        df.locale = Locale(identifier: "ja_JP")
+        df.dateStyle = .full
+        df.timeStyle = .medium
+        ret = df.string(from: date)
+        
+        return ret
+    }
+    
+    /**
+     曜日フォーマッター
+     */
+    static func weekFormatter(date: Date) -> String {
+        var ret: String = ""
+
+        let current = Calendar.current
+        let week: Int = current.component(.weekday, from: date)
+        
+        switch week {
+        case 1:
+            ret = "日"
+        case 2:
+            ret = "月"
+        case 3:
+            ret = "火"
+        case 4:
+            ret = "水"
+        case 5:
+            ret = "木"
+        case 6:
+            ret = "金"
+        case 7:
+            ret = "土"
+        default:
+            ret = "日"
+        }
+        return ret
+    }
 }
