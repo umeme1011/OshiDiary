@@ -50,5 +50,13 @@ class MyUserDefaults {
         return ud.object(forKey: "imageColorCd") as? Int ?? Const.Color.imageColorCd.WHITE
     }
 
+    // 最終表示画面
+    func setLastShowScreen(screen : String) {
+        ud.set(screen, forKey: "lastShowScreen")
+    }
+    
+    func getLastShowScreen() -> String {
+        return ud.object(forKey: "lastShowScreen") as? String ?? Const.ScreenName.SCHEDULE_CALENDAR
+    }
 
 }

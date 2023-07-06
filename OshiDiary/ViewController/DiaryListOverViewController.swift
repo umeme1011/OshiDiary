@@ -21,19 +21,20 @@ class DiaryListOverViewController: UIViewController {
         
         myUD = MyUserDefaults.init()
         oshiId = myUD.getOshiId()
+        // 最終表示画面設定
+        myUD.setLastShowScreen(screen: Const.ScreenName.DIALY_LIST)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        // イメージカラー設定
-        baseView.backgroundColor = Const.Color().getImageColor(cd: myUD.getImageColorCd())
-        
-        // アイコン画像設定
-        iconIV.image = CommonMethod.roadIconImage(oshiId: oshiId)
+        changeVisual()
     }
 
-    @IBAction func tapBackBtn(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
+    func changeVisual() {
+        // イメージカラー設定
+        baseView.backgroundColor = Const.Color().getImageColor(cd: myUD.getImageColorCd())
+        // アイコン画像設定
+        iconIV.image = CommonMethod.roadIconImage(oshiId: myUD.getOshiId())
     }
+    
 }

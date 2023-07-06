@@ -20,15 +20,19 @@ class ScheduleListOverViewController: UIViewController {
         
         myUD = MyUserDefaults.init()
         oshiId = myUD.getOshiId()
+        // 最終表示画面設定
+        myUD.setLastShowScreen(screen: Const.ScreenName.SCHEDULE_LIST)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        changeVisual()
+    }
+
+    func changeVisual() {
         // イメージカラー設定
         baseView.backgroundColor = Const.Color().getImageColor(cd: myUD.getImageColorCd())
-        
         // アイコン画像設定
-        iconIV.image = CommonMethod.roadIconImage(oshiId: oshiId)
+        iconIV.image = CommonMethod.roadIconImage(oshiId: myUD.getOshiId())
     }
 }

@@ -67,6 +67,12 @@ class Const {
             }
             return ret
         }
-
+    }
+    
+    class ScreenName {
+        static let SCHEDULE_CALENDAR = "ScheduleCalendar"
+        static let SCHEDULE_LIST = "ScheduleList"
+        static let DIALY_CALENDAR = "DiaryCalendar"
+        static let DIALY_LIST = "DiaryList"
     }
 }

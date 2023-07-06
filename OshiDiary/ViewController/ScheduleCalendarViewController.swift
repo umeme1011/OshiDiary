@@ -22,40 +22,43 @@ class ScheduleCalendarViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.calendar.delegate = self
-        self.calendar.dataSource = self
-        self.listTV.delegate = self
-        self.listTV.dataSource = self
+        calendar.delegate = self
+        calendar.dataSource = self
+        listTV.delegate = self
+        listTV.dataSource = self
         
         myUD = MyUserDefaults.init()
         oshiId = myUD.getOshiId()
         
-        // ランダムに背景画像を設定
-        backgroundIV.image = CommonMethod.roadBackgroundImage(oshiId: oshiId).randomElement()
-        
         // calendarの曜日部分を日本語表記に変更
-        self.calendar.calendarWeekdayView.weekdayLabels[0].text = "日"
-        self.calendar.calendarWeekdayView.weekdayLabels[1].text = "月"
-        self.calendar.calendarWeekdayView.weekdayLabels[2].text = "火"
-        self.calendar.calendarWeekdayView.weekdayLabels[3].text = "水"
-        self.calendar.calendarWeekdayView.weekdayLabels[4].text = "木"
-        self.calendar.calendarWeekdayView.weekdayLabels[5].text = "金"
-        self.calendar.calendarWeekdayView.weekdayLabels[6].text = "土"
+        calendar.calendarWeekdayView.weekdayLabels[0].text = "日"
+        calendar.calendarWeekdayView.weekdayLabels[1].text = "月"
+        calendar.calendarWeekdayView.weekdayLabels[2].text = "火"
+        calendar.calendarWeekdayView.weekdayLabels[3].text = "水"
+        calendar.calendarWeekdayView.weekdayLabels[4].text = "木"
+        calendar.calendarWeekdayView.weekdayLabels[5].text = "金"
+        calendar.calendarWeekdayView.weekdayLabels[6].text = "土"
         
-        self.calendar.calendarWeekdayView.weekdayLabels[0].font = UIFont.boldSystemFont(ofSize: 16)
-        self.calendar.calendarWeekdayView.weekdayLabels[1].font = UIFont.boldSystemFont(ofSize: 16)
-        self.calendar.calendarWeekdayView.weekdayLabels[2].font = UIFont.boldSystemFont(ofSize: 16)
-        self.calendar.calendarWeekdayView.weekdayLabels[3].font = UIFont.boldSystemFont(ofSize: 16)
-        self.calendar.calendarWeekdayView.weekdayLabels[4].font = UIFont.boldSystemFont(ofSize: 16)
-        self.calendar.calendarWeekdayView.weekdayLabels[5].font = UIFont.boldSystemFont(ofSize: 16)
-        self.calendar.calendarWeekdayView.weekdayLabels[6].font = UIFont.boldSystemFont(ofSize: 16)
+        calendar.calendarWeekdayView.weekdayLabels[0].font = UIFont.boldSystemFont(ofSize: 16)
+        calendar.calendarWeekdayView.weekdayLabels[1].font = UIFont.boldSystemFont(ofSize: 16)
+        calendar.calendarWeekdayView.weekdayLabels[2].font = UIFont.boldSystemFont(ofSize: 16)
+        calendar.calendarWeekdayView.weekdayLabels[3].font = UIFont.boldSystemFont(ofSize: 16)
+        calendar.calendarWeekdayView.weekdayLabels[4].font = UIFont.boldSystemFont(ofSize: 16)
+        calendar.calendarWeekdayView.weekdayLabels[5].font = UIFont.boldSystemFont(ofSize: 16)
+        calendar.calendarWeekdayView.weekdayLabels[6].font = UIFont.boldSystemFont(ofSize: 16)
         
         // calendarの曜日部分の色を変更
-        self.calendar.calendarWeekdayView.weekdayLabels[0].textColor = .systemRed
-        self.calendar.calendarWeekdayView.weekdayLabels[6].textColor = .systemBlue
-
+        calendar.calendarWeekdayView.weekdayLabels[0].textColor = .systemRed
+        calendar.calendarWeekdayView.weekdayLabels[6].textColor = .systemBlue
+        
+        // ランダムに背景画像を設定
+        self.changeVisual()
     }
-
+    
+    func changeVisual() {
+        // ランダムに背景画像を設定
+        backgroundIV.image = CommonMethod.roadBackgroundImage(oshiId: myUD.getOshiId()).randomElement()
+    }
 }
 
 extension ScheduleCalendarViewController: FSCalendarDelegate, FSCalendarDataSource, FSCalendarDelegateAppearance {
@@ -65,11 +68,11 @@ extension ScheduleCalendarViewController: FSCalendarDelegate, FSCalendarDataSour
      */
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
         //祝日判定をする（祝日は赤色で表示する）
-        if self.judgeHoliday(date){
+        if judgeHoliday(date){
             return UIColor.red
         }
         //土日の判定を行う（土曜日は青色、日曜日は赤色で表示する）
-        let weekday = self.getWeekIdx(date)
+        let weekday = getWeekIdx(date)
         if weekday == 1 {   //日曜日
             return UIColor.red
         }

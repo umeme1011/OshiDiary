@@ -16,37 +16,46 @@ class OshiListViewController: UIViewController {
     var myUD: MyUserDefaults!
     var oshiId: Int!
     var commonRealm: Realm!
+    var oshiSettings: Results<OshiSetting>!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.listTV.delegate = self
-        self.listTV.dataSource = self
+        listTV.delegate = self
+        listTV.dataSource = self
         
         myUD = MyUserDefaults.init()
         oshiId = myUD.getOshiId()
         commonRealm = CommonMethod.createCommonRealm()
         
-        
+        // 推しリスト取得
+        oshiSettings = commonRealm.objects(OshiSetting.self)
+
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // 編集後再表示
+        oshiId = myUD.getOshiId()
+        listTV.reloadData()
+        // メニュー画面に反映
+        let vc: MenuViewController = self.presentingViewController as! MenuViewController
+        vc.changeVisual()
+    }
+    
 
     /**
      編集ボタン押下
      */
     @IBAction func tapEditBtn(_ sender: Any) {
-        if self.listTV.isEditing == true {
-            self.listTV.isEditing = false
-            self.editBtn.setTitle("編集", for: .normal)
+        if listTV.isEditing == true {
+            listTV.isEditing = false
+            editBtn.setTitle("編集", for: .normal)
         } else {
-            self.listTV.isEditing = true
-            self.editBtn.setTitle("完了", for: .normal)
+            listTV.isEditing = true
+            editBtn.setTitle("完了", for: .normal)
         }
-    }
-    
-    /**
-     推し追加ボタン押下
-     */
-    @IBAction func tapOshiAddBtn(_ sender: Any) {
     }
     
     /**
@@ -55,7 +64,7 @@ class OshiListViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
         switch segue.identifier {
-        // 設定画面へ
+        // 推し追加ボタン押下で設定画面へ
         case "toSetting":
             // 遷移先のVC取得
             let vc:SettingViewController = segue.destination as? SettingViewController ?? SettingViewController()
@@ -65,16 +74,22 @@ class OshiListViewController: UIViewController {
         }
     }
 
+    /**
+     閉じるボタン押下
+     */
+    @IBAction func tapCloseBtn(_ sender: Any) {
+        self.dismiss(animated: true)
+    }
 }
 
 extension OshiListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        return oshiSettings.count + 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        if indexPath.row == 3 {
+        if indexPath.row == oshiSettings.count {
             let cell = tableView.dequeueReusableCell(withIdentifier:  "addCell", for:indexPath as IndexPath)
                 as! OshiListAddTableViewCell
 
@@ -84,10 +99,18 @@ extension OshiListViewController: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier:  "cell", for:indexPath as IndexPath)
                 as! OshiListTableViewCell
             
-            cell.nameLbl.text = "ててててて"
+            // アイコン画像
+            cell.iconIV.image = CommonMethod.roadIconImage(oshiId: oshiSettings[indexPath.row].id)
+            // 名前
+            cell.nameLbl.text = oshiSettings[indexPath.row].name
+            // チェックマーク
+            if oshiId != oshiSettings[indexPath.row].id {
+                cell.checkIV.isHidden = true
+            } else {
+                cell.checkIV.isHidden = false
+            }
 
             return cell
-
         }
     }
     
@@ -112,4 +135,15 @@ extension OshiListViewController: UITableViewDelegate, UITableViewDataSource {
 //        dataList.insert(moveData!, atIndex:destinationIndexPath.row)
     }
     
+    // セルがタップされた時の処理
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+      
+        myUD.setOshiId(id: oshiSettings[indexPath.row].id)
+        myUD.setImageColorCd(cd: oshiSettings[indexPath.row].imageColorCd)
+        
+        let vc: MenuViewController = self.presentingViewController as! MenuViewController
+        vc.changeVisual()
+
+        self.dismiss(animated: true)
+    }
 }

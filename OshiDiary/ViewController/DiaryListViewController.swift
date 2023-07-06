@@ -20,15 +20,19 @@ class DiaryListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.listTV.delegate = self
-        self.listTV.dataSource = self
+        listTV.delegate = self
+        listTV.dataSource = self
         
         myUD = MyUserDefaults.init()
         oshiId = myUD.getOshiId()
-        
-        // ランダムに背景画像を設定
-        backgroundIV.image = CommonMethod.roadBackgroundImage(oshiId: oshiId).randomElement()
 
+        // ランダムに背景画像を設定
+        self.changeVisual()
+    }
+    
+    func changeVisual() {
+        // ランダムに背景画像を設定
+        backgroundIV.image = CommonMethod.roadBackgroundImage(oshiId: myUD.getOshiId()).randomElement()
     }
 }
 

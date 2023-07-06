@@ -43,6 +43,9 @@
                                                 <integer key="value" value="30"/>
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <segue destination="3KD-6v-Fmk" kind="presentation" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="5re-dB-YVG"/>
+                                        </connections>
                                     </button>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="9JE-i9-pmT">
                                         <rect key="frame" x="25" y="173" width="259" height="166"/>
@@ -177,7 +180,7 @@
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" image="arrow.left.arrow.right" catalog="system"/>
                                         <connections>
-                                            <segue destination="Xlp-1x-HMa" kind="presentation" id="F4z-9x-PIg"/>
+                                            <segue destination="Xlp-1x-HMa" kind="presentation" id="9BM-ZE-9GX"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -217,6 +220,7 @@
                     <connections>
                         <outlet property="baseView" destination="7Pf-hA-M8s" id="pt4-tq-rf1"/>
                         <outlet property="iconIV" destination="kgy-TX-GEO" id="V9o-Bn-nLi"/>
+                        <outlet property="nameLbl" destination="cnU-le-ewH" id="Zo9-pW-I9s"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -261,6 +265,9 @@
             <point key="canvasLocation" x="621" y="101"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="5re-dB-YVG"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <image name="arrow.left.arrow.right" catalog="system" width="120" height="128"/>
         <image name="diary" width="64" height="64"/>

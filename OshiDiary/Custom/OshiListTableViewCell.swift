@@ -11,4 +11,5 @@ class OshiListTableViewCell: UITableViewCell {
     
     @IBOutlet weak var iconIV: UIImageView!
     @IBOutlet weak var nameLbl: UILabel!
+    @IBOutlet weak var checkIV: UIImageView!
 }
