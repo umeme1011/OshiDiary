@@ -34,12 +34,14 @@ class Const {
 
     }
     
-    class Limit {
+    class Course {
         class Premium {
-            static let BACKGROUND_IMAGE_COUNT = 10
+            static let BACKGROUND_IMAGE_LIMIT = 10
+            static let DIARY_IMAGE_LIMIT = 10
         }
         class Normal {
-            static let BACKGROUND_IMAGE_COUNT = 3
+            static let BACKGROUND_IMAGE_LIMIT = 3
+            static let DIARY_IMAGE_LIMIT = 3
         }
     }
     

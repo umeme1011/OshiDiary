@@ -128,6 +128,7 @@ class CommonMethod {
     static func roadBackgroundImage(oshiId: Int) -> [UIImage] {
         var ret: [UIImage] = [UIImage]()
         let oshiIdStr: String = String(oshiId)
+        let myUD: MyUserDefaults = MyUserDefaults.init()
         
         let bacgroundFileName: String = Const.File.OSHI_DIR_NAME + oshiIdStr
                             + "/" + Const.File.Setting.SETTING_DIR_NAME
@@ -135,7 +136,7 @@ class CommonMethod {
                             + "/" + Const.File.Setting.BACKGROUND_IMAGE_FILE_NAME
         var cnt = 1
         var image: UIImage!
-        while cnt <= Const.Limit.Premium.BACKGROUND_IMAGE_COUNT {
+        while cnt <= myUD.getBackgroundImageLimit() {
             if CommonMethod.isFileExists(name: bacgroundFileName + String(cnt) + ".jpg") {
                 image = CommonMethod.roadImageFile(name: bacgroundFileName + String(cnt) + ".jpg", defaultName: "")
                 ret.append(image)

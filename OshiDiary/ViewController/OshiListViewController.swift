@@ -39,21 +39,21 @@ class OshiListViewController: UIViewController {
         // 編集後再表示
         oshiId = myUD.getOshiId()
         listTV.reloadData()
-        // メニュー画面に反映
+        // メニュー画面にデザイン反映
         let vc: MenuViewController = self.presentingViewController as! MenuViewController
         vc.changeVisual()
     }
     
-
     /**
      編集ボタン押下
      */
     @IBAction func tapEditBtn(_ sender: Any) {
+        // TODO 削除、編集できない
         if listTV.isEditing == true {
-            listTV.isEditing = false
+            listTV.setEditing(false, animated: true)
             editBtn.setTitle("編集", for: .normal)
         } else {
-            listTV.isEditing = true
+            listTV.setEditing(true, animated: true)
             editBtn.setTitle("完了", for: .normal)
         }
     }
@@ -114,6 +114,7 @@ extension OshiListViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
+    // セルの移動を許可する
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         return true
     }

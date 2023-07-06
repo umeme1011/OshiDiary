@@ -11,6 +11,7 @@ import PhotosUI
 class DiaryEditViewController: UIViewController, UITextViewDelegate {
     
     @IBOutlet weak var baseView: UIView!
+    @IBOutlet weak var titleTF: UITextField!
     @IBOutlet weak var textView: PlaceHolderTextView!
     @IBOutlet weak var contentsViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var imageCV: UICollectionView!
@@ -22,9 +23,9 @@ class DiaryEditViewController: UIViewController, UITextViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.textView.delegate = self
-        self.imageCV.delegate = self
-        self.imageCV.dataSource = self
+        textView.delegate = self
+        imageCV.delegate = self
+        imageCV.dataSource = self
         
         myUD = MyUserDefaults.init()
         
@@ -50,7 +51,9 @@ class DiaryEditViewController: UIViewController, UITextViewDelegate {
         textView.inputAccessoryView = newToolbar
         
         // プレースホルダー
-        self.textView.placeHolder = "推しとの思い出をのこそう♡"
+        titleTF.attributedPlaceholder = NSAttributedString(string: "タイトルを記入",
+                                                                attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+        textView.placeHolder = "推しとの思い出をのこそう♡"
     }
     
     /**
@@ -58,11 +61,8 @@ class DiaryEditViewController: UIViewController, UITextViewDelegate {
      */
     @objc func tapImageBtn() {
         var configuration = PHPickerConfiguration()
-        configuration.selectionLimit = 5 // 選択上限。0にすると無制限に。
+        configuration.selectionLimit = 0 // 選択上限。0にすると無制限に。
         configuration.filter = .images // 取得できるメディアの種類。
-//        configuration.selection = .ordered
-        // configuration.filter = .any([.videos,livePhotos]) // 複数種類メディア
-
         let picker = PHPickerViewController(configuration: configuration)
         picker.delegate = self
         present(picker, animated: true)
@@ -81,8 +81,8 @@ class DiaryEditViewController: UIViewController, UITextViewDelegate {
     @objc func keyboardWillShow(notification: NSNotification) {
         // キーボードの高さに合わせてViewのボトムを上に上げる
         if let keyboadSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            let tabBarHeight = self.tabBarController?.tabBar.frame.size.height ?? 0
-            self.contentsViewBottomConstraint.constant = -(keyboadSize.height - tabBarHeight)
+            let tabBarHeight = tabBarController?.tabBar.frame.size.height ?? 0
+            contentsViewBottomConstraint.constant = -(keyboadSize.height - tabBarHeight)
         }
     }
     
@@ -91,7 +91,7 @@ class DiaryEditViewController: UIViewController, UITextViewDelegate {
      */
     @objc func keyboardWillHide() {
         // Viewのボトムをもとに戻す
-        self.contentsViewBottomConstraint.constant = 0
+        contentsViewBottomConstraint.constant = 0
     }
 
     /**
@@ -145,15 +145,15 @@ extension DiaryEditViewController: PHPickerViewControllerDelegate {
 extension DiaryEditViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.imageArray.count
+        return imageArray.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! ImageCollectionViewCell
 
-        if !self.imageArray.isEmpty {
-            cell.imageIV.image = self.imageArray[indexPath.row]
+        if !imageArray.isEmpty {
+            cell.imageIV.image = imageArray[indexPath.row]
             
             // 削除ボタン押下アクションセット
             cell.deleteBtn.tag = indexPath.row
@@ -167,7 +167,7 @@ extension DiaryEditViewController: UICollectionViewDelegate, UICollectionViewDat
      cell選択
      */
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.selectedNo = indexPath.row
+        selectedNo = indexPath.row
         performSegue(withIdentifier: "toImageDetail",sender: nil)
     }
 
@@ -177,8 +177,8 @@ extension DiaryEditViewController: UICollectionViewDelegate, UICollectionViewDat
     override func prepare(for segue: UIStoryboardSegue, sender: Any!) {
         if (segue.identifier == "toImageDetail") {
             let vc: ImageDetailViewController = (segue.destination as? ImageDetailViewController)!
-            vc.imageArray = self.imageArray
-            vc.selectedNo = self.selectedNo
+            vc.imageArray = imageArray
+            vc.selectedNo = selectedNo
         }
     }
     
@@ -187,8 +187,8 @@ extension DiaryEditViewController: UICollectionViewDelegate, UICollectionViewDat
      */
     @objc private func tapDeleteBtn(_ sender:UIButton) {
         let row: Int = sender.tag
-        self.imageArray.remove(at: row)
-        self.imageCV.reloadData()
+        imageArray.remove(at: row)
+        imageCV.reloadData()
     }
     
 }

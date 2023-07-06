@@ -298,7 +298,7 @@ extension SettingViewController: PHPickerViewControllerDelegate {
 extension SettingViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if imageArray.count == Const.Limit.Normal.BACKGROUND_IMAGE_COUNT {
+        if imageArray.count == myUD.getBackgroundImageLimit() {
             // 上限に達している場合は+ボタン表示しない
             return imageArray.count
         } else {
@@ -355,7 +355,7 @@ extension SettingViewController: UICollectionViewDelegate, UICollectionViewDataS
     @objc private func tapAddBtn(_ sender:UIButton) {
         
         // 選択上限
-        let limit = Const.Limit.Normal.BACKGROUND_IMAGE_COUNT - imageArray.count
+        let limit = myUD.getBackgroundImageLimit() - imageArray.count
         
         tapImageAddBtn = true
         var configuration = PHPickerConfiguration()

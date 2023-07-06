@@ -125,12 +125,6 @@
                                     <segue destination="swX-Cg-6s0" kind="presentation" identifier="toScheduleEdit" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="5yd-Eq-ZLq"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q1S-eh-djK">
-                                <rect key="frame" x="66" y="703" width="59" height="35"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="戻る"/>
-                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="OSf-0V-NCq"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

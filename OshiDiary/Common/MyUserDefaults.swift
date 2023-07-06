@@ -33,14 +33,23 @@ class MyUserDefaults {
     }
 
     // 背景画像数上限
-    func setBackgroundImageCount(id : Int) {
+    func setBackgroundImageLimit(id : Int) {
         ud.set(id, forKey: "backgroundImageCount")
     }
     
-    func getBackgroundImageCount() -> Int {
-        return ud.object(forKey: "backgroundImageCount") as? Int ?? Const.Limit.Normal.BACKGROUND_IMAGE_COUNT
+    func getBackgroundImageLimit() -> Int {
+        return ud.object(forKey: "backgroundImageCount") as? Int ?? Const.Course.Normal.BACKGROUND_IMAGE_LIMIT
     }
     
+    // 日記画像数上限
+    func setDiaryImageLimit(id : Int) {
+        ud.set(id, forKey: "diaryImageLimit")
+    }
+    
+    func getDiaryImageLimit() -> Int {
+        return ud.object(forKey: "diaryImageLimit") as? Int ?? Const.Course.Normal.DIARY_IMAGE_LIMIT
+    }
+
     // イメージカラーCD
     func setImageColorCd(cd : Int) {
         ud.set(cd, forKey: "imageColorCd")

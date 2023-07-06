@@ -35,6 +35,7 @@
 		C369D87A2A42EC7F00DBDE8A /* DiaryCalendarOverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C369D8792A42EC7F00DBDE8A /* DiaryCalendarOverViewController.swift */; };
 		C369D87C2A4376B000DBDE8A /* DiaryCalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C369D87B2A4376B000DBDE8A /* DiaryCalendarViewController.swift */; };
 		C3D4F0942A4EC1BD005F7825 /* MyUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3D4F0932A4EC1BD005F7825 /* MyUserDefaults.swift */; };
+		C3F254152A5672DD00A113E7 /* Diary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F254142A5672DD00A113E7 /* Diary.swift */; };
 		C3F598372A4BFD1C00705BE0 /* ScheduleList.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C3F598362A4BFD1C00705BE0 /* ScheduleList.storyboard */; };
 		C3F598392A4BFD5F00705BE0 /* ScheduleListOverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F598382A4BFD5F00705BE0 /* ScheduleListOverViewController.swift */; };
 		C3F5983B2A4BFD7C00705BE0 /* ScheduleListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F5983A2A4BFD7C00705BE0 /* ScheduleListViewController.swift */; };
@@ -84,6 +85,7 @@
 		C369D8792A42EC7F00DBDE8A /* DiaryCalendarOverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryCalendarOverViewController.swift; sourceTree = "<group>"; };
 		C369D87B2A4376B000DBDE8A /* DiaryCalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryCalendarViewController.swift; sourceTree = "<group>"; };
 		C3D4F0932A4EC1BD005F7825 /* MyUserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyUserDefaults.swift; sourceTree = "<group>"; };
+		C3F254142A5672DD00A113E7 /* Diary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diary.swift; sourceTree = "<group>"; };
 		C3F598362A4BFD1C00705BE0 /* ScheduleList.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ScheduleList.storyboard; sourceTree = "<group>"; };
 		C3F598382A4BFD5F00705BE0 /* ScheduleListOverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleListOverViewController.swift; sourceTree = "<group>"; };
 		C3F5983A2A4BFD7C00705BE0 /* ScheduleListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleListViewController.swift; sourceTree = "<group>"; };
@@ -222,6 +224,7 @@
 			isa = PBXGroup;
 			children = (
 				C3F5984B2A4D621500705BE0 /* OshiSetting.swift */,
+				C3F254142A5672DD00A113E7 /* Diary.swift */,
 			);
 			path = Realm;
 			sourceTree = "<group>";
@@ -384,6 +387,7 @@
 				C310CD902A4405A40049C510 /* DiaryListOverViewController.swift in Sources */,
 				C3F5983F2A4C076C00705BE0 /* SettingViewController.swift in Sources */,
 				C369D8642A42E69D00DBDE8A /* SceneDelegate.swift in Sources */,
+				C3F254152A5672DD00A113E7 /* Diary.swift in Sources */,
 				C3F598412A4C226800705BE0 /* ImageAddCollectionViewCell.swift in Sources */,
 				C3F5983B2A4BFD7C00705BE0 /* ScheduleListViewController.swift in Sources */,
 				C310CD8A2A43E5B30049C510 /* ListTableViewCell.swift in Sources */,
