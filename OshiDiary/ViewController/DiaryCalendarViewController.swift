@@ -163,6 +163,7 @@ extension DiaryCalendarViewController: UITableViewDelegate, UITableViewDataSourc
         cell.weekLbl.text = CommonMethod.weekFormatter(date: diaries[indexPath.row].date)
         cell.titleLbl.text = diaries[indexPath.row].title
         cell.contentLbl.text = diaries[indexPath.row].content
+        cell.imageIV.image = CommonMethod.roadDiaryImage(oshiId: oshiId, diaryId: diaries[indexPath.row].id).first
         
         return cell
     }

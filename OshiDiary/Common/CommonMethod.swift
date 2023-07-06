@@ -143,7 +143,30 @@ class CommonMethod {
             }
             cnt += 1
         }
-
+        return ret
+    }
+    
+    /**
+     日記画像読込
+     */
+    static func roadDiaryImage(oshiId: Int, diaryId: Int) -> [UIImage] {
+        var ret: [UIImage] = [UIImage]()
+        let oshiIdStr: String = String(oshiId)
+        let diaryIdStr: String = String(diaryId)
+        let myUD: MyUserDefaults = MyUserDefaults.init()
+        
+        let imageName: String = Const.File.OSHI_DIR_NAME + oshiIdStr
+                            + "/" + Const.File.Diary.DIARY_DIR_NAME + diaryIdStr
+                            + "/" + Const.File.Diary.DIARY_IMAGE_FILE_NAME + diaryIdStr
+        var cnt = 1
+        var image: UIImage!
+        while cnt <= myUD.getDiaryImageLimit() {
+            if CommonMethod.isFileExists(name: imageName + "_" + String(cnt) + ".jpg") {
+                image = CommonMethod.roadImageFile(name: imageName + "_" + String(cnt) + ".jpg", defaultName: "")
+                ret.append(image)
+            }
+            cnt += 1
+        }
         return ret
     }
     

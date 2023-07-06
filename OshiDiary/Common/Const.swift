@@ -32,6 +32,14 @@ class Const {
             static let COMMON_REALM_NAME = "common.realm"
         }
 
+        class Schedule {
+            static let SCHEDULE_DIR_NAME = "schedule"
+        }
+
+        class Diary {
+            static let DIARY_DIR_NAME = "diray_id"  // ID付与
+            static let DIARY_IMAGE_FILE_NAME = "diray_id"    // ID、連番付与
+        }
     }
     
     class Course {

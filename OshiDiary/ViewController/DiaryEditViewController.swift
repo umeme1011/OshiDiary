@@ -72,6 +72,9 @@ class DiaryEditViewController: UIViewController {
             dateLbl.text = CommonMethod.dateFormatter(date: diary.date)
             titleTF.text = diary.title
             contentTV.text = diary.content
+            
+            // 日記画像読込
+            imageArray = CommonMethod.roadDiaryImage(oshiId: oshiId, diaryId: diary.id)
         }
         
     }
@@ -137,6 +140,24 @@ class DiaryEditViewController: UIViewController {
      投稿ボタン押下
      */
     @IBAction func tapPostBtn(_ sender: Any) {
+        
+        let oshiIdStr: String = String(oshiId)
+        let diaryIdStr: String = String(diary.id)
+        // 日記用のディレクトリ削除、作成
+        let dirName: String = Const.File.OSHI_DIR_NAME + oshiIdStr
+                            + "/" + Const.File.Diary.DIARY_DIR_NAME + diaryIdStr
+        CommonMethod.removeFile(name: dirName)
+        CommonMethod.createDir(name: dirName)
+        
+        // 日記画像保存
+        var cnt = 0
+        for image in imageArray {
+            cnt += 1
+            let cntStr: String = String(cnt)
+            let fileName: String = Const.File.Diary.DIARY_IMAGE_FILE_NAME
+                        + diaryIdStr + "_" + cntStr + ".jpg"
+            CommonMethod.saveImageFile(image: image, name: dirName + "/" + fileName)
+        }
         
         // 現在日時取得
         let now = Date()
