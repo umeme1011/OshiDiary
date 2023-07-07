@@ -222,21 +222,6 @@ class CommonMethod {
     }
 
     /**
-     日時フォーマッター
-     */
-    static func dateFormatter(date: Date) -> String {
-        var ret: String = ""
-        
-        let df = DateFormatter()
-        df.locale = Locale(identifier: "ja_JP")
-        df.dateStyle = .full
-        df.timeStyle = .medium
-        ret = df.string(from: date)
-        
-        return ret
-    }
-    
-    /**
      曜日フォーマッター
      */
     static func weekFormatter(date: Date) -> String {
@@ -263,6 +248,29 @@ class CommonMethod {
         default:
             ret = "日"
         }
+        return ret
+    }
+    
+    /**
+     日付フォーマッター
+     */
+    static func dateFormatter(date: Date, withHour: Bool, onlyHour: Bool) -> String {
+        var ret: String = ""
+        
+        let formatter = DateFormatter()
+        
+        if withHour {
+            formatter.dateFormat = "yyyy年MM月dd日 " + weekFormatter(date: date) + "曜日 HH:mm:ss"
+        } else if onlyHour{
+            formatter.dateFormat = "HH:mm"
+        } else {
+            formatter.dateFormat = "yyyy年MM月dd日 " + weekFormatter(date: date) + "曜日"
+        }
+        formatter.calendar = Calendar(identifier: .gregorian)
+        formatter.timeZone = TimeZone.current
+        formatter.locale = Locale(identifier: "ja_JP")
+        ret = formatter.string(from: date)
+        
         return ret
     }
 }

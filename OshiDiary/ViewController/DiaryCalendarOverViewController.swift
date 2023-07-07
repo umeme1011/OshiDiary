@@ -29,6 +29,20 @@ class DiaryCalendarOverViewController: UIViewController {
         self.changeVisual()
     }
     
+    /**
+     データ渡し
+     */
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // 編集画面にデータを渡す（新規）
+        if segue.identifier == "toDiaryEditNew" {
+            let vc: DiaryCalendarViewController = self.children[0] as! DiaryCalendarViewController
+            let selectedDate = vc.selectedDate
+            let vc2: DiaryEditViewController = segue.destination as! DiaryEditViewController
+            vc2.isNew = true
+            vc2.selectedDate = selectedDate ?? Date()
+        }
+    }
+
     @IBAction func tapNewBtn(_ sender: Any) {
     }
     

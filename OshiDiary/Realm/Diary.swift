@@ -10,6 +10,7 @@ import RealmSwift
 class Diary: RealmSwift.Object {
     @objc dynamic var id: Int = 0
     @objc dynamic var date: Date = Date()
+    @objc dynamic var dateString: String = ""
 //    @objc dynamic var year: Int = 0
 //    @objc dynamic var month: Int = 0
 //    @objc dynamic var day: Int = 0
@@ -31,6 +32,7 @@ class Diary: RealmSwift.Object {
     enum Types: String {
         case id
         case date
+        case dateString
 //        case year
 //        case month
 //        case day

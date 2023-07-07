@@ -22,6 +22,9 @@ class DiaryCalendarViewController: UIViewController {
     var oshiRealm: Realm!
     var diaries: Results<Diary>!
     var diary: Diary!
+    var diaryDic: Dictionary = Dictionary<String, [Diary]>()
+    var keyArray: [String] = [String]()
+    var selectedDate: Date!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,8 +35,6 @@ class DiaryCalendarViewController: UIViewController {
         listTV.dataSource = self
         
         myUD = MyUserDefaults.init()
-        oshiId = myUD.getOshiId()
-        oshiRealm = CommonMethod.createOshiRealm(oshiId: oshiId)
         
         // calendarの曜日部分を日本語表記に変更
         calendar.calendarWeekdayView.weekdayLabels[0].text = "日"
@@ -55,14 +56,6 @@ class DiaryCalendarViewController: UIViewController {
         // calendarの曜日部分の色を変更
         calendar.calendarWeekdayView.weekdayLabels[0].textColor = .systemRed
         calendar.calendarWeekdayView.weekdayLabels[6].textColor = .systemBlue
-        
-        // ランダムに背景画像を設定
-        self.changeVisual()
-        
-        // 日記データ取得
-        diaries = oshiRealm.objects(Diary.self)
-            .sorted(byKeyPath: Diary.Types.date.rawValue, ascending: true)
-        
     }
     
     /**
@@ -70,21 +63,61 @@ class DiaryCalendarViewController: UIViewController {
      */
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        listTV.reloadData()
+        self.changeVisual()
     }
     
+    /**
+     画面表示生成
+     */
     func changeVisual() {
+        // oshiRealm生成
+        oshiId = myUD.getOshiId()
+        oshiRealm = CommonMethod.createOshiRealm(oshiId: oshiId)
+        
+        // 日記データ取得
+        diaries = oshiRealm.objects(Diary.self)
+            .sorted(byKeyPath: Diary.Types.date.rawValue, ascending: true)
+        // 日付ごとに分類しDictionaryに格納
+        if !diaries.isEmpty {
+            var tmpDate = ""
+            var diaryArray: [Diary] = [Diary]()
+            for diary in diaries {
+                if tmpDate == diary.dateString {
+                    diaryArray.append(diary)
+                } else {
+                    if !diaryArray.isEmpty {
+                        diaryDic[tmpDate] = diaryArray
+                        diaryArray.removeAll()
+                    }
+                    diaryArray.append(diary)
+                }
+                tmpDate = diary.dateString
+            }
+            diaryDic[tmpDate] = diaryArray
+        }
+        // キー（日付）配列
+        keyArray = [String](diaryDic.keys)
+        // キーをソート
+        keyArray.sort()
+
         // ランダムに背景画像を設定
         backgroundIV.image = CommonMethod.roadBackgroundImage(oshiId: myUD.getOshiId()).randomElement()
+        // listTVリロード
+        listTV.reloadData()
+        // カレンダーリロード
+        calendar.reloadData()
     }
     
-    // データ渡し
+    /**
+     データ渡し
+     */
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // 編集画面にデータを渡す
         if segue.identifier == "toDiaryEdit" {
             let vc: DiaryEditViewController = segue.destination as! DiaryEditViewController
             vc.diary = diary
             vc.isNew = false
+            vc.selectedDate = Date()
         }
     }
 
@@ -146,21 +179,107 @@ extension DiaryCalendarViewController: FSCalendarDelegate, FSCalendarDataSource,
         let tmpCalendar = Calendar(identifier: .gregorian)
         return tmpCalendar.component(.weekday, from: date)
     }
+
+    /**
+     イベントある日に点を付ける
+     */
+    func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int{
+        var ret: Int = 0
+        
+        // 登録日付と比較するために日付を年月日曜日にフォーマット
+        let dateString: String = CommonMethod.dateFormatter(date: date, withHour: false, onlyHour: false)
+        
+        for diary in diaries {
+            if diary.dateString == dateString {
+                ret += 1
+            }
+        }
+        return ret
+    }
+    
+    /**
+     タップした日付を取得する
+     */
+    func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+        selectedDate = date
+    }
+
 }
 
 extension DiaryCalendarViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    /**
+     セクション数
+     */
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return keyArray.count
+    }
+    
+    /**
+     セクション内容
+     */
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view: UIView = UIView()
+        let label: UILabel = UILabel()
+        
+        let cnt = diaryDic[keyArray[section]]?.count
+        label.text = "\(keyArray[section])  \(cnt ?? 0)件"
+
+        // Viewデザイン
+        let screenWidth:CGFloat = listTV.frame.size.width
+        view.layer.borderColor = UIColor.white.cgColor
+        view.layer.borderWidth = 0.5
+        view.frame = CGRect(x:0, y:0, width:screenWidth, height:30)
+        view.backgroundColor = UIColor(red: 239/255, green: 239/255, blue: 244/255, alpha: 1)
+        // labelデザイン
+        label.sizeToFit()
+        label.font = UIFont.systemFont(ofSize: 15)
+        label.frame = CGRect(x:10, y:0, width:screenWidth-10, height:30)
+        label.textColor = UIColor.darkGray
+        
+        view.addSubview(label)
+        
+        // セクションのビューに対応する番号を設定する
+        view.tag = section
+        
+        return view
+    }
+
+    /**
+     セクション高さ
+     */
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 30
+    }
+    
+    /**
+     セル数
+     */
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return diaries.count
     }
 
+    /**
+     セル内容
+     */
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier:  "cell", for:indexPath as IndexPath)
             as! ListTableViewCell
         
         let current = Calendar.current
         
-        cell.dateLbl.text = String(current.component(.day, from: diaries[indexPath.row].date))
-        cell.weekLbl.text = CommonMethod.weekFormatter(date: diaries[indexPath.row].date)
+//        let day = current.component(.day, from: diaries[indexPath.row].date)
+//        // 一つ前のデータと同日の場合は、日付、曜日を表示しない
+//        if indexPath.row == 0 {
+            cell.dateLbl.text = String(current.component(.day, from: diaries[indexPath.row].date))
+            cell.weekLbl.text = CommonMethod.weekFormatter(date: diaries[indexPath.row].date)
+            cell.timeLbl.text = CommonMethod.dateFormatter(date: diaries[indexPath.row].date, withHour: false, onlyHour: true)
+//        } else if indexPath.row > 0 {
+//            if day != current.component(.day, from: diaries[indexPath.row - 1].date) {
+//                cell.dateLbl.text = String(current.component(.day, from: diaries[indexPath.row].date))
+//                cell.weekLbl.text = CommonMethod.weekFormatter(date: diaries[indexPath.row].date)
+//            }
+//        }
         cell.titleLbl.text = diaries[indexPath.row].title
         cell.contentLbl.text = diaries[indexPath.row].content
         cell.imageIV.image = CommonMethod.roadDiaryImage(oshiId: oshiId, diaryId: diaries[indexPath.row].id).first
@@ -168,7 +287,9 @@ extension DiaryCalendarViewController: UITableViewDelegate, UITableViewDataSourc
         return cell
     }
 
-    // セルがタップされた時の処理
+    /**
+     セルがタップされた時の処理
+     */
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // タップしたセルを取得
         if let cell: UITableViewCell = listTV.cellForRow(at: indexPath) {
@@ -180,7 +301,9 @@ extension DiaryCalendarViewController: UITableViewDelegate, UITableViewDataSourc
         performSegue(withIdentifier: "toDiaryEdit", sender: nil)
     }
     
-    // 右から左へスワイプ
+    /**
+     右から左へスワイプ
+     */
     func tableView(_ tableView: UITableView,
                    trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
@@ -213,6 +336,7 @@ extension DiaryCalendarViewController: UITableViewDelegate, UITableViewDataSourc
                         print("削除失敗", error)
                     }
                     self.listTV.reloadData()
+                    self.calendar.reloadData()
                 }
             })
             alert.addAction(cancel)

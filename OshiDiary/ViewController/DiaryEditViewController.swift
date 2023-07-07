@@ -27,6 +27,7 @@ class DiaryEditViewController: UIViewController {
     var diary: Diary!
     var isNew: Bool = true
     var diaryId: Int!
+    var selectedDate: Date = Date()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -78,10 +79,13 @@ class DiaryEditViewController: UIViewController {
             
             // ゴミ箱非表示
             deleteBtn.isHidden = true
+            // 日付表示（時間込で表示）
+            dateLbl.text = CommonMethod.dateFormatter(date: selectedDate, withHour: true, onlyHour: false)
         
         // 既存データ編集
         } else {
-            dateLbl.text = CommonMethod.dateFormatter(date: diary.date)
+            // 日付表示（時間込で表示）
+            dateLbl.text = CommonMethod.dateFormatter(date: diary.date, withHour: true, onlyHour: false)
             titleTF.text = diary.title
             contentTV.text = diary.content
             
@@ -210,16 +214,16 @@ class DiaryEditViewController: UIViewController {
             CommonMethod.saveImageFile(image: image, name: dirName + "/" + fileName)
         }
         
-        // 現在日時取得
-        let now = Date()
-        
+        // 日時を年月日曜日にフォーマット
+        let dateString = CommonMethod.dateFormatter(date: selectedDate, withHour: false, onlyHour: false)
+
         // データがすでに存在していたら更新
         if let diary: Diary = oshiRealm.objects(Diary.self)
             .filter("\(Diary.Types.id.rawValue) = %@", diaryId!).first {
             try! oshiRealm.write {
                 diary.title = titleTF.text ?? ""
                 diary.content = contentTV.text
-                diary.updateDate = now
+                diary.updateDate = Date()
             }
 
         // 存在しない場合は登録
@@ -227,7 +231,8 @@ class DiaryEditViewController: UIViewController {
             let newDiary = Diary()
             try! oshiRealm.write {
                 newDiary.id = diaryId
-                newDiary.date = now
+                newDiary.date = selectedDate
+                newDiary.dateString = dateString
                 newDiary.title = titleTF.text ?? ""
                 newDiary.content = contentTV.text
 

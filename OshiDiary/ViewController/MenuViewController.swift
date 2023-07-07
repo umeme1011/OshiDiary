@@ -45,26 +45,31 @@ class MenuViewController: UIViewController {
             vc.changeVisual()
             let vc2: ScheduleCalendarViewController = vc.children[0] as! ScheduleCalendarViewController
             vc2.changeVisual()
+            vc2.listTV.reloadData()
         case Const.ScreenName.SCHEDULE_LIST:
             let vc: ScheduleListOverViewController = self.presentingViewController as! ScheduleListOverViewController
             vc.changeVisual()
             let vc2: ScheduleListViewController = vc.children[0] as! ScheduleListViewController
             vc2.changeVisual()
+            vc2.listTV.reloadData()
         case Const.ScreenName.DIALY_CALENDAR:
             let vc: DiaryCalendarOverViewController = self.presentingViewController as! DiaryCalendarOverViewController
             vc.changeVisual()
             let vc2: DiaryCalendarViewController = vc.children[0] as! DiaryCalendarViewController
             vc2.changeVisual()
+            vc2.listTV.reloadData()
         case Const.ScreenName.DIALY_LIST:
             let vc: DiaryListOverViewController = self.presentingViewController as! DiaryListOverViewController
             vc.changeVisual()
             let vc2: DiaryListViewController = vc.children[0] as! DiaryListViewController
             vc2.changeVisual()
+            vc2.listTV.reloadData()
         default:
             let vc: ScheduleCalendarOverViewControlle = self.presentingViewController as! ScheduleCalendarOverViewControlle
             vc.changeVisual()
             let vc2: ScheduleCalendarViewController = vc.children[0] as! ScheduleCalendarViewController
             vc2.changeVisual()
+            vc2.listTV.reloadData()
         }
         
         self.dismiss(animated: true)
