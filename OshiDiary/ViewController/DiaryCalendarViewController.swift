@@ -180,4 +180,50 @@ extension DiaryCalendarViewController: UITableViewDelegate, UITableViewDataSourc
         performSegue(withIdentifier: "toDiaryEdit", sender: nil)
     }
     
+    // 右から左へスワイプ
+    func tableView(_ tableView: UITableView,
+                   trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        let delete = UIContextualAction(style: .normal,
+                                            title: "削除",
+                                            handler: { (action: UIContextualAction, view: UIView, success :(Bool) -> Void) in
+            
+            let alert = UIAlertController(title: "", message: Const.Message.DELTE_CONFIRM_MSG, preferredStyle: .alert)
+            let cancel = UIAlertAction(title: "いいえ", style: .default, handler: { (action) -> Void in
+                // アラートを閉じる
+                alert.dismiss(animated: true)
+            })
+            let ok = UIAlertAction(title: "はい", style: .default, handler: { (action) -> Void in
+                // 日記画像ディレクトリ削除
+                let oshiIdStr: String = String(self.oshiId)
+                let diaryIdStr: String = String(self.diaries[indexPath.row].id)
+                let dirName: String = Const.File.OSHI_DIR_NAME + oshiIdStr
+                                    + "/" + Const.File.Diary.DIARY_DIR_NAME + diaryIdStr
+                CommonMethod.removeFile(name: dirName)
+                
+                // DB物理削除
+                if let diary: Diary = self.oshiRealm.objects(Diary.self)
+                    .filter("\(Diary.Types.id.rawValue) = %@", self.diaries[indexPath.row].id).first {
+                    
+                    do {
+                        try self.oshiRealm.write {
+                            self.oshiRealm.delete(diary)
+                        }
+                    } catch {
+                        print("削除失敗", error)
+                    }
+                    self.listTV.reloadData()
+                }
+            })
+            alert.addAction(cancel)
+            alert.addAction(ok)
+            self.present(alert, animated: true, completion: nil)
+            
+            success(true)
+        })
+        delete.backgroundColor = UIColor.systemRed
+
+        return UISwipeActionsConfiguration(actions: [delete])
+    }
+    
 }

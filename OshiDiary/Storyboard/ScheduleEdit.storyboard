@@ -26,34 +26,45 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jT8-VI-vq7">
-                                        <rect key="frame" x="8" y="8" width="120" height="34.5"/>
+                                        <rect key="frame" x="0.0" y="8" width="45" height="34"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="120" id="LeH-uO-9Sy"/>
+                                            <constraint firstAttribute="width" constant="45" id="LeH-uO-9Sy"/>
                                         </constraints>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="キャンセル"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="arrow.uturn.backward" catalog="system"/>
                                         <connections>
                                             <action selector="tapCancelBtn:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="MhB-Hm-Fck"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GSO-wn-9D2">
-                                        <rect key="frame" x="307" y="8" width="60" height="34.5"/>
+                                        <rect key="frame" x="330" y="8" width="45" height="34"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="60" id="42y-ZT-PS0"/>
+                                            <constraint firstAttribute="width" constant="45" id="42y-ZT-PS0"/>
                                         </constraints>
                                         <color key="tintColor" systemColor="tintColor"/>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="作成"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="checkmark" catalog="system"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C3v-Tx-UfE">
+                                        <rect key="frame" x="285" y="8" width="45" height="34"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="45" id="qfa-iS-lSw"/>
+                                        </constraints>
+                                        <color key="tintColor" systemColor="tintColor"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="trash" catalog="system"/>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="jT8-VI-vq7" firstAttribute="centerY" secondItem="QQP-AA-iS3" secondAttribute="centerY" id="7Jk-Mt-VdC"/>
+                                    <constraint firstItem="GSO-wn-9D2" firstAttribute="leading" secondItem="C3v-Tx-UfE" secondAttribute="trailing" id="Uqa-Ka-PLd"/>
                                     <constraint firstItem="GSO-wn-9D2" firstAttribute="centerY" secondItem="QQP-AA-iS3" secondAttribute="centerY" id="dpd-4v-X0I"/>
                                     <constraint firstItem="kod-2k-wc6" firstAttribute="centerY" secondItem="QQP-AA-iS3" secondAttribute="centerY" id="gRM-6b-gST"/>
-                                    <constraint firstAttribute="trailing" secondItem="GSO-wn-9D2" secondAttribute="trailing" constant="8" id="l4i-Ht-WP9"/>
+                                    <constraint firstAttribute="trailing" secondItem="GSO-wn-9D2" secondAttribute="trailing" id="l4i-Ht-WP9"/>
+                                    <constraint firstItem="C3v-Tx-UfE" firstAttribute="centerY" secondItem="QQP-AA-iS3" secondAttribute="centerY" id="mxt-Sd-EA9"/>
                                     <constraint firstItem="kod-2k-wc6" firstAttribute="centerX" secondItem="QQP-AA-iS3" secondAttribute="centerX" id="o39-II-o7H"/>
-                                    <constraint firstItem="jT8-VI-vq7" firstAttribute="leading" secondItem="QQP-AA-iS3" secondAttribute="leading" constant="8" id="tWS-Kq-eEs"/>
+                                    <constraint firstItem="jT8-VI-vq7" firstAttribute="leading" secondItem="QQP-AA-iS3" secondAttribute="leading" id="tWS-Kq-eEs"/>
                                     <constraint firstAttribute="height" constant="50" id="xHI-Lo-RPm"/>
                                 </constraints>
                             </view>
@@ -409,9 +420,12 @@
         </scene>
     </scenes>
     <resources>
+        <image name="arrow.uturn.backward" catalog="system" width="128" height="113"/>
         <image name="birthday_gray" width="64" height="64"/>
+        <image name="checkmark" catalog="system" width="128" height="114"/>
         <image name="present_gray" width="64" height="64"/>
         <image name="ribbon_gray" width="64" height="64"/>
+        <image name="trash" catalog="system" width="117" height="128"/>
         <systemColor name="tintColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

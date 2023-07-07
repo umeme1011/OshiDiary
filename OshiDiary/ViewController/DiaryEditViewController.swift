@@ -17,6 +17,7 @@ class DiaryEditViewController: UIViewController {
     @IBOutlet weak var contentTV: PlaceHolderTextView!
     @IBOutlet weak var contentsViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var imageCV: UICollectionView!
+    @IBOutlet weak var deleteBtn: UIButton!
     
     var imageArray: [UIImage] = [UIImage]()
     var selectedNo: Int!
@@ -25,6 +26,7 @@ class DiaryEditViewController: UIViewController {
     var oshiRealm: Realm!
     var diary: Diary!
     var isNew: Bool = true
+    var diaryId: Int!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,6 +68,16 @@ class DiaryEditViewController: UIViewController {
             titleTF.attributedPlaceholder = NSAttributedString(string: "タイトルを記入",
                                                                     attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
             contentTV.placeHolder = "推しとの思い出をのこそう♡"
+            
+            // DiaryID発行
+            diaryId = 1
+            if let diary: Diary = oshiRealm.objects(Diary.self)
+                .sorted(byKeyPath: Diary.Types.id.rawValue, ascending: false).first {
+                diaryId = diary.id + 1
+            }
+            
+            // ゴミ箱非表示
+            deleteBtn.isHidden = true
         
         // 既存データ編集
         } else {
@@ -73,8 +85,10 @@ class DiaryEditViewController: UIViewController {
             titleTF.text = diary.title
             contentTV.text = diary.content
             
+            // DiaryId設定
+            diaryId = diary.id
             // 日記画像読込
-            imageArray = CommonMethod.roadDiaryImage(oshiId: oshiId, diaryId: diary.id)
+            imageArray = CommonMethod.roadDiaryImage(oshiId: oshiId, diaryId: diaryId)
         }
         
     }
@@ -119,10 +133,10 @@ class DiaryEditViewController: UIViewController {
     }
 
     /**
-     キャンセルボタン押下
+     戻るボタン押下
      */
-    @IBAction func tapCancelBtn(_ sender: Any) {
-        let alert = UIAlertController(title: "編集キャンセル", message: "編集途中の内容は破棄されます。\nキャンセルしますか？", preferredStyle: .alert)
+    @IBAction func tapBackBtn(_ sender: Any) {
+        let alert = UIAlertController(title: "", message: Const.Message.EDIT_BACK_CONFIRM_MSG, preferredStyle: .alert)
         let cancel = UIAlertAction(title: "いいえ", style: .default, handler: { (action) -> Void in
             // アラートを閉じる
             alert.dismiss(animated: true)
@@ -137,12 +151,49 @@ class DiaryEditViewController: UIViewController {
     }
     
     /**
+     削除ボタン押下
+     */
+    @IBAction func tapDiaryDeleteBtn(_ sender: Any) {
+        let alert = UIAlertController(title: "", message: Const.Message.DELTE_CONFIRM_MSG, preferredStyle: .alert)
+        let cancel = UIAlertAction(title: "いいえ", style: .default, handler: { (action) -> Void in
+            // アラートを閉じる
+            alert.dismiss(animated: true)
+        })
+        let ok = UIAlertAction(title: "はい", style: .default, handler: { (action) -> Void in
+            // 日記画像ディレクトリ削除
+            let oshiIdStr: String = String(self.oshiId)
+            let diaryIdStr: String = String(self.diaryId)
+            let dirName: String = Const.File.OSHI_DIR_NAME + oshiIdStr
+                                + "/" + Const.File.Diary.DIARY_DIR_NAME + diaryIdStr
+            CommonMethod.removeFile(name: dirName)
+            
+            // DB物理削除
+            if let diary: Diary = self.oshiRealm.objects(Diary.self)
+                .filter("\(Diary.Types.id.rawValue) = %@", self.diaryId!).first {
+                
+                do {
+                    try self.oshiRealm.write {
+                        self.oshiRealm.delete(diary)
+                    }
+                } catch {
+                    print("削除失敗", error)
+                }
+            }
+            // 画面を閉じる
+            self.dismiss(animated: true)
+        })
+        alert.addAction(cancel)
+        alert.addAction(ok)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    /**
      投稿ボタン押下
      */
     @IBAction func tapPostBtn(_ sender: Any) {
         
         let oshiIdStr: String = String(oshiId)
-        let diaryIdStr: String = String(diary.id)
+        let diaryIdStr: String = String(diaryId)
         // 日記用のディレクトリ削除、作成
         let dirName: String = Const.File.OSHI_DIR_NAME + oshiIdStr
                             + "/" + Const.File.Diary.DIARY_DIR_NAME + diaryIdStr
@@ -164,7 +215,7 @@ class DiaryEditViewController: UIViewController {
         
         // データがすでに存在していたら更新
         if let diary: Diary = oshiRealm.objects(Diary.self)
-            .filter("\(Diary.Types.id.rawValue) = %@", self.diary.id).first {
+            .filter("\(Diary.Types.id.rawValue) = %@", diaryId!).first {
             try! oshiRealm.write {
                 diary.title = titleTF.text ?? ""
                 diary.content = contentTV.text
@@ -173,13 +224,6 @@ class DiaryEditViewController: UIViewController {
 
         // 存在しない場合は登録
         } else {
-            var diaryId = 1
-            // DiaryID発行
-            if let diary: Diary = oshiRealm.objects(Diary.self)
-                .sorted(byKeyPath: Diary.Types.id.rawValue, ascending: false).first {
-                diaryId = diary.id + 1
-            }
-
             let newDiary = Diary()
             try! oshiRealm.write {
                 newDiary.id = diaryId

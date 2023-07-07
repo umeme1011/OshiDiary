@@ -81,7 +81,7 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
      キャンセルボタン押下
      */
     @IBAction func tapCancelBtn(_ sender: Any) {
-        let alert = UIAlertController(title: "編集キャンセル", message: "編集途中の内容は破棄されます。\nキャンセルしますか？", preferredStyle: .alert)
+        let alert = UIAlertController(title: "", message: "編集途中の内容は破棄されます。\nよろしいですか？", preferredStyle: .alert)
         let cancel = UIAlertAction(title: "いいえ", style: .default, handler: { (action) -> Void in
             // アラートを閉じる
             alert.dismiss(animated: true)

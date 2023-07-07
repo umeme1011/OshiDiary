@@ -85,4 +85,9 @@ class Const {
         static let DIALY_CALENDAR = "DiaryCalendar"
         static let DIALY_LIST = "DiaryList"
     }
+    
+    class Message {
+        static let EDIT_BACK_CONFIRM_MSG = "編集途中の内容は破棄されます。\nよろしいですか？"
+        static let DELTE_CONFIRM_MSG = "削除してもよろしいですか？"
+    }
 }

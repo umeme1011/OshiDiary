@@ -27,26 +27,26 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oXc-zf-KdH">
-                                        <rect key="frame" x="8" y="7.6666666666666714" width="120" height="35"/>
+                                        <rect key="frame" x="0.0" y="7.6666666666666714" width="45" height="35"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="35" id="Dbo-t0-K5v"/>
-                                            <constraint firstAttribute="width" constant="120" id="c9h-Tg-Eel"/>
+                                            <constraint firstAttribute="width" constant="45" id="c9h-Tg-Eel"/>
                                         </constraints>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="キャンセル"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="arrow.uturn.backward" catalog="system"/>
                                         <connections>
                                             <action selector="tapCancelBtn:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="oRA-mC-ehU"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="s8b-ap-9Im">
-                                        <rect key="frame" x="326" y="7.6666666666666714" width="59" height="35"/>
+                                        <rect key="frame" x="348" y="7.6666666666666714" width="45" height="35"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="59" id="4hy-7K-CDO"/>
+                                            <constraint firstAttribute="width" constant="45" id="4hy-7K-CDO"/>
                                             <constraint firstAttribute="height" constant="35" id="5dI-9Q-hTq"/>
                                         </constraints>
                                         <color key="tintColor" systemColor="tintColor"/>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="保存"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="checkmark" catalog="system"/>
                                         <connections>
                                             <action selector="tapSaveBtn:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="aBt-Uk-Ltn"/>
                                         </connections>
@@ -57,9 +57,9 @@
                                     <constraint firstItem="oXc-zf-KdH" firstAttribute="centerY" secondItem="Hc1-dc-Yey" secondAttribute="centerY" id="2Tc-F8-q5F"/>
                                     <constraint firstItem="8S5-Oz-mRh" firstAttribute="centerX" secondItem="Hc1-dc-Yey" secondAttribute="centerX" id="4K4-xH-j3d"/>
                                     <constraint firstItem="s8b-ap-9Im" firstAttribute="centerY" secondItem="Hc1-dc-Yey" secondAttribute="centerY" id="6zW-Dq-Pvs"/>
-                                    <constraint firstAttribute="trailing" secondItem="s8b-ap-9Im" secondAttribute="trailing" constant="8" id="BQ2-1b-VEv"/>
+                                    <constraint firstAttribute="trailing" secondItem="s8b-ap-9Im" secondAttribute="trailing" id="BQ2-1b-VEv"/>
                                     <constraint firstItem="8S5-Oz-mRh" firstAttribute="centerY" secondItem="Hc1-dc-Yey" secondAttribute="centerY" id="Fjd-on-LKy"/>
-                                    <constraint firstItem="oXc-zf-KdH" firstAttribute="leading" secondItem="Hc1-dc-Yey" secondAttribute="leading" constant="8" id="Hqz-MK-Eea"/>
+                                    <constraint firstItem="oXc-zf-KdH" firstAttribute="leading" secondItem="Hc1-dc-Yey" secondAttribute="leading" id="Hqz-MK-Eea"/>
                                     <constraint firstAttribute="height" constant="50" id="JhU-SL-mw1"/>
                                 </constraints>
                             </view>
@@ -380,6 +380,8 @@
         </scene>
     </scenes>
     <resources>
+        <image name="arrow.uturn.backward" catalog="system" width="128" height="113"/>
+        <image name="checkmark" catalog="system" width="128" height="114"/>
         <image name="cross" width="32" height="32"/>
         <image name="kuma_default" width="120" height="120"/>
         <image name="plus.circle" catalog="system" width="128" height="123"/>

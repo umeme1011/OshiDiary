@@ -29,31 +29,52 @@
                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Aj0-Yl-QG8">
-                                        <rect key="frame" x="0.0" y="9" width="111" height="35"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Aj0-Yl-QG8">
+                                        <rect key="frame" x="0.0" y="7.6666666666666714" width="59" height="35"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="59" id="K93-Jc-Vmx"/>
+                                        </constraints>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="キャンセル"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="arrow.uturn.backward" catalog="system"/>
                                         <connections>
-                                            <action selector="tapCancelBtn:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="HV4-wB-ZL5"/>
+                                            <action selector="tapBackBtn:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="BPr-WC-5fy"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kMg-od-ilz">
-                                        <rect key="frame" x="334" y="7" width="59" height="35"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kMg-od-ilz">
+                                        <rect key="frame" x="348" y="7.6666666666666714" width="45" height="35"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="45" id="Dyh-Wl-WjU"/>
+                                        </constraints>
                                         <color key="tintColor" systemColor="tintColor"/>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="投稿"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="checkmark" catalog="system"/>
                                         <connections>
                                             <action selector="tapPostBtn:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="M4W-m5-7rc"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jyo-1E-WUa">
+                                        <rect key="frame" x="308" y="7.6666666666666714" width="40" height="35"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="40" id="iz5-8V-bAX"/>
+                                        </constraints>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="trash" catalog="system"/>
+                                        <connections>
+                                            <action selector="tapDiaryDeleteBtn:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="3oK-Rs-oIY"/>
                                         </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="Xgf-4F-0KG" firstAttribute="centerX" secondItem="hBW-EV-ngo" secondAttribute="centerX" id="4Wk-Tn-Zzb"/>
+                                    <constraint firstItem="Aj0-Yl-QG8" firstAttribute="centerY" secondItem="hBW-EV-ngo" secondAttribute="centerY" id="AeB-z9-P8y"/>
+                                    <constraint firstItem="kMg-od-ilz" firstAttribute="leading" secondItem="Jyo-1E-WUa" secondAttribute="trailing" id="DrC-av-dVd"/>
+                                    <constraint firstItem="Jyo-1E-WUa" firstAttribute="centerY" secondItem="hBW-EV-ngo" secondAttribute="centerY" id="IWZ-1p-5Xd"/>
+                                    <constraint firstItem="kMg-od-ilz" firstAttribute="centerY" secondItem="hBW-EV-ngo" secondAttribute="centerY" id="M2b-1V-RbS"/>
+                                    <constraint firstAttribute="trailing" secondItem="kMg-od-ilz" secondAttribute="trailing" id="Q4M-6u-g6g"/>
                                     <constraint firstItem="Xgf-4F-0KG" firstAttribute="centerY" secondItem="hBW-EV-ngo" secondAttribute="centerY" id="Snp-FX-fHk"/>
                                     <constraint firstAttribute="height" constant="50" id="TQf-wn-Rz1"/>
+                                    <constraint firstItem="Aj0-Yl-QG8" firstAttribute="leading" secondItem="hBW-EV-ngo" secondAttribute="leading" id="Up3-Nn-VcH"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eVK-ye-zd9">
@@ -197,6 +218,7 @@
                         <outlet property="contentTV" destination="9ca-vg-tei" id="gcM-Km-XOf"/>
                         <outlet property="contentsViewBottomConstraint" destination="RLq-Pr-8Lq" id="HfP-eB-4oI"/>
                         <outlet property="dateLbl" destination="Xgf-4F-0KG" id="LVQ-EC-UAS"/>
+                        <outlet property="deleteBtn" destination="Jyo-1E-WUa" id="fV9-9l-GTs"/>
                         <outlet property="imageCV" destination="LFo-xY-5oX" id="o5Q-Uy-Gcz"/>
                         <outlet property="titleTF" destination="SUM-8h-aHW" id="Yiy-GE-hXa"/>
                         <segue destination="tms-JR-Aiy" kind="presentation" identifier="toImageDetail" id="6BM-HC-Qdg"/>
@@ -216,8 +238,11 @@
         </scene>
     </scenes>
     <resources>
+        <image name="arrow.uturn.backward" catalog="system" width="128" height="113"/>
+        <image name="checkmark" catalog="system" width="128" height="114"/>
         <image name="cross" width="32" height="32"/>
         <image name="photo" width="128" height="128"/>
+        <image name="trash" catalog="system" width="117" height="128"/>
         <systemColor name="tintColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
