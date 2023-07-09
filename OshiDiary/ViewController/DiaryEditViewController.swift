@@ -85,7 +85,7 @@ class DiaryEditViewController: UIViewController {
         // 既存データ編集
         } else {
             // 日付表示（時間込で表示）
-            dateLbl.text = CommonMethod.dateFormatter(date: diary.date, formattKind: Const.DateFormatt.YMDWHMS)
+            dateLbl.text = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.YMDWHMS)
             titleTF.text = diary.title
             contentTV.text = diary.content
             

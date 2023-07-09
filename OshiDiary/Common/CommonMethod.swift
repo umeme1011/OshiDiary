@@ -269,7 +269,7 @@ class CommonMethod {
         case Const.DateFormatt.HM:
             formatter.dateFormat = "HH:mm"
         case Const.DateFormatt.YM:
-            formatter.dateFormat = "yyyy/MM"
+            formatter.dateFormat = "yyyy年MM月"
         default:
             formatter.dateFormat = "yyyy年MM月dd日 " + weekFormatter(date: date) + "曜日 HH:mm:ss"
         }

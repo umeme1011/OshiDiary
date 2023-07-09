@@ -130,7 +130,7 @@ class DiaryCalendarViewController: UIViewController {
             let vc: DiaryEditViewController = segue.destination as! DiaryEditViewController
             vc.diary = diary
             vc.isNew = false
-            vc.selectedDate = Date()
+            vc.selectedDate = diary.date
         }
     }
 

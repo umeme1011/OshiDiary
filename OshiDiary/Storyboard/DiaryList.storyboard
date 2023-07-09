@@ -378,6 +378,7 @@
                     <connections>
                         <outlet property="backgroundIV" destination="NyR-de-cY0" id="Fbd-35-ECK"/>
                         <outlet property="listTV" destination="x4J-r9-nCa" id="jPs-Q2-YrQ"/>
+                        <segue destination="FTu-Ax-kBq" kind="presentation" identifier="toDiaryEdit" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="PAr-P1-6b5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hlh-MR-chk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -385,6 +386,9 @@
             <point key="canvasLocation" x="665" y="107"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="PAr-P1-6b5"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <image name="calendar" catalog="system" width="128" height="107"/>
         <image name="diary_new" width="80" height="80"/>
