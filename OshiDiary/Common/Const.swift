@@ -90,4 +90,12 @@ class Const {
         static let EDIT_BACK_CONFIRM_MSG = "編集途中の内容は破棄されます。\nよろしいですか？"
         static let DELTE_CONFIRM_MSG = "削除してもよろしいですか？"
     }
+    
+    class DateFormatt {
+        static let YMDWHMS = 1
+        static let YMDW = 2
+        static let HMS = 3
+        static let HM = 4
+        static let YM = 5
+    }
 }

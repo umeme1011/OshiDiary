@@ -25,6 +25,8 @@ class DiaryCalendarViewController: UIViewController {
     var diaryDic: Dictionary = Dictionary<String, [Diary]>()
     var keyArray: [String] = [String]()
     var selectedDate: Date!
+    var currentPage: Date!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,6 +58,9 @@ class DiaryCalendarViewController: UIViewController {
         // calendarの曜日部分の色を変更
         calendar.calendarWeekdayView.weekdayLabels[0].textColor = .systemRed
         calendar.calendarWeekdayView.weekdayLabels[6].textColor = .systemBlue
+        
+        // カレンダー表示月を格納
+        currentPage = calendar.currentPage
     }
     
     /**
@@ -70,13 +75,21 @@ class DiaryCalendarViewController: UIViewController {
      画面表示生成
      */
     func changeVisual() {
+        // diaryDic初期化
+        diaryDic.removeAll()
+        
         // oshiRealm生成
         oshiId = myUD.getOshiId()
         oshiRealm = CommonMethod.createOshiRealm(oshiId: oshiId)
         
+        // 表示月のyyyy/MMを取得
+        let ymString: String = CommonMethod.dateFormatter(date: currentPage, formattKind: Const.DateFormatt.YM)
+        
         // 日記データ取得
         diaries = oshiRealm.objects(Diary.self)
+            .filter("\(Diary.Types.ymString.rawValue) = %@", ymString)
             .sorted(byKeyPath: Diary.Types.date.rawValue, ascending: true)
+        
         // 日付ごとに分類しDictionaryに格納
         if !diaries.isEmpty {
             var tmpDate = ""
@@ -187,7 +200,7 @@ extension DiaryCalendarViewController: FSCalendarDelegate, FSCalendarDataSource,
         var ret: Int = 0
         
         // 登録日付と比較するために日付を年月日曜日にフォーマット
-        let dateString: String = CommonMethod.dateFormatter(date: date, withHour: false, onlyHour: false)
+        let dateString: String = CommonMethod.dateFormatter(date: date, formattKind: Const.DateFormatt.YMDW)
         
         for diary in diaries {
             if diary.dateString == dateString {
@@ -198,12 +211,26 @@ extension DiaryCalendarViewController: FSCalendarDelegate, FSCalendarDataSource,
     }
     
     /**
-     タップした日付を取得する
+     セルをタップ
      */
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+        // 選択した日付
         selectedDate = date
+        // リストをスクロール
+        let dateStr = CommonMethod.dateFormatter(date: date, formattKind: Const.DateFormatt.YMDW)
+        scroll(dateStr: dateStr)
     }
-
+    
+    /**
+     月を変更
+     */
+    func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
+        // 表示月を格納
+        currentPage = calendar.currentPage
+        // 画面表示更新
+        self.changeVisual()
+    }
+    
 }
 
 extension DiaryCalendarViewController: UITableViewDelegate, UITableViewDataSource {
@@ -228,13 +255,13 @@ extension DiaryCalendarViewController: UITableViewDelegate, UITableViewDataSourc
         // Viewデザイン
         let screenWidth:CGFloat = listTV.frame.size.width
         view.layer.borderColor = UIColor.white.cgColor
-        view.layer.borderWidth = 0.5
-        view.frame = CGRect(x:0, y:0, width:screenWidth, height:30)
-        view.backgroundColor = UIColor(red: 239/255, green: 239/255, blue: 244/255, alpha: 1)
+        view.layer.borderWidth = 0.0
+        view.frame = CGRect(x:0, y:0, width:screenWidth, height:25)
+        view.backgroundColor = Const.Color().getImageColor(cd: myUD.getImageColorCd())
         // labelデザイン
         label.sizeToFit()
-        label.font = UIFont.systemFont(ofSize: 15)
-        label.frame = CGRect(x:10, y:0, width:screenWidth-10, height:30)
+        label.font = UIFont.systemFont(ofSize: 13)
+        label.frame = CGRect(x:10, y:0, width:screenWidth-10, height:25)
         label.textColor = UIColor.darkGray
         
         view.addSubview(label)
@@ -249,14 +276,14 @@ extension DiaryCalendarViewController: UITableViewDelegate, UITableViewDataSourc
      セクション高さ
      */
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 30
+        return 25
     }
     
     /**
      セル数
      */
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return diaries.count
+        return diaryDic[keyArray[section]]?.count ?? 0
     }
 
     /**
@@ -265,24 +292,19 @@ extension DiaryCalendarViewController: UITableViewDelegate, UITableViewDataSourc
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier:  "cell", for:indexPath as IndexPath)
             as! ListTableViewCell
+
+        // キーをもとにDiaryを取得
+        let diaryArray: [Diary] = diaryDic[keyArray[indexPath.section]]!
         
-        let current = Calendar.current
-        
-//        let day = current.component(.day, from: diaries[indexPath.row].date)
-//        // 一つ前のデータと同日の場合は、日付、曜日を表示しない
-//        if indexPath.row == 0 {
-            cell.dateLbl.text = String(current.component(.day, from: diaries[indexPath.row].date))
-            cell.weekLbl.text = CommonMethod.weekFormatter(date: diaries[indexPath.row].date)
-            cell.timeLbl.text = CommonMethod.dateFormatter(date: diaries[indexPath.row].date, withHour: false, onlyHour: true)
-//        } else if indexPath.row > 0 {
-//            if day != current.component(.day, from: diaries[indexPath.row - 1].date) {
-//                cell.dateLbl.text = String(current.component(.day, from: diaries[indexPath.row].date))
-//                cell.weekLbl.text = CommonMethod.weekFormatter(date: diaries[indexPath.row].date)
-//            }
-//        }
-        cell.titleLbl.text = diaries[indexPath.row].title
-        cell.contentLbl.text = diaries[indexPath.row].content
-        cell.imageIV.image = CommonMethod.roadDiaryImage(oshiId: oshiId, diaryId: diaries[indexPath.row].id).first
+        if indexPath.row < diaryArray.count {
+            let current = Calendar.current
+            cell.dateLbl.text = String(current.component(.day, from: diaryArray[indexPath.row].date))
+            cell.weekLbl.text = CommonMethod.weekFormatter(date: diaryArray[indexPath.row].date)
+            cell.timeLbl.text = CommonMethod.dateFormatter(date: diaryArray[indexPath.row].date, formattKind: Const.DateFormatt.HM)
+            cell.titleLbl.text = diaryArray[indexPath.row].title
+            cell.contentLbl.text = diaryArray[indexPath.row].content
+            cell.imageIV.image = CommonMethod.roadDiaryImage(oshiId: oshiId, diaryId: diaryArray[indexPath.row].id).first
+        }
         
         return cell
     }
@@ -291,13 +313,14 @@ extension DiaryCalendarViewController: UITableViewDelegate, UITableViewDataSourc
      セルがタップされた時の処理
      */
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
         // タップしたセルを取得
         if let cell: UITableViewCell = listTV.cellForRow(at: indexPath) {
             // 選択状態を解除
             cell.isSelected = false
         }
         // 編集画面へ遷移
-        diary = diaries[indexPath.row]
+        diary = diaryDic[keyArray[indexPath.section]]![indexPath.row]
         performSegue(withIdentifier: "toDiaryEdit", sender: nil)
     }
     
@@ -317,16 +340,18 @@ extension DiaryCalendarViewController: UITableViewDelegate, UITableViewDataSourc
                 alert.dismiss(animated: true)
             })
             let ok = UIAlertAction(title: "はい", style: .default, handler: { (action) -> Void in
+                var diaryArray: [Diary] = self.diaryDic[self.keyArray[indexPath.section]]!
+
                 // 日記画像ディレクトリ削除
                 let oshiIdStr: String = String(self.oshiId)
-                let diaryIdStr: String = String(self.diaries[indexPath.row].id)
+                let diaryIdStr: String = String(diaryArray[indexPath.row].id)
                 let dirName: String = Const.File.OSHI_DIR_NAME + oshiIdStr
                                     + "/" + Const.File.Diary.DIARY_DIR_NAME + diaryIdStr
                 CommonMethod.removeFile(name: dirName)
                 
                 // DB物理削除
                 if let diary: Diary = self.oshiRealm.objects(Diary.self)
-                    .filter("\(Diary.Types.id.rawValue) = %@", self.diaries[indexPath.row].id).first {
+                    .filter("\(Diary.Types.id.rawValue) = %@", diaryArray[indexPath.row].id).first {
                     
                     do {
                         try self.oshiRealm.write {
@@ -335,6 +360,9 @@ extension DiaryCalendarViewController: UITableViewDelegate, UITableViewDataSourc
                     } catch {
                         print("削除失敗", error)
                     }
+                    // 削除したデータをDicからも削除
+                    diaryArray.remove(at: indexPath.row)
+                    self.diaryDic[self.keyArray[indexPath.section]] = diaryArray
                     self.listTV.reloadData()
                     self.calendar.reloadData()
                 }
@@ -350,4 +378,13 @@ extension DiaryCalendarViewController: UITableViewDelegate, UITableViewDataSourc
         return UISwipeActionsConfiguration(actions: [delete])
     }
     
+    /**
+     指定の日付までスクロールする
+     */
+    private func scroll(dateStr: String) {
+        if let index = keyArray.firstIndex(of: dateStr) {
+            let indexPath = IndexPath(row: 0, section: index)
+            listTV.scrollToRow(at: indexPath, at: .top, animated: true)
+        }
+    }
 }

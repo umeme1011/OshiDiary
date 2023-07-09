@@ -254,18 +254,26 @@ class CommonMethod {
     /**
      日付フォーマッター
      */
-    static func dateFormatter(date: Date, withHour: Bool, onlyHour: Bool) -> String {
+    static func dateFormatter(date: Date, formattKind: Int) -> String {
         var ret: String = ""
         
         let formatter = DateFormatter()
         
-        if withHour {
+        switch formattKind {
+        case Const.DateFormatt.YMDWHMS:
             formatter.dateFormat = "yyyy年MM月dd日 " + weekFormatter(date: date) + "曜日 HH:mm:ss"
-        } else if onlyHour{
-            formatter.dateFormat = "HH:mm"
-        } else {
+        case Const.DateFormatt.YMDW:
             formatter.dateFormat = "yyyy年MM月dd日 " + weekFormatter(date: date) + "曜日"
+        case Const.DateFormatt.HMS:
+            formatter.dateFormat = "HH:mm:ss"
+        case Const.DateFormatt.HM:
+            formatter.dateFormat = "HH:mm"
+        case Const.DateFormatt.YM:
+            formatter.dateFormat = "yyyy/MM"
+        default:
+            formatter.dateFormat = "yyyy年MM月dd日 " + weekFormatter(date: date) + "曜日 HH:mm:ss"
         }
+
         formatter.calendar = Calendar(identifier: .gregorian)
         formatter.timeZone = TimeZone.current
         formatter.locale = Locale(identifier: "ja_JP")

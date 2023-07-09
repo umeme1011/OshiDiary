@@ -14,6 +14,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        // ios15でセクションの上部にスペースが入る対応
+        if #available(iOS 15, *) {
+            UITableView.appearance().sectionHeaderTopPadding = 0
+        }
+        
         return true
     }
 

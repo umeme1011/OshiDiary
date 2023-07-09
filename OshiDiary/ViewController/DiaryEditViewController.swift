@@ -80,12 +80,12 @@ class DiaryEditViewController: UIViewController {
             // ゴミ箱非表示
             deleteBtn.isHidden = true
             // 日付表示（時間込で表示）
-            dateLbl.text = CommonMethod.dateFormatter(date: selectedDate, withHour: true, onlyHour: false)
+            dateLbl.text = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.YMDWHMS)
         
         // 既存データ編集
         } else {
             // 日付表示（時間込で表示）
-            dateLbl.text = CommonMethod.dateFormatter(date: diary.date, withHour: true, onlyHour: false)
+            dateLbl.text = CommonMethod.dateFormatter(date: diary.date, formattKind: Const.DateFormatt.YMDWHMS)
             titleTF.text = diary.title
             contentTV.text = diary.content
             
@@ -214,9 +214,11 @@ class DiaryEditViewController: UIViewController {
             CommonMethod.saveImageFile(image: image, name: dirName + "/" + fileName)
         }
         
-        // 日時を年月日曜日にフォーマット
-        let dateString = CommonMethod.dateFormatter(date: selectedDate, withHour: false, onlyHour: false)
-
+        // 日時をyyyy年MM月dd日 曜日にフォーマット
+        let dateString = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.YMDW)
+        // 日時をyyyy/MMにフォーマット
+        let ymString = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.YM)
+        
         // データがすでに存在していたら更新
         if let diary: Diary = oshiRealm.objects(Diary.self)
             .filter("\(Diary.Types.id.rawValue) = %@", diaryId!).first {
@@ -233,6 +235,7 @@ class DiaryEditViewController: UIViewController {
                 newDiary.id = diaryId
                 newDiary.date = selectedDate
                 newDiary.dateString = dateString
+                newDiary.ymString = ymString
                 newDiary.title = titleTF.text ?? ""
                 newDiary.content = contentTV.text
 
