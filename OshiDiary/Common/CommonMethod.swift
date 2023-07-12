@@ -252,7 +252,7 @@ class CommonMethod {
     }
     
     /**
-     日付フォーマッター
+     日付フォーマッター（Date→String）
      */
     static func dateFormatter(date: Date, formattKind: Int) -> String {
         var ret: String = ""
@@ -260,18 +260,30 @@ class CommonMethod {
         let formatter = DateFormatter()
         
         switch formattKind {
-        case Const.DateFormatt.YMDWHMS:
-            formatter.dateFormat = "yyyy年MM月dd日 " + weekFormatter(date: date) + "曜日 HH:mm:ss"
-        case Const.DateFormatt.YMDW:
-            formatter.dateFormat = "yyyy年MM月dd日 " + weekFormatter(date: date) + "曜日"
-        case Const.DateFormatt.HMS:
-            formatter.dateFormat = "HH:mm:ss"
-        case Const.DateFormatt.HM:
-            formatter.dateFormat = "HH:mm"
-        case Const.DateFormatt.YM:
-            formatter.dateFormat = "yyyy年MM月"
+        case Const.DateFormatt.yyyyMdWHmmss:
+            formatter.dateFormat = "yyyy年M月d日 " + weekFormatter(date: date) + "曜日 H:mm:ss"
+        case Const.DateFormatt.yyyyMdW:
+            formatter.dateFormat = "yyyy年M月d日 " + weekFormatter(date: date) + "曜日"
+        case Const.DateFormatt.yyyyMd:
+            formatter.dateFormat = "yyyy年M月d日"
+        case Const.DateFormatt.yyyyM:
+            formatter.dateFormat = "yyyy年M月"
+        case Const.DateFormatt.yyyy:
+            formatter.dateFormat = "yyyy年"
+        case Const.DateFormatt.M:
+            formatter.dateFormat = "M月"
+        case Const.DateFormatt.d:
+            formatter.dateFormat = "d日"
+        case Const.DateFormatt.Hmmss:
+            formatter.dateFormat = "H:mm:ss"
+        case Const.DateFormatt.Hmm:
+            formatter.dateFormat = "H:mm"
+        case Const.DateFormatt.H:
+            formatter.dateFormat = "H"
+        case Const.DateFormatt.mm:
+            formatter.dateFormat = "mm"
         default:
-            formatter.dateFormat = "yyyy年MM月dd日 " + weekFormatter(date: date) + "曜日 HH:mm:ss"
+            formatter.dateFormat = "yyyy年M月d日 " + weekFormatter(date: date) + "曜日 H:mm:ss"
         }
 
         formatter.calendar = Calendar(identifier: .gregorian)
@@ -281,4 +293,21 @@ class CommonMethod {
         
         return ret
     }
+    
+    /**
+     日付フォーマッター（String→Date）
+     */
+    static func dateFormatter(str: String, formattStr: String) -> Date {
+        var ret: Date!
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = formattStr
+        formatter.calendar = Calendar(identifier: .gregorian)
+        formatter.timeZone = TimeZone(identifier: "Asia/Tokyo")
+        formatter.locale = Locale(identifier: "ja_JP")
+        ret = formatter.date(from: str)
+        
+        return ret
+    }
+
 }

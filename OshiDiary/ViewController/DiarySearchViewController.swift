@@ -201,7 +201,7 @@ extension DiarySearchViewController: UITableViewDelegate, UITableViewDataSource 
             let current = Calendar.current
             cell.dateLbl.text = String(current.component(.day, from: diaryArray[indexPath.row].date))
             cell.weekLbl.text = CommonMethod.weekFormatter(date: diaryArray[indexPath.row].date)
-            cell.timeLbl.text = CommonMethod.dateFormatter(date: diaryArray[indexPath.row].date, formattKind: Const.DateFormatt.HM)
+            cell.timeLbl.text = CommonMethod.dateFormatter(date: diaryArray[indexPath.row].date, formattKind: Const.DateFormatt.Hmm)
             cell.titleLbl.text = diaryArray[indexPath.row].title
             cell.contentLbl.text = diaryArray[indexPath.row].content
             cell.imageIV.image = CommonMethod.roadDiaryImage(oshiId: oshiId, diaryId: diaryArray[indexPath.row].id).first

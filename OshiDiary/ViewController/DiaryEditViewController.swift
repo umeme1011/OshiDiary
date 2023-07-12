@@ -12,12 +12,13 @@ import RealmSwift
 class DiaryEditViewController: UIViewController {
     
     @IBOutlet weak var baseView: UIView!
-    @IBOutlet weak var dateLbl: UILabel!
     @IBOutlet weak var titleTF: UITextField!
     @IBOutlet weak var contentTV: PlaceHolderTextView!
     @IBOutlet weak var contentsViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var imageCV: UICollectionView!
     @IBOutlet weak var deleteBtn: UIButton!
+    @IBOutlet weak var dateTF: UITextField!
+    @IBOutlet weak var timeTF: UITextField!
     
     var imageArray: [UIImage] = [UIImage]()
     var selectedNo: Int!
@@ -28,17 +29,47 @@ class DiaryEditViewController: UIViewController {
     var isNew: Bool = true
     var diaryId: Int!
     var selectedDate: Date = Date()
+    var datePV: UIPickerView = UIPickerView()
+    var timePV: UIPickerView = UIPickerView()
+
+    // pickerView用
+    var yearArray: [String] = [String]()
+    var monthArray: [String] = [String]()
+    var dayArray: [String] = [String]()
+    var hourArray: [String] = [String]()
+    var minutsArray: [String] = [String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         contentTV.delegate = self
         imageCV.delegate = self
         imageCV.dataSource = self
+        datePV.delegate = self
+        datePV.dataSource = self
+        timePV.delegate = self
+        timePV.dataSource = self
         
         myUD = MyUserDefaults.init()
         oshiId = myUD.getOshiId()
         oshiRealm = CommonMethod.createOshiRealm(oshiId: oshiId)
         
+        // pickerView用配列作成
+        // 2000年〜2100年
+        var year = 2000
+        while year <= 2100 {
+            yearArray.append(String(year) + "年")
+            year += 1
+        }
+        monthArray = ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"]
+        dayArray = ["1日","2日","3日","4日","5日","6日","7日","8日","9日","10日","11日","12日","13日","14日","15日","16日","17日","18日","19日","20日","21日","22日","23日","24日","25日","26日","27日","28日","29日","30日","31日"]
+        hourArray = ["0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23"]
+        // 00〜59分
+        var minuts = 0
+        while minuts <= 59 {
+            minutsArray.append(String(format: "%02d", minuts))
+            minuts += 1
+        }
+
         // イメージカラー設定
         baseView.backgroundColor = Const.Color().getImageColor(cd: myUD.getImageColorCd())
 
@@ -51,8 +82,13 @@ class DiaryEditViewController: UIViewController {
 //        textView.layer.borderColor = UIColor(red:0.76, green:0.76, blue:0.76, alpha:1.0).cgColor
 //        textView.layer.borderWidth = 1.0;
 //        textView.layer.cornerRadius = 5.0;
+        
+        // 枠線
+        dateTF.layer.borderWidth = 0
+        timeTF.layer.borderWidth = 0
 
-        // keyboad toolbar
+        //***********************
+        // タイトル、内容用keyboad toolbar
         let newToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 40))
 //        let newImageItem = UIBarButtonItem(image: UIImage(systemName: "photo"), style:.plain, target: self, action: #selector(tapImageBtn))
         let newSpacelItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
@@ -63,6 +99,45 @@ class DiaryEditViewController: UIViewController {
         titleTF.inputAccessoryView = newToolbar
         contentTV.inputAccessoryView = newToolbar
         
+        //***********************
+        // datePV toolbar
+        let dateToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 40))
+        let dateCancelItem = UIBarButtonItem(title: "キャンセル", style: .plain, target: self, action: #selector(tapDateCancelBtn))
+        let dateSpacelItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        let dateDoneItem = UIBarButtonItem(title: "決定", style: .plain, target: self, action: #selector(tapDateDoneBtn))
+        dateToolbar.setItems([dateCancelItem, dateSpacelItem, dateDoneItem], animated: true)
+        
+        dateTF.inputView = datePV
+        dateTF.inputAccessoryView = dateToolbar
+        
+        //***********************
+        // timePV toolbar
+        let timeToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 40))
+        let timeCancelItem = UIBarButtonItem(title: "キャンセル", style: .plain, target: self, action: #selector(tapTimeCancelBtn))
+        let timeSpacelItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        let timeDoneItem = UIBarButtonItem(title: "決定", style: .plain, target: self, action: #selector(tapTimeDoneBtn))
+        timeToolbar.setItems([timeCancelItem, timeSpacelItem, timeDoneItem], animated: true)
+        
+        timeTF.inputView = timePV
+        timeTF.inputAccessoryView = timeToolbar
+
+        // PickerView初期値
+        let yearStr = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.yyyy)
+        let monthStr = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.M)
+        let dayStr = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.d)
+        let hourStr = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.H)
+        let minutsStr = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.mm)
+        datePV.selectRow(yearArray.firstIndex(of: yearStr)!, inComponent: 0, animated: true)
+        datePV.selectRow(monthArray.firstIndex(of: monthStr)!, inComponent: 1, animated: true)
+        datePV.selectRow(dayArray.firstIndex(of: dayStr)!, inComponent: 2, animated: true)
+        timePV.selectRow(hourArray.firstIndex(of: hourStr)!, inComponent: 0, animated: true)
+        timePV.selectRow(minutsArray.firstIndex(of: minutsStr)!, inComponent: 2, animated: true)
+        
+        // 日付初期値
+        dateTF.text = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.yyyyMd)
+        // 時間初期値
+        timeTF.text = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.Hmm)
+
         // 新規作成
         if isNew {
             // プレースホルダー
@@ -76,16 +151,11 @@ class DiaryEditViewController: UIViewController {
                 .sorted(byKeyPath: Diary.Types.id.rawValue, ascending: false).first {
                 diaryId = diary.id + 1
             }
-            
             // ゴミ箱非表示
             deleteBtn.isHidden = true
-            // 日付表示（時間込で表示）
-            dateLbl.text = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.YMDWHMS)
         
         // 既存データ編集
         } else {
-            // 日付表示（時間込で表示）
-            dateLbl.text = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.YMDWHMS)
             titleTF.text = diary.title
             contentTV.text = diary.content
             
@@ -94,7 +164,6 @@ class DiaryEditViewController: UIViewController {
             // 日記画像読込
             imageArray = CommonMethod.roadDiaryImage(oshiId: oshiId, diaryId: diaryId)
         }
-        
     }
     
     /**
@@ -214,15 +283,17 @@ class DiaryEditViewController: UIViewController {
             CommonMethod.saveImageFile(image: image, name: dirName + "/" + fileName)
         }
         
-        // 日時をyyyy年MM月dd日 曜日にフォーマット
-        let dateString = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.YMDW)
-        // 日時をyyyy/MMにフォーマット
-        let ymString = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.YM)
+        // 日時をフォーマット
+        let dateString = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.yyyyMdW)
+        let ymString = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.yyyyM)
         
         // データがすでに存在していたら更新
         if let diary: Diary = oshiRealm.objects(Diary.self)
             .filter("\(Diary.Types.id.rawValue) = %@", diaryId!).first {
             try! oshiRealm.write {
+                diary.date = selectedDate
+                diary.dateString = dateString
+                diary.ymString = ymString
                 diary.title = titleTF.text ?? ""
                 diary.content = contentTV.text
                 diary.updateDate = Date()
@@ -244,6 +315,7 @@ class DiaryEditViewController: UIViewController {
         }
         self.dismiss(animated: true)
     }
+    
 }
 
 extension DiaryEditViewController: UITextViewDelegate {
@@ -354,7 +426,7 @@ extension DiaryEditViewController: UICollectionViewDelegate, UICollectionViewDat
     @objc private func tapImageBtn() {
         var configuration = PHPickerConfiguration()
         configuration.selectionLimit = myUD.getDiaryImageLimit() - imageArray.count // 選択上限
-        configuration.filter = .images // 取得できるメディアの種類。
+        configuration.filter = .images // 取得できるメディアの種類
         let picker = PHPickerViewController(configuration: configuration)
         picker.delegate = self
         present(picker, animated: true)
@@ -363,3 +435,151 @@ extension DiaryEditViewController: UICollectionViewDelegate, UICollectionViewDat
     
 }
 
+extension DiaryEditViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+    
+    // 列数
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        var cnt: Int = 0
+        switch pickerView {
+        case datePV:
+            cnt = 3
+        case timePV:
+            cnt = 3
+        default:
+            fatalError()
+        }
+        return cnt
+    }
+
+    // 行数
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        var cnt: Int = 0
+        switch pickerView {
+        case datePV:
+            switch component {
+            case 0:
+                cnt = yearArray.count
+            case 1:
+                cnt = monthArray.count
+            case 2:
+                cnt = dayArray.count
+            default:
+                cnt = 0
+            }
+        case timePV:
+            switch component {
+            case 0:
+                cnt = hourArray.count
+            case 1:
+                cnt = 1
+            case 2:
+                cnt = minutsArray.count
+            default:
+                cnt = 0
+            }
+        default:
+            fatalError()
+        }
+        return cnt
+    }
+
+    // データ
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        var item: String = ""
+        switch pickerView {
+        case datePV:
+            switch component {
+            case 0:
+                item = yearArray[row]
+            case 1:
+                item = monthArray[row]
+            case 2:
+                item = dayArray[row]
+          default:
+                item = ""
+            }
+        case timePV:
+            switch component {
+            case 0:
+                item = hourArray[row]
+            case 1:
+                item = ":"
+            case 2:
+                item = minutsArray[row]
+            default:
+                item = ""
+            }
+        default:
+            fatalError()
+        }
+        return item
+    }
+    
+    // 幅のサイズ
+    func pickerView(_ pickerView: UIPickerView, widthForComponent component:Int) -> CGFloat {
+        var ret: CGFloat!
+        switch pickerView {
+        case datePV:
+            switch component {
+            case 0:
+                ret = (UIScreen.main.bounds.size.width-50)/3
+            case 1:
+                ret = (UIScreen.main.bounds.size.width-50)/3
+            default:
+                ret = (UIScreen.main.bounds.size.width-50)/3
+            }
+        case timePV:
+            switch component {
+            case 0:
+                ret = (UIScreen.main.bounds.size.width-100)/2
+            case 1:
+                ret = 50
+            case 2:
+                ret = (UIScreen.main.bounds.size.width-100)/2
+            default:
+                ret = (UIScreen.main.bounds.size.width-100)/2
+            }
+        default:
+            fatalError()
+        }
+        return ret
+    }
+
+    /// Done button
+    @objc func tapDateDoneBtn() {
+        dateTF.endEditing(true)
+        var dateStr = yearArray[datePV.selectedRow(inComponent: 0)]
+                + monthArray[datePV.selectedRow(inComponent: 1)]
+                + dayArray[datePV.selectedRow(inComponent: 2)]
+        // TFに設定
+        dateTF.text = dateStr
+        // 時間と結合
+        dateStr += timeTF.text ?? ""
+        selectedDate = CommonMethod.dateFormatter(str: dateStr, formattStr: "yyyy年M月d日H:mm")
+        // 時差？9時間プラス
+//        selectedDate = Calendar.current.date(byAdding: .hour, value: 9, to: selectedDate)!
+    }
+
+    /// cancel button
+    @objc func tapDateCancelBtn() {
+        dateTF.endEditing(true)
+    }
+
+    /// Done button
+    @objc func tapTimeDoneBtn() {
+        timeTF.endEditing(true)
+        var timeStr = hourArray[timePV.selectedRow(inComponent: 0)] + ":" + minutsArray[timePV.selectedRow(inComponent: 2)]
+        // TFに設定
+        timeTF.text = timeStr
+        // 年月日と結合
+        timeStr = (dateTF.text ?? "") + timeStr
+        selectedDate = CommonMethod.dateFormatter(str: timeStr, formattStr: "yyyy年M月d日H:mm")
+        // 時差？9時間プラス
+//        selectedDate = Calendar.current.date(byAdding: .hour, value: 9, to: selectedDate)!
+    }
+
+    /// cancel button
+    @objc func tapTimeCancelBtn() {
+        timeTF.endEditing(true)
+    }
+}

@@ -92,10 +92,16 @@ class Const {
     }
     
     class DateFormatt {
-        static let YMDWHMS = 1
-        static let YMDW = 2
-        static let HMS = 3
-        static let HM = 4
-        static let YM = 5
+        static let yyyyMdWHmmss = 1
+        static let yyyyMdW = 2
+        static let yyyyMd = 3
+        static let yyyyM = 4
+        static let yyyy = 5
+        static let M = 6
+        static let d = 7
+        static let Hmmss = 8
+        static let Hmm = 9
+        static let H = 10
+        static let mm = 11
     }
 }

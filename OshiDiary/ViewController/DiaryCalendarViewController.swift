@@ -83,7 +83,7 @@ class DiaryCalendarViewController: UIViewController {
         oshiRealm = CommonMethod.createOshiRealm(oshiId: oshiId)
         
         // 表示月のyyyy/MMを取得
-        let ymString: String = CommonMethod.dateFormatter(date: currentPage, formattKind: Const.DateFormatt.YM)
+        let ymString: String = CommonMethod.dateFormatter(date: currentPage, formattKind: Const.DateFormatt.yyyyM)
         
         // 日記データ取得
         diaries = oshiRealm.objects(Diary.self)
@@ -200,7 +200,7 @@ extension DiaryCalendarViewController: FSCalendarDelegate, FSCalendarDataSource,
         var ret: Int = 0
         
         // 登録日付と比較するために日付を年月日曜日にフォーマット
-        let dateString: String = CommonMethod.dateFormatter(date: date, formattKind: Const.DateFormatt.YMDW)
+        let dateString: String = CommonMethod.dateFormatter(date: date, formattKind: Const.DateFormatt.yyyyMdW)
         
         for diary in diaries {
             if diary.dateString == dateString {
@@ -217,7 +217,7 @@ extension DiaryCalendarViewController: FSCalendarDelegate, FSCalendarDataSource,
         // 選択した日付
         selectedDate = date
         // リストをスクロール
-        let dateStr = CommonMethod.dateFormatter(date: date, formattKind: Const.DateFormatt.YMDW)
+        let dateStr = CommonMethod.dateFormatter(date: date, formattKind: Const.DateFormatt.yyyyMdW)
         scroll(dateStr: dateStr)
     }
     
@@ -300,7 +300,7 @@ extension DiaryCalendarViewController: UITableViewDelegate, UITableViewDataSourc
             let current = Calendar.current
             cell.dateLbl.text = String(current.component(.day, from: diaryArray[indexPath.row].date))
             cell.weekLbl.text = CommonMethod.weekFormatter(date: diaryArray[indexPath.row].date)
-            cell.timeLbl.text = CommonMethod.dateFormatter(date: diaryArray[indexPath.row].date, formattKind: Const.DateFormatt.HM)
+            cell.timeLbl.text = CommonMethod.dateFormatter(date: diaryArray[indexPath.row].date, formattKind: Const.DateFormatt.Hmm)
             cell.titleLbl.text = diaryArray[indexPath.row].title
             cell.contentLbl.text = diaryArray[indexPath.row].content
             cell.imageIV.image = CommonMethod.roadDiaryImage(oshiId: oshiId, diaryId: diaryArray[indexPath.row].id).first
