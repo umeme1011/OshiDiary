@@ -89,7 +89,6 @@ class DiaryCalendarViewController: UIViewController {
         let spacelItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
         let doneItem = UIBarButtonItem(title: "決定", style: .plain, target: self, action: #selector(tapDoneBtn))
         toolbar.setItems([cancelItem, spacelItem, doneItem], animated: true)
-        
         headerTF.inputView = yearMonthPV
         headerTF.inputAccessoryView = toolbar
 
@@ -114,7 +113,7 @@ class DiaryCalendarViewController: UIViewController {
         oshiId = myUD.getOshiId()
         oshiRealm = CommonMethod.createOshiRealm(oshiId: oshiId)
         
-        // 表示月のyyyy/MMを取得
+        // 表示月の年月を取得
         let ymString: String = CommonMethod.dateFormatter(date: currentPage, formattKind: Const.DateFormatt.yyyyM)
         
         // 日記データ取得
@@ -381,12 +380,8 @@ extension DiaryCalendarViewController: UITableViewDelegate, UITableViewDataSourc
                 var diaryArray: [Diary] = self.diaryDic[self.keyArray[indexPath.section]]!
 
                 // 日記画像ディレクトリ削除
-                let oshiIdStr: String = String(self.oshiId)
-                let diaryIdStr: String = String(diaryArray[indexPath.row].id)
-                let dirName: String = Const.File.OSHI_DIR_NAME + oshiIdStr
-                                    + "/" + Const.File.Diary.DIARY_DIR_NAME + diaryIdStr
-                CommonMethod.removeFile(name: dirName)
-                
+                CommonMethod.removeDiaryImage(oshiId: self.oshiId, diaryId: diaryArray[indexPath.row].id)
+
                 // DB物理削除
                 if let diary: Diary = self.oshiRealm.objects(Diary.self)
                     .filter("\(Diary.Types.id.rawValue) = %@", diaryArray[indexPath.row].id).first {

@@ -171,6 +171,18 @@ class CommonMethod {
     }
     
     /**
+     日記画像削除
+     */
+    static func removeDiaryImage(oshiId: Int, diaryId: Int) {
+        let oshiIdStr: String = String(oshiId)
+        let diaryIdStr: String = String(diaryId)
+        let dirName: String = Const.File.OSHI_DIR_NAME + oshiIdStr
+                            + "/" + Const.File.Diary.DIARY_DIR_NAME + diaryIdStr
+        CommonMethod.removeFile(name: dirName)
+    }
+    
+    
+    /**
      Realm作成
      */
     static func createRealm(path: URL) -> Realm {

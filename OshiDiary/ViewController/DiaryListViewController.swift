@@ -208,11 +208,7 @@ extension DiaryListViewController: UITableViewDelegate, UITableViewDataSource {
                 var diaryArray: [Diary] = self.diaryDic[self.keyArray[indexPath.section]]!
 
                 // 日記画像ディレクトリ削除
-                let oshiIdStr: String = String(self.oshiId)
-                let diaryIdStr: String = String(diaryArray[indexPath.row].id)
-                let dirName: String = Const.File.OSHI_DIR_NAME + oshiIdStr
-                                    + "/" + Const.File.Diary.DIARY_DIR_NAME + diaryIdStr
-                CommonMethod.removeFile(name: dirName)
+                CommonMethod.removeDiaryImage(oshiId: self.oshiId, diaryId: diaryArray[indexPath.row].id)
                 
                 // DB物理削除
                 if let diary: Diary = self.oshiRealm.objects(Diary.self)

@@ -67,25 +67,16 @@ class DiaryEditViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
 
-        
-        // textView枠線
-//        textView.layer.borderColor = UIColor(red:0.76, green:0.76, blue:0.76, alpha:1.0).cgColor
-//        textView.layer.borderWidth = 1.0;
-//        textView.layer.cornerRadius = 5.0;
-        
-        // 枠線
+        // 枠線を消す
         dateTF.borderStyle = .none
         timeTF.borderStyle = .none
 
         //***********************
         // タイトル、内容用keyboad toolbar
         let newToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 40))
-//        let newImageItem = UIBarButtonItem(image: UIImage(systemName: "photo"), style:.plain, target: self, action: #selector(tapImageBtn))
         let newSpacelItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
-        let newCloseItem = UIBarButtonItem(image: UIImage(systemName: "arrowtriangle.down.fill"), style:.plain, target: self, action: #selector(tapCloseBtn))
-//        newToolbar.setItems([newImageItem, newSpacelItem, newCloseItem], animated: true)
+        let newCloseItem = UIBarButtonItem(title: "閉じる", style:.plain, target: self, action: #selector(tapCloseBtn))
         newToolbar.setItems([newSpacelItem, newCloseItem], animated: true)
-
         titleTF.inputAccessoryView = newToolbar
         contentTV.inputAccessoryView = newToolbar
         
@@ -96,7 +87,6 @@ class DiaryEditViewController: UIViewController {
         let dateSpacelItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
         let dateDoneItem = UIBarButtonItem(title: "決定", style: .plain, target: self, action: #selector(tapDateDoneBtn))
         dateToolbar.setItems([dateCancelItem, dateSpacelItem, dateDoneItem], animated: true)
-        
         dateTF.inputView = datePV
         dateTF.inputAccessoryView = dateToolbar
         
@@ -107,7 +97,6 @@ class DiaryEditViewController: UIViewController {
         let timeSpacelItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
         let timeDoneItem = UIBarButtonItem(title: "決定", style: .plain, target: self, action: #selector(tapTimeDoneBtn))
         timeToolbar.setItems([timeCancelItem, timeSpacelItem, timeDoneItem], animated: true)
-        
         timeTF.inputView = timePV
         timeTF.inputAccessoryView = timeToolbar
 
@@ -156,18 +145,6 @@ class DiaryEditViewController: UIViewController {
         }
     }
     
-    /**
-     画像ボタン（未使用）
-     */
-//    @objc func tapImageBtn() {
-//        var configuration = PHPickerConfiguration()
-//        configuration.selectionLimit = myUD.getDiaryImageLimit() - imageArray.count // 選択上限
-//        configuration.filter = .images // 取得できるメディアの種類。
-//        let picker = PHPickerViewController(configuration: configuration)
-//        picker.delegate = self
-//        present(picker, animated: true)
-//    }
-
     /**
      キーボード閉じるボタン
      */
@@ -421,7 +398,6 @@ extension DiaryEditViewController: UICollectionViewDelegate, UICollectionViewDat
         picker.delegate = self
         present(picker, animated: true)
     }
-
     
 }
 
@@ -546,8 +522,6 @@ extension DiaryEditViewController: UIPickerViewDelegate, UIPickerViewDataSource 
         // 時間と結合
         dateStr += timeTF.text ?? ""
         selectedDate = CommonMethod.dateFormatter(str: dateStr, formattStr: "yyyy年M月d日H:mm")
-        // 時差？9時間プラス
-//        selectedDate = Calendar.current.date(byAdding: .hour, value: 9, to: selectedDate)!
     }
 
     /// cancel button
@@ -564,8 +538,6 @@ extension DiaryEditViewController: UIPickerViewDelegate, UIPickerViewDataSource 
         // 年月日と結合
         timeStr = (dateTF.text ?? "") + timeStr
         selectedDate = CommonMethod.dateFormatter(str: timeStr, formattStr: "yyyy年M月d日H:mm")
-        // 時差？9時間プラス
-//        selectedDate = Calendar.current.date(byAdding: .hour, value: 9, to: selectedDate)!
     }
 
     /// cancel button

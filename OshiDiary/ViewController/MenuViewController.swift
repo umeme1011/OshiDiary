@@ -77,9 +77,9 @@ class MenuViewController: UIViewController {
     
     func changeVisual() {
         
-        // 名前設定
         if let oshiSetting: OshiSetting = commonRealm.objects(OshiSetting.self)
             .filter("\(OshiSetting.Types.id.rawValue) = %@", myUD.getOshiId()).first {
+            // 名前設定
             nameLbl.text = oshiSetting.name
             // イメージカラー設定
             baseView.backgroundColor = Const.Color().getImageColor(cd: myUD.getImageColorCd())

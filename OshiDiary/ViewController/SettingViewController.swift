@@ -39,8 +39,6 @@ class SettingViewController: UIViewController {
         imageCV.dataSource = self
         
         myUD = MyUserDefaults.init()
-        
-        // Realm
         commonRealm = CommonMethod.createCommonRealm()
         
         // 新規追加
@@ -164,7 +162,6 @@ class SettingViewController: UIViewController {
                                        + "/" + Const.File.Setting.BACKGROUND_IMAGE_FILE_NAME + String(cnt) + ".jpg")
         }
         
-        // Realm
         // データがすでに存在していたら更新
         if let setting: OshiSetting = commonRealm.objects(OshiSetting.self)
             .filter("\(OshiSetting.Types.id.rawValue) = %@", oshiId!).first {
@@ -297,6 +294,9 @@ extension SettingViewController: PHPickerViewControllerDelegate {
  */
 extension SettingViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
+    /**
+     セル数
+     */
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if imageArray.count == myUD.getBackgroundImageLimit() {
             // 上限に達している場合は+ボタン表示しない
@@ -306,6 +306,9 @@ extension SettingViewController: UICollectionViewDelegate, UICollectionViewDataS
         }
     }
     
+    /**
+     セル内容
+     */
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         // 最後のセルは追加ボタンを表示
@@ -332,6 +335,7 @@ extension SettingViewController: UICollectionViewDelegate, UICollectionViewDataS
             return cell
         }
     }
+    
     /**
      cell選択
      */

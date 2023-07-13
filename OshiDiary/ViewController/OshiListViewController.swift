@@ -66,7 +66,6 @@ class OshiListViewController: UIViewController {
         switch segue.identifier {
         // 推し追加ボタン押下で設定画面へ
         case "toSetting":
-            // 遷移先のVC取得
             let vc:SettingViewController = segue.destination as? SettingViewController ?? SettingViewController()
             vc.isNew = true
         default:
