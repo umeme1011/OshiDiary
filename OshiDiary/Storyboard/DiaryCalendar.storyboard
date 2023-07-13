@@ -82,6 +82,18 @@
                                             <segue destination="j0U-wb-a3v" kind="presentation" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="89V-hR-dcU"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oBm-ef-C5i">
+                                        <rect key="frame" x="280" y="2.6666666666666643" width="60" height="45"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="60" id="JgJ-N8-aZu"/>
+                                            <constraint firstAttribute="height" constant="45" id="Wh4-W2-1BE"/>
+                                        </constraints>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="今日"/>
+                                        <connections>
+                                            <action selector="tapTodayBtn:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="PN7-fN-1aT"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -93,8 +105,10 @@
                                     <constraint firstItem="qfG-un-4jf" firstAttribute="centerY" secondItem="emm-NF-VU6" secondAttribute="centerY" id="To0-o3-NoV"/>
                                     <constraint firstItem="qfG-un-4jf" firstAttribute="leading" secondItem="hK1-D7-IqX" secondAttribute="trailing" id="VxY-YG-T4Y"/>
                                     <constraint firstItem="hK1-D7-IqX" firstAttribute="centerY" secondItem="emm-NF-VU6" secondAttribute="centerY" id="aFV-jM-ych"/>
+                                    <constraint firstItem="hKt-1t-gv8" firstAttribute="leading" secondItem="oBm-ef-C5i" secondAttribute="trailing" id="aab-mD-Loa"/>
                                     <constraint firstAttribute="trailing" secondItem="hKt-1t-gv8" secondAttribute="trailing" constant="8" id="c26-ZH-SQu"/>
                                     <constraint firstItem="u1X-0W-Fno" firstAttribute="centerY" secondItem="emm-NF-VU6" secondAttribute="centerY" id="dI8-H1-3Sc"/>
+                                    <constraint firstItem="oBm-ef-C5i" firstAttribute="centerY" secondItem="emm-NF-VU6" secondAttribute="centerY" id="hFS-FE-Yji"/>
                                     <constraint firstItem="hK1-D7-IqX" firstAttribute="leading" secondItem="emm-NF-VU6" secondAttribute="leading" constant="16" id="kYr-8e-jR5"/>
                                     <constraint firstItem="u1X-0W-Fno" firstAttribute="centerX" secondItem="emm-NF-VU6" secondAttribute="centerX" id="nzo-bK-nPQ"/>
                                     <constraint firstItem="1qu-oN-yOO" firstAttribute="leading" secondItem="hK1-D7-IqX" secondAttribute="trailing" id="q3u-w5-hmX"/>
@@ -178,11 +192,23 @@
                                     <userDefinedRuntimeAttribute type="color" keyPath="weekdayTextColor">
                                         <color key="value" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="string" keyPath="headerDateFormat" value="YYYY年MM月"/>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="headerDateFormat" value="YYYY年M月"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="titleTextSize">
+                                        <real key="value" value="16"/>
+                                    </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="u3k-GP-MyF" customClass="CustomTextField" customModule="OshiDiary" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="34"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="34" id="ag4-kT-F2e"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="70" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="DyO-qA-eWD">
-                                <rect key="frame" x="0.0" y="301" width="393" height="362"/>
+                                <rect key="frame" x="0.0" y="300" width="393" height="363"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell" id="it2-om-78p" customClass="ListTableViewCell" customModule="OshiDiary" customModuleProvider="target">
@@ -349,14 +375,17 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="AZN-cj-Vq4" firstAttribute="leading" secondItem="Gvv-pe-d2W" secondAttribute="leading" id="2ap-Ax-K9Z"/>
+                            <constraint firstItem="u3k-GP-MyF" firstAttribute="top" secondItem="u1B-LC-PB0" secondAttribute="top" id="7Xo-uI-LeK"/>
                             <constraint firstItem="DyO-qA-eWD" firstAttribute="trailing" secondItem="Gvv-pe-d2W" secondAttribute="trailing" id="DGg-gE-GaI"/>
                             <constraint firstItem="AME-Iq-Zer" firstAttribute="top" secondItem="u1B-LC-PB0" secondAttribute="top" id="DJG-E1-Egf"/>
-                            <constraint firstItem="DyO-qA-eWD" firstAttribute="top" secondItem="AME-Iq-Zer" secondAttribute="bottom" constant="1" id="Gr5-n8-hHm"/>
+                            <constraint firstItem="DyO-qA-eWD" firstAttribute="top" secondItem="AME-Iq-Zer" secondAttribute="bottom" id="Gr5-n8-hHm"/>
                             <constraint firstAttribute="trailing" secondItem="AME-Iq-Zer" secondAttribute="trailing" id="TM4-Gh-K3V"/>
                             <constraint firstItem="Gvv-pe-d2W" firstAttribute="bottom" secondItem="AZN-cj-Vq4" secondAttribute="bottom" id="VOK-zU-KAd"/>
                             <constraint firstItem="DyO-qA-eWD" firstAttribute="bottom" secondItem="Gvv-pe-d2W" secondAttribute="bottom" id="aJL-Zv-Iph"/>
                             <constraint firstItem="AME-Iq-Zer" firstAttribute="leading" secondItem="u1B-LC-PB0" secondAttribute="leading" id="fII-hq-KKz"/>
+                            <constraint firstAttribute="trailing" secondItem="u3k-GP-MyF" secondAttribute="trailing" id="lwg-aZ-egg"/>
                             <constraint firstItem="Gvv-pe-d2W" firstAttribute="trailing" secondItem="AZN-cj-Vq4" secondAttribute="trailing" id="n4f-FO-28p"/>
+                            <constraint firstItem="u3k-GP-MyF" firstAttribute="leading" secondItem="u1B-LC-PB0" secondAttribute="leading" id="qfI-9t-pjk"/>
                             <constraint firstItem="DyO-qA-eWD" firstAttribute="leading" secondItem="Gvv-pe-d2W" secondAttribute="leading" id="xDm-qT-lcj"/>
                             <constraint firstItem="AZN-cj-Vq4" firstAttribute="top" secondItem="u1B-LC-PB0" secondAttribute="top" id="ytM-1H-6Av"/>
                         </constraints>
@@ -364,6 +393,7 @@
                     <connections>
                         <outlet property="backgroundIV" destination="AZN-cj-Vq4" id="qVL-9q-WmX"/>
                         <outlet property="calendar" destination="AME-Iq-Zer" id="uXo-MG-ds2"/>
+                        <outlet property="headerTF" destination="u3k-GP-MyF" id="fe0-H4-WC6"/>
                         <outlet property="listTV" destination="DyO-qA-eWD" id="YX3-fU-pIW"/>
                         <segue destination="Mpx-OK-b0h" kind="presentation" identifier="toDiaryEdit" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="Co8-Ib-CrH"/>
                     </connections>
@@ -380,7 +410,7 @@
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PQo-tp-whB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-208" y="393"/>
+            <point key="canvasLocation" x="-220" y="421"/>
         </scene>
         <!--DiaryList-->
         <scene sceneID="kU9-63-pZx">
@@ -388,7 +418,7 @@
                 <viewControllerPlaceholder storyboardName="DiaryList" id="j0U-wb-a3v" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9cL-98-8ra" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="234" y="406"/>
+            <point key="canvasLocation" x="34" y="421"/>
         </scene>
         <!--DiaryEdit-->
         <scene sceneID="8Ek-o6-IfX">
@@ -396,7 +426,7 @@
                 <viewControllerPlaceholder storyboardName="DiaryEdit" id="Mpx-OK-b0h" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OcH-0e-Wyi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="520" y="378"/>
+            <point key="canvasLocation" x="469" y="421"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>

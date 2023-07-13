@@ -84,8 +84,8 @@ class DiaryEditViewController: UIViewController {
 //        textView.layer.cornerRadius = 5.0;
         
         // 枠線
-        dateTF.layer.borderWidth = 0
-        timeTF.layer.borderWidth = 0
+        dateTF.borderStyle = .none
+        timeTF.borderStyle = .none
 
         //***********************
         // タイトル、内容用keyboad toolbar

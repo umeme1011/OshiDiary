@@ -15,6 +15,7 @@ class DiaryCalendarViewController: UIViewController {
     @IBOutlet weak var calendar: FSCalendar!
     @IBOutlet weak var listTV: UITableView!
     @IBOutlet weak var backgroundIV: UIImageView!
+    @IBOutlet weak var headerTF: CustomTextField!
     
     var backgroundImageArray: [UIImage] = [UIImage]()
     var myUD: MyUserDefaults!
@@ -26,8 +27,12 @@ class DiaryCalendarViewController: UIViewController {
     var keyArray: [String] = [String]()
     var selectedDate: Date!
     var currentPage: Date!
+    var yearMonthPV: UIPickerView = UIPickerView()
     
-    
+    // pickerView用
+    var yearArray: [String] = [String]()
+    var monthArray: [String] = [String]()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -35,6 +40,8 @@ class DiaryCalendarViewController: UIViewController {
         calendar.dataSource = self
         listTV.delegate = self
         listTV.dataSource = self
+        yearMonthPV.delegate = self
+        yearMonthPV.dataSource = self
         
         myUD = MyUserDefaults.init()
         
@@ -61,6 +68,31 @@ class DiaryCalendarViewController: UIViewController {
         
         // カレンダー表示月を格納
         currentPage = calendar.currentPage
+        
+        // PickerView用配列作成
+        yearArray = Const.Array().getYearArray()
+        monthArray = Const.Array.MONTH_ARRAY
+        
+        // PickerView初期値
+        let yearStr = CommonMethod.dateFormatter(date: calendar.selectedDate ?? Date(), formattKind: Const.DateFormatt.yyyy)
+        let monthStr = CommonMethod.dateFormatter(date: calendar.selectedDate ?? Date(), formattKind: Const.DateFormatt.M)
+        yearMonthPV.selectRow(yearArray.firstIndex(of: yearStr)!, inComponent: 0, animated: true)
+        yearMonthPV.selectRow(monthArray.firstIndex(of: monthStr)!, inComponent: 1, animated: true)
+        
+        // カレンダーヘッダに重ねたTextFieldの枠線を消す
+        headerTF.borderStyle = .none
+
+        //***********************
+        // yearMonthPV toolbar
+        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 40))
+        let cancelItem = UIBarButtonItem(title: "キャンセル", style: .plain, target: self, action: #selector(tapCancelBtn))
+        let spacelItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        let doneItem = UIBarButtonItem(title: "決定", style: .plain, target: self, action: #selector(tapDoneBtn))
+        toolbar.setItems([cancelItem, spacelItem, doneItem], animated: true)
+        
+        headerTF.inputView = yearMonthPV
+        headerTF.inputAccessoryView = toolbar
+
     }
     
     /**
@@ -133,7 +165,7 @@ class DiaryCalendarViewController: UIViewController {
             vc.selectedDate = diary.date
         }
     }
-
+    
 }
 
 extension DiaryCalendarViewController: FSCalendarDelegate, FSCalendarDataSource, FSCalendarDelegateAppearance {
@@ -142,6 +174,11 @@ extension DiaryCalendarViewController: FSCalendarDelegate, FSCalendarDataSource,
      土日や祝日の日の文字色を変える
      */
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
+        //  現在表示されているページの月とセルの月が異なる場合には nil を戻す
+        if Calendar.current.compare(date, to: calendar.currentPage, toGranularity: .month) != .orderedSame {
+            return nil
+        }
+        
         //祝日判定をする（祝日は赤色で表示する）
         if judgeHoliday(date){
             return UIColor.red
@@ -387,4 +424,69 @@ extension DiaryCalendarViewController: UITableViewDelegate, UITableViewDataSourc
             listTV.scrollToRow(at: indexPath, at: .top, animated: true)
         }
     }
+}
+
+extension DiaryCalendarViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+    // 列数
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 2
+    }
+
+    // 行数
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        var cnt: Int = 0
+        switch component {
+        case 0:
+            cnt = yearArray.count
+        case 1:
+            cnt = monthArray.count
+        default:
+            cnt = 0
+        }
+        return cnt
+    }
+
+    // データ
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        var item: String = ""
+        switch component {
+        case 0:
+            item = yearArray[row]
+        case 1:
+            item = monthArray[row]
+        default:
+            item = ""
+        }
+        return item
+    }
+    
+    // 幅のサイズ
+    func pickerView(_ pickerView: UIPickerView, widthForComponent component:Int) -> CGFloat {
+        var ret: CGFloat!
+        switch component {
+        case 0:
+            ret = (UIScreen.main.bounds.size.width-50)/2
+        case 1:
+            ret = (UIScreen.main.bounds.size.width-50)/2
+        default:
+            ret = (UIScreen.main.bounds.size.width-50)/2
+        }
+        return ret
+    }
+
+    /// Done button
+    @objc func tapDoneBtn() {
+        headerTF.endEditing(true)
+        let dateStr = yearArray[yearMonthPV.selectedRow(inComponent: 0)]
+                + monthArray[yearMonthPV.selectedRow(inComponent: 1)]
+        let date = CommonMethod.dateFormatter(str: dateStr, formattStr: "yyyy年M月")
+        // 選択した年月を表示
+        calendar.select(date, scrollToDate: true)
+    }
+
+    /// cancel button
+    @objc func tapCancelBtn() {
+        headerTF.endEditing(true)
+    }
+
 }

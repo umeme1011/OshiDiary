@@ -46,6 +46,14 @@ class DiaryCalendarOverViewController: UIViewController {
     @IBAction func tapNewBtn(_ sender: Any) {
     }
     
+    /**
+     今日ボタン押下
+     */
+    @IBAction func tapTodayBtn(_ sender: Any) {
+        let vc: DiaryCalendarViewController = self.children[0] as! DiaryCalendarViewController
+        vc.calendar.select(Date(), scrollToDate: true)
+    }
+    
     func changeVisual() {
         // イメージカラー設定
         baseView.backgroundColor = Const.Color().getImageColor(cd: myUD.getImageColorCd())

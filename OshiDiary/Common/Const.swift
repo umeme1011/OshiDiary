@@ -104,4 +104,36 @@ class Const {
         static let H = 10
         static let mm = 11
     }
+    
+    class Array {
+        
+        // 年配列
+        func getYearArray() -> [String] {
+            // 2000年〜2100年
+            var ret: [String] = [String]()
+            var year = 2000
+            while year <= 2100 {
+                ret.append(String(year) + "年")
+                year += 1
+            }
+            return ret
+        }
+        // 月配列
+        static let MONTH_ARRAY = ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"]
+        // 日配列
+        static let DAY_ARRAY = ["1日","2日","3日","4日","5日","6日","7日","8日","9日","10日","11日","12日","13日","14日","15日","16日","17日","18日","19日","20日","21日","22日","23日","24日","25日","26日","27日","28日","29日","30日","31日"]
+        // 時間配列
+        static let HOUR_ARRAY = ["0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23"]
+        // 分配列
+        func getMinutsArray() -> [String] {
+            // 00〜59分
+            var ret: [String] = [String]()
+            var minuts = 0
+            while minuts <= 59 {
+                ret.append(String(format: "%02d", minuts))
+                minuts += 1
+            }
+            return ret
+        }
+    }
 }
