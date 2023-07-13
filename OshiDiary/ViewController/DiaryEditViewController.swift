@@ -54,21 +54,11 @@ class DiaryEditViewController: UIViewController {
         oshiRealm = CommonMethod.createOshiRealm(oshiId: oshiId)
         
         // pickerView用配列作成
-        // 2000年〜2100年
-        var year = 2000
-        while year <= 2100 {
-            yearArray.append(String(year) + "年")
-            year += 1
-        }
-        monthArray = ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"]
-        dayArray = ["1日","2日","3日","4日","5日","6日","7日","8日","9日","10日","11日","12日","13日","14日","15日","16日","17日","18日","19日","20日","21日","22日","23日","24日","25日","26日","27日","28日","29日","30日","31日"]
-        hourArray = ["0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23"]
-        // 00〜59分
-        var minuts = 0
-        while minuts <= 59 {
-            minutsArray.append(String(format: "%02d", minuts))
-            minuts += 1
-        }
+        yearArray = Const.Array().getYearArray()
+        monthArray = Const.Array.MONTH_ARRAY
+        dayArray = Const.Array.DAY_ARRAY
+        hourArray = Const.Array.HOUR_ARRAY
+        minutsArray = Const.Array().getMinutsArray()
 
         // イメージカラー設定
         baseView.backgroundColor = Const.Color().getImageColor(cd: myUD.getImageColorCd())

@@ -228,6 +228,9 @@ extension DiaryListViewController: UITableViewDelegate, UITableViewDataSource {
                     // 削除したデータをDicからも削除
                     diaryArray.remove(at: indexPath.row)
                     self.diaryDic[self.keyArray[indexPath.section]] = diaryArray
+                    if diaryArray.isEmpty {
+                        self.keyArray.remove(at: indexPath.section)
+                    }
                     self.listTV.reloadData()
                 }
             })

@@ -147,8 +147,9 @@ class DiaryCalendarViewController: UIViewController {
 
         // ランダムに背景画像を設定
         backgroundIV.image = CommonMethod.roadBackgroundImage(oshiId: myUD.getOshiId()).randomElement()
-        // listTVリロード
-        listTV.reloadData()
+        // listTVリロード（アニメーションつき）
+        UIView.transition(with: listTV, duration: 0.1, options: [.transitionCrossDissolve, .curveLinear], animations: {self.listTV.reloadData()})
+        
         // カレンダーリロード
         calendar.reloadData()
     }
@@ -400,6 +401,9 @@ extension DiaryCalendarViewController: UITableViewDelegate, UITableViewDataSourc
                     // 削除したデータをDicからも削除
                     diaryArray.remove(at: indexPath.row)
                     self.diaryDic[self.keyArray[indexPath.section]] = diaryArray
+                    if diaryArray.isEmpty {
+                        self.keyArray.remove(at: indexPath.section)
+                    }
                     self.listTV.reloadData()
                     self.calendar.reloadData()
                 }
