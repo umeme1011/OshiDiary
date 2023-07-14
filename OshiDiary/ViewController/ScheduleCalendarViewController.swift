@@ -51,6 +51,7 @@ class ScheduleCalendarViewController: UIViewController {
         calendar.calendarWeekdayView.weekdayLabels[0].textColor = .systemRed
         calendar.calendarWeekdayView.weekdayLabels[6].textColor = .systemBlue
         
+        
         // ランダムに背景画像を設定
         self.changeVisual()
     }

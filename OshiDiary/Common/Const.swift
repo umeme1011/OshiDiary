@@ -82,9 +82,13 @@ class Const {
     class ScheduleIcon {
         class iconCd {
             static let BIRTHDAY = 1
+            static let PRESENT = 2
+            static let RIBBON = 3
         }
         class colorCd {
             static let GRAY = 1
+            static let BLUE = 2
+            static let ORANGE = 3
         }
         func getIconName(iconCd: Int, colorCd: Int) -> String {
             switch iconCd {
@@ -92,6 +96,32 @@ class Const {
                 switch colorCd {
                 case Const.ScheduleIcon.colorCd.GRAY:
                     return "birthday_gray"
+                case Const.ScheduleIcon.colorCd.BLUE:
+                    return "birthday_blue"
+                case Const.ScheduleIcon.colorCd.ORANGE:
+                    return "birthday_orange"
+                default:
+                    return ""
+                }
+            case Const.ScheduleIcon.iconCd.PRESENT:
+                switch colorCd {
+                case Const.ScheduleIcon.colorCd.GRAY:
+                    return "present_gray"
+                case Const.ScheduleIcon.colorCd.BLUE:
+                    return "present_blue"
+                case Const.ScheduleIcon.colorCd.ORANGE:
+                    return "present_orange"
+                default:
+                    return ""
+                }
+            case Const.ScheduleIcon.iconCd.RIBBON:
+                switch colorCd {
+                case Const.ScheduleIcon.colorCd.GRAY:
+                    return "ribbon_gray"
+                case Const.ScheduleIcon.colorCd.BLUE:
+                    return "ribbon_blue"
+                case Const.ScheduleIcon.colorCd.ORANGE:
+                    return "ribbon_orange"
                 default:
                     return ""
                 }
@@ -148,12 +178,23 @@ class Const {
         static let HOUR_ARRAY = ["0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23"]
         // 分配列
         func getMinutsArray() -> [String] {
-            // 00〜59分
+            // 00〜55分
             var ret: [String] = [String]()
             var minuts = 0
             while minuts <= 59 {
                 ret.append(String(format: "%02d", minuts))
                 minuts += 1
+            }
+            return ret
+        }
+        // 分配列（5分間隔）
+        func getMinutsArrayPerFive() -> [String] {
+            // 00〜55分
+            var ret: [String] = [String]()
+            var minuts = 0
+            while minuts <= 55 {
+                ret.append(String(format: "%02d", minuts))
+                minuts += 5
             }
             return ret
         }
