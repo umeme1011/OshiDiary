@@ -60,6 +60,10 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="KHU-8r-hUn">
                                 <rect key="frame" x="0.0" y="109" width="393" height="663"/>
                             </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RLY-dC-uwe">
+                                <rect key="frame" x="0.0" y="109" width="393" height="663"/>
+                                <color key="backgroundColor" white="1" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="70" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="Ik3-NO-S8l">
                                 <rect key="frame" x="0.0" y="109" width="393" height="663"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -211,7 +215,7 @@
                                                 <constraint firstAttribute="bottom" secondItem="PPA-3N-bfp" secondAttribute="bottom" id="uVD-cZ-Udn"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <outlet property="contentLbl" destination="2HK-eN-hbA" id="mKv-53-r4s"/>
                                             <outlet property="dateLbl" destination="MpT-B1-wwc" id="aXw-rs-MW1"/>
@@ -223,6 +227,28 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9vC-lR-Hhz">
+                                <rect key="frame" x="132" y="139" width="129" height="30"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="exclamationmark.circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="EaL-xR-kov">
+                                        <rect key="frame" x="0.0" y="0.99999999999999822" width="25" height="28.666666666666664"/>
+                                        <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="25" id="Kam-3R-pp0"/>
+                                            <constraint firstAttribute="height" constant="30" id="wpK-zg-QLJ"/>
+                                        </constraints>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="検索結果なし" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L81-F5-2cY">
+                                        <rect key="frame" x="25" y="0.0" width="104" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="rRL-qP-2ys"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -234,10 +260,16 @@
                             <constraint firstItem="Bwm-Vd-0ca" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="4xV-Fp-yT1"/>
                             <constraint firstAttribute="trailing" secondItem="KHU-8r-hUn" secondAttribute="trailing" id="EG7-IL-rtU"/>
                             <constraint firstAttribute="bottom" secondItem="Bwm-Vd-0ca" secondAttribute="bottom" id="JKy-lv-A6K"/>
+                            <constraint firstItem="Bwm-Vd-0ca" firstAttribute="top" secondItem="RLY-dC-uwe" secondAttribute="bottom" id="KW4-Hf-tY9"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="RLY-dC-uwe" secondAttribute="trailing" id="LRI-Ko-Ccc"/>
                             <constraint firstItem="KHU-8r-hUn" firstAttribute="top" secondItem="gzu-CW-kgl" secondAttribute="bottom" id="LSk-FO-kmE"/>
                             <constraint firstItem="Ik3-NO-S8l" firstAttribute="top" secondItem="gzu-CW-kgl" secondAttribute="bottom" id="X5P-ng-hhB"/>
+                            <constraint firstItem="9vC-lR-Hhz" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="XTm-B4-2Er"/>
+                            <constraint firstItem="RLY-dC-uwe" firstAttribute="top" secondItem="gzu-CW-kgl" secondAttribute="bottom" id="YcY-hv-RL5"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="Ik3-NO-S8l" secondAttribute="trailing" id="fOb-Lf-Nlz"/>
                             <constraint firstItem="gzu-CW-kgl" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="idJ-zh-wwF"/>
+                            <constraint firstItem="9vC-lR-Hhz" firstAttribute="top" secondItem="gzu-CW-kgl" secondAttribute="bottom" constant="30" id="l8G-65-rqC"/>
+                            <constraint firstItem="RLY-dC-uwe" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="nHQ-oT-o8y"/>
                             <constraint firstItem="KHU-8r-hUn" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leading" id="tAQ-0v-NlK"/>
                             <constraint firstItem="gzu-CW-kgl" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="uGb-Hd-cC6"/>
                             <constraint firstItem="Bwm-Vd-0ca" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="zlZ-jL-vmE"/>
@@ -247,6 +279,7 @@
                         <outlet property="backgroundIV" destination="KHU-8r-hUn" id="91Q-7H-YGa"/>
                         <outlet property="baseView" destination="5EZ-qb-Rvc" id="qEi-Rm-z4L"/>
                         <outlet property="listTV" destination="Ik3-NO-S8l" id="WoL-2P-PFW"/>
+                        <outlet property="noMessageSV" destination="9vC-lR-Hhz" id="fWX-3E-2Gt"/>
                         <outlet property="searchTF" destination="J5I-my-vdo" id="Tjq-1B-caz"/>
                         <segue destination="sRp-3A-wGl" kind="presentation" identifier="toDiaryEdit" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="EkQ-ca-hS3"/>
                     </connections>
@@ -266,6 +299,7 @@
     </scenes>
     <resources>
         <image name="arrow.uturn.backward" catalog="system" width="128" height="113"/>
+        <image name="exclamationmark.circle" catalog="system" width="128" height="123"/>
         <image name="yoongi" width="424" height="636"/>
     </resources>
 </document>

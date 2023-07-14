@@ -16,6 +16,7 @@ class DiaryCalendarViewController: UIViewController {
     @IBOutlet weak var listTV: UITableView!
     @IBOutlet weak var backgroundIV: UIImageView!
     @IBOutlet weak var headerTF: CustomTextField!
+    @IBOutlet weak var noMessageSV: UIStackView!
     
     var backgroundImageArray: [UIImage] = [UIImage]()
     var myUD: MyUserDefaults!
@@ -144,13 +145,20 @@ class DiaryCalendarViewController: UIViewController {
         // キーをソート
         keyArray.sort()
 
-        // ランダムに背景画像を設定
-        backgroundIV.image = CommonMethod.roadBackgroundImage(oshiId: myUD.getOshiId()).randomElement()
         // listTVリロード（アニメーションつき）
         UIView.transition(with: listTV, duration: 0.1, options: [.transitionCrossDissolve, .curveLinear], animations: {self.listTV.reloadData()})
-        
         // カレンダーリロード
         calendar.reloadData()
+        // ランダムに背景画像を設定
+        backgroundIV.image = CommonMethod.roadBackgroundImage(oshiId: myUD.getOshiId()).randomElement()
+
+        if !diaries.isEmpty {
+            // 日記なしメッセージ非表示
+            noMessageSV.isHidden = true
+        } else {
+            // 日記なしメッセージ表示
+            noMessageSV.isHidden = false
+        }
     }
     
     /**
@@ -397,9 +405,14 @@ extension DiaryCalendarViewController: UITableViewDelegate, UITableViewDataSourc
                     diaryArray.remove(at: indexPath.row)
                     self.diaryDic[self.keyArray[indexPath.section]] = diaryArray
                     if diaryArray.isEmpty {
+                        self.diaryDic.removeValue(forKey: self.keyArray[indexPath.section])
                         self.keyArray.remove(at: indexPath.section)
                     }
-                    self.listTV.reloadData()
+                    if self.diaryDic.isEmpty {
+                        // 日記なしメッセージ表示
+                        self.noMessageSV.isHidden = false
+                    }
+                   self.listTV.reloadData()
                     self.calendar.reloadData()
                 }
             })

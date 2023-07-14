@@ -14,6 +14,7 @@ class DiarySearchViewController: UIViewController {
     @IBOutlet weak var searchTF: UITextField!
     @IBOutlet weak var backgroundIV: UIImageView!
     @IBOutlet weak var listTV: UITableView!
+    @IBOutlet weak var noMessageSV: UIStackView!
     
     var myUD: MyUserDefaults!
     var oshiRealm: Realm!
@@ -42,6 +43,8 @@ class DiarySearchViewController: UIViewController {
         searchTF.attributedPlaceholder = NSAttributedString(string: "スペースでAND検索",
                                                                 attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
 
+        // データなしメッセージ非表示
+        noMessageSV.isHidden = true
     }
     
     /**
@@ -128,6 +131,14 @@ extension DiarySearchViewController: UITextFieldDelegate {
         keyArray.sort { $0 > $1 }
         // TVリロード
         listTV.reloadData()
+        
+        if !diaries.isEmpty {
+            // 日記なしメッセージ非表示
+            noMessageSV.isHidden = true
+        } else {
+            // 日記なしメッセージ表示
+            noMessageSV.isHidden = false
+        }
 
         // キーボードを閉じる
         textField.resignFirstResponder()
@@ -261,7 +272,12 @@ extension DiarySearchViewController: UITableViewDelegate, UITableViewDataSource 
                     diaryArray.remove(at: indexPath.row)
                     self.diaryDic[self.keyArray[indexPath.section]] = diaryArray
                     if diaryArray.isEmpty {
+                        self.diaryDic.removeValue(forKey: self.keyArray[indexPath.section])
                         self.keyArray.remove(at: indexPath.section)
+                    }
+                    if self.diaryDic.isEmpty {
+                        // 日記なしメッセージ表示
+                        self.noMessageSV.isHidden = false
                     }
                     self.listTV.reloadData()
                 }

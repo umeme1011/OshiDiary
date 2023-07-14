@@ -178,9 +178,13 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="yoongi2" translatesAutoresizingMaskIntoConstraints="NO" id="AZN-cj-Vq4">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="663"/>
                             </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eGf-Fn-xFT">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="663"/>
+                                <color key="backgroundColor" white="1" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AME-Iq-Zer" customClass="FSCalendar">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="300"/>
-                                <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="0.69503996235366328" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="300" id="rPd-U9-1lx"/>
@@ -358,7 +362,7 @@
                                                 <constraint firstAttribute="bottom" secondItem="utN-jN-BnM" secondAttribute="bottom" id="zci-Wa-eCQ"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <outlet property="contentLbl" destination="4RH-3z-E9J" id="GIm-ew-nFA"/>
                                             <outlet property="dateLbl" destination="J9A-SW-3Rx" id="tqN-wR-aRa"/>
@@ -370,19 +374,47 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="e7J-ED-SBq">
+                                <rect key="frame" x="97.333333333333329" y="320" width="198.33333333333337" height="30"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="exclamationmark.circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="H6k-fL-2Ey">
+                                        <rect key="frame" x="0.0" y="0.99999999999999822" width="25" height="28.666666666666664"/>
+                                        <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="25" id="7Ch-DM-pRf"/>
+                                            <constraint firstAttribute="height" constant="30" id="ZpP-a2-G95"/>
+                                        </constraints>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="日記はまだありません" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nC5-Bl-nom">
+                                        <rect key="frame" x="25" y="0.0" width="173.33333333333334" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="bJD-PT-bJG"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Gvv-pe-d2W"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="AZN-cj-Vq4" firstAttribute="leading" secondItem="Gvv-pe-d2W" secondAttribute="leading" id="2ap-Ax-K9Z"/>
                             <constraint firstItem="u3k-GP-MyF" firstAttribute="top" secondItem="u1B-LC-PB0" secondAttribute="top" id="7Xo-uI-LeK"/>
+                            <constraint firstItem="eGf-Fn-xFT" firstAttribute="trailing" secondItem="Gvv-pe-d2W" secondAttribute="trailing" id="9rF-V7-OcS"/>
+                            <constraint firstItem="e7J-ED-SBq" firstAttribute="top" secondItem="AME-Iq-Zer" secondAttribute="bottom" constant="20" id="D9N-fZ-TsI"/>
                             <constraint firstItem="DyO-qA-eWD" firstAttribute="trailing" secondItem="Gvv-pe-d2W" secondAttribute="trailing" id="DGg-gE-GaI"/>
                             <constraint firstItem="AME-Iq-Zer" firstAttribute="top" secondItem="u1B-LC-PB0" secondAttribute="top" id="DJG-E1-Egf"/>
                             <constraint firstItem="DyO-qA-eWD" firstAttribute="top" secondItem="AME-Iq-Zer" secondAttribute="bottom" id="Gr5-n8-hHm"/>
+                            <constraint firstItem="eGf-Fn-xFT" firstAttribute="leading" secondItem="Gvv-pe-d2W" secondAttribute="leading" id="Nns-Tk-z1m"/>
+                            <constraint firstItem="e7J-ED-SBq" firstAttribute="centerX" secondItem="u1B-LC-PB0" secondAttribute="centerX" id="O7F-Wx-4Ry"/>
                             <constraint firstAttribute="trailing" secondItem="AME-Iq-Zer" secondAttribute="trailing" id="TM4-Gh-K3V"/>
                             <constraint firstItem="Gvv-pe-d2W" firstAttribute="bottom" secondItem="AZN-cj-Vq4" secondAttribute="bottom" id="VOK-zU-KAd"/>
                             <constraint firstItem="DyO-qA-eWD" firstAttribute="bottom" secondItem="Gvv-pe-d2W" secondAttribute="bottom" id="aJL-Zv-Iph"/>
                             <constraint firstItem="AME-Iq-Zer" firstAttribute="leading" secondItem="u1B-LC-PB0" secondAttribute="leading" id="fII-hq-KKz"/>
+                            <constraint firstItem="eGf-Fn-xFT" firstAttribute="top" secondItem="u1B-LC-PB0" secondAttribute="top" id="gNy-sA-FbL"/>
+                            <constraint firstItem="eGf-Fn-xFT" firstAttribute="bottom" secondItem="Gvv-pe-d2W" secondAttribute="bottom" id="hkH-az-VcZ"/>
                             <constraint firstAttribute="trailing" secondItem="u3k-GP-MyF" secondAttribute="trailing" id="lwg-aZ-egg"/>
                             <constraint firstItem="Gvv-pe-d2W" firstAttribute="trailing" secondItem="AZN-cj-Vq4" secondAttribute="trailing" id="n4f-FO-28p"/>
                             <constraint firstItem="u3k-GP-MyF" firstAttribute="leading" secondItem="u1B-LC-PB0" secondAttribute="leading" id="qfI-9t-pjk"/>
@@ -395,6 +427,7 @@
                         <outlet property="calendar" destination="AME-Iq-Zer" id="uXo-MG-ds2"/>
                         <outlet property="headerTF" destination="u3k-GP-MyF" id="fe0-H4-WC6"/>
                         <outlet property="listTV" destination="DyO-qA-eWD" id="YX3-fU-pIW"/>
+                        <outlet property="noMessageSV" destination="e7J-ED-SBq" id="Ra1-9C-UvG"/>
                         <segue destination="Mpx-OK-b0h" kind="presentation" identifier="toDiaryEdit" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="Co8-Ib-CrH"/>
                     </connections>
                 </viewController>
@@ -434,6 +467,7 @@
     </inferredMetricsTieBreakers>
     <resources>
         <image name="diary_new" width="80" height="80"/>
+        <image name="exclamationmark.circle" catalog="system" width="128" height="123"/>
         <image name="heart" width="64" height="64"/>
         <image name="kuma_default" width="120" height="120"/>
         <image name="list.bullet.rectangle" catalog="system" width="128" height="93"/>

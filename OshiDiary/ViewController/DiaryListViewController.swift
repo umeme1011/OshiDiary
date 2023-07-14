@@ -12,6 +12,7 @@ class DiaryListViewController: UIViewController {
     
     @IBOutlet weak var listTV: UITableView!
     @IBOutlet weak var backgroundIV: UIImageView!
+    @IBOutlet weak var noMessageSV: UIStackView!
     
     var backgroundImageArray: [UIImage] = [UIImage]()
     var myUD: MyUserDefaults!
@@ -82,6 +83,14 @@ class DiaryListViewController: UIViewController {
         backgroundIV.image = CommonMethod.roadBackgroundImage(oshiId: myUD.getOshiId()).randomElement()
         // listTVリロード
         listTV.reloadData()
+        
+        if !diaries.isEmpty {
+            // 日記なしメッセージ非表示
+            noMessageSV.isHidden = true
+        } else {
+            // 日記なしメッセージ表示
+            noMessageSV.isHidden = false
+        }
     }
     
     /**
@@ -225,7 +234,12 @@ extension DiaryListViewController: UITableViewDelegate, UITableViewDataSource {
                     diaryArray.remove(at: indexPath.row)
                     self.diaryDic[self.keyArray[indexPath.section]] = diaryArray
                     if diaryArray.isEmpty {
+                        self.diaryDic.removeValue(forKey: self.keyArray[indexPath.section])
                         self.keyArray.remove(at: indexPath.section)
+                    }
+                    if self.diaryDic.isEmpty {
+                        // 日記なしメッセージ表示
+                        self.noMessageSV.isHidden = false
                     }
                     self.listTV.reloadData()
                 }
