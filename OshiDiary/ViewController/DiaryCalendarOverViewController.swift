@@ -56,7 +56,7 @@ class DiaryCalendarOverViewController: UIViewController {
     
     func changeVisual() {
         // イメージカラー設定
-        baseView.backgroundColor = Const.Color().getImageColor(cd: myUD.getImageColorCd())
+        baseView.backgroundColor = Const.ImageColor().getImageColor(cd: myUD.getImageColorCd())
         // アイコン画像設定
         iconIV.image = CommonMethod.roadIconImage(oshiId: myUD.getOshiId())
     }

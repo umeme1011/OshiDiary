@@ -53,7 +53,7 @@ class Const {
         }
     }
     
-    class Color {
+    class ImageColor {
         class imageColorCd {
             static let WHITE = 1
             static let MISTYROSE = 2
@@ -76,6 +76,28 @@ class Const {
                 ret = UIColor(red: 230/255, green: 230/255, blue: 250/255, alpha: 1)
             }
             return ret
+        }
+    }
+    
+    class ScheduleIcon {
+        class iconCd {
+            static let BIRTHDAY = 1
+        }
+        class colorCd {
+            static let GRAY = 1
+        }
+        func getIconName(iconCd: Int, colorCd: Int) -> String {
+            switch iconCd {
+            case Const.ScheduleIcon.iconCd.BIRTHDAY:
+                switch colorCd {
+                case Const.ScheduleIcon.colorCd.GRAY:
+                    return "birthday_gray"
+                default:
+                    return ""
+                }
+            default:
+                return ""
+            }
         }
     }
     

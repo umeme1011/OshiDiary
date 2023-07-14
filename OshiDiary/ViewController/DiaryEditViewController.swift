@@ -61,7 +61,7 @@ class DiaryEditViewController: UIViewController {
         minutsArray = Const.Array().getMinutsArray()
 
         // イメージカラー設定
-        baseView.backgroundColor = Const.Color().getImageColor(cd: myUD.getImageColorCd())
+        baseView.backgroundColor = Const.ImageColor().getImageColor(cd: myUD.getImageColorCd())
 
         // キーボード開閉時アクション設定
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)

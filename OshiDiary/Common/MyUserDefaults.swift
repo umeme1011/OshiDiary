@@ -56,7 +56,7 @@ class MyUserDefaults {
     }
     
     func getImageColorCd() -> Int {
-        return ud.object(forKey: "imageColorCd") as? Int ?? Const.Color.imageColorCd.WHITE
+        return ud.object(forKey: "imageColorCd") as? Int ?? Const.ImageColor.imageColorCd.WHITE
     }
 
     // 最終表示画面

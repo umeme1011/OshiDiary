@@ -21,6 +21,7 @@
 		C310CDA32A491DA00049C510 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C310CDA22A491DA00049C510 /* MenuViewController.swift */; };
 		C33B47EA2A5AFF22006DD8B9 /* DiarySearch.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C33B47E92A5AFF22006DD8B9 /* DiarySearch.storyboard */; };
 		C33B47EC2A5AFF43006DD8B9 /* DiarySearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C33B47EB2A5AFF43006DD8B9 /* DiarySearchViewController.swift */; };
+		C346B2D82A60E80400C780B5 /* Schedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C346B2D72A60E80400C780B5 /* Schedule.swift */; };
 		C347E25B2A5FFC1500A36037 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = C347E25A2A5FFC1500A36037 /* CustomTextField.swift */; };
 		C35B953C2A49DCA9008BB23F /* ScheduleCalendar.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C35B953B2A49DCA9008BB23F /* ScheduleCalendar.storyboard */; };
 		C35B953E2A49DCC8008BB23F /* ScheduleCalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C35B953D2A49DCC8008BB23F /* ScheduleCalendarViewController.swift */; };
@@ -72,6 +73,7 @@
 		C310CDA22A491DA00049C510 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		C33B47E92A5AFF22006DD8B9 /* DiarySearch.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = DiarySearch.storyboard; sourceTree = "<group>"; };
 		C33B47EB2A5AFF43006DD8B9 /* DiarySearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiarySearchViewController.swift; sourceTree = "<group>"; };
+		C346B2D72A60E80400C780B5 /* Schedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Schedule.swift; sourceTree = "<group>"; };
 		C347E25A2A5FFC1500A36037 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		C35B953B2A49DCA9008BB23F /* ScheduleCalendar.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ScheduleCalendar.storyboard; sourceTree = "<group>"; };
 		C35B953D2A49DCC8008BB23F /* ScheduleCalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleCalendarViewController.swift; sourceTree = "<group>"; };
@@ -234,6 +236,7 @@
 			children = (
 				C3F5984B2A4D621500705BE0 /* OshiSetting.swift */,
 				C3F254142A5672DD00A113E7 /* Diary.swift */,
+				C346B2D72A60E80400C780B5 /* Schedule.swift */,
 			);
 			path = Realm;
 			sourceTree = "<group>";
@@ -396,6 +399,7 @@
 				C35B95462A4B2079008BB23F /* PlaceHolderTextView.swift in Sources */,
 				C3F598452A4C803000705BE0 /* OshiListViewController.swift in Sources */,
 				C310CD9F2A4828DD0049C510 /* ImageDetailCollectionViewCell.swift in Sources */,
+				C346B2D82A60E80400C780B5 /* Schedule.swift in Sources */,
 				C310CD902A4405A40049C510 /* DiaryListOverViewController.swift in Sources */,
 				C3F5983F2A4C076C00705BE0 /* SettingViewController.swift in Sources */,
 				C369D8642A42E69D00DBDE8A /* SceneDelegate.swift in Sources */,

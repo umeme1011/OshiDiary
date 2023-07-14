@@ -131,7 +131,7 @@ extension DiaryListViewController: UITableViewDelegate, UITableViewDataSource {
         view.layer.borderColor = UIColor.white.cgColor
         view.layer.borderWidth = 0.0
         view.frame = CGRect(x:0, y:0, width:screenWidth, height:25)
-        view.backgroundColor = Const.Color().getImageColor(cd: myUD.getImageColorCd())
+        view.backgroundColor = Const.ImageColor().getImageColor(cd: myUD.getImageColorCd())
         // labelデザイン
         label.sizeToFit()
         label.font = UIFont.systemFont(ofSize: 13)

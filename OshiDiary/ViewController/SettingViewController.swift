@@ -56,7 +56,7 @@ class SettingViewController: UIViewController {
                                                                     attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
             // イメージカラー白を選択
             imageColorBtn1.setTitle("✓", for: .normal)
-            imageColorCd = Const.Color.imageColorCd.WHITE
+            imageColorCd = Const.ImageColor.imageColorCd.WHITE
             // イメージカラー白を設定
             baseView.backgroundColor = UIColor.white
 
@@ -77,25 +77,25 @@ class SettingViewController: UIViewController {
                 
                 // イメージカラー選択
                 switch oshiSetting.imageColorCd {
-                case Const.Color.imageColorCd.WHITE:
+                case Const.ImageColor.imageColorCd.WHITE:
                     imageColorBtn1.setTitle("✓", for: .normal)
-                    imageColorCd = Const.Color.imageColorCd.WHITE
-                case Const.Color.imageColorCd.MISTYROSE:
+                    imageColorCd = Const.ImageColor.imageColorCd.WHITE
+                case Const.ImageColor.imageColorCd.MISTYROSE:
                     imageColorBtn2.setTitle("✓", for: .normal)
-                    imageColorCd = Const.Color.imageColorCd.MISTYROSE
-                case Const.Color.imageColorCd.LIGHTCYAN:
+                    imageColorCd = Const.ImageColor.imageColorCd.MISTYROSE
+                case Const.ImageColor.imageColorCd.LIGHTCYAN:
                     imageColorBtn3.setTitle("✓", for: .normal)
-                    imageColorCd = Const.Color.imageColorCd.LIGHTCYAN
-                case Const.Color.imageColorCd.LAVENDER:
+                    imageColorCd = Const.ImageColor.imageColorCd.LIGHTCYAN
+                case Const.ImageColor.imageColorCd.LAVENDER:
                     imageColorBtn4.setTitle("✓", for: .normal)
-                    imageColorCd = Const.Color.imageColorCd.LAVENDER
+                    imageColorCd = Const.ImageColor.imageColorCd.LAVENDER
                 default:
                     imageColorBtn1.setTitle("✓", for: .normal)
-                    imageColorCd = Const.Color.imageColorCd.WHITE
+                    imageColorCd = Const.ImageColor.imageColorCd.WHITE
                 }
                 
                 // イメージカラー設定
-                baseView.backgroundColor = Const.Color().getImageColor(cd: myUD.getImageColorCd())
+                baseView.backgroundColor = Const.ImageColor().getImageColor(cd: myUD.getImageColorCd())
                 
                 // アイコン画像読込
                 let oshiIdStr: String = String(oshiId)
@@ -214,7 +214,7 @@ class SettingViewController: UIViewController {
         imageColorBtn2.setTitle("　", for: .normal)
         imageColorBtn3.setTitle("　", for: .normal)
         imageColorBtn4.setTitle("　", for: .normal)
-        imageColorCd = Const.Color.imageColorCd.WHITE
+        imageColorCd = Const.ImageColor.imageColorCd.WHITE
         baseView.backgroundColor = UIColor.white
     }
     /**
@@ -225,8 +225,8 @@ class SettingViewController: UIViewController {
         imageColorBtn2.setTitle("✓", for: .normal)
         imageColorBtn3.setTitle("　", for: .normal)
         imageColorBtn4.setTitle("　", for: .normal)
-        imageColorCd = Const.Color.imageColorCd.MISTYROSE
-        baseView.backgroundColor = Const.Color().getImageColor(cd: Const.Color.imageColorCd.MISTYROSE)
+        imageColorCd = Const.ImageColor.imageColorCd.MISTYROSE
+        baseView.backgroundColor = Const.ImageColor().getImageColor(cd: Const.ImageColor.imageColorCd.MISTYROSE)
     }
     /**
      イメージカラーボタン3押下
@@ -236,8 +236,8 @@ class SettingViewController: UIViewController {
         imageColorBtn2.setTitle("　", for: .normal)
         imageColorBtn3.setTitle("✓", for: .normal)
         imageColorBtn4.setTitle("　", for: .normal)
-        imageColorCd = Const.Color.imageColorCd.LIGHTCYAN
-        baseView.backgroundColor = Const.Color().getImageColor(cd: Const.Color.imageColorCd.LIGHTCYAN)
+        imageColorCd = Const.ImageColor.imageColorCd.LIGHTCYAN
+        baseView.backgroundColor = Const.ImageColor().getImageColor(cd: Const.ImageColor.imageColorCd.LIGHTCYAN)
     }
     /**
      イメージカラーボタン4押下
@@ -247,8 +247,8 @@ class SettingViewController: UIViewController {
         imageColorBtn2.setTitle("　", for: .normal)
         imageColorBtn3.setTitle("　", for: .normal)
         imageColorBtn4.setTitle("✓", for: .normal)
-        imageColorCd = Const.Color.imageColorCd.LAVENDER
-        baseView.backgroundColor = Const.Color().getImageColor(cd: Const.Color.imageColorCd.LAVENDER)
+        imageColorCd = Const.ImageColor.imageColorCd.LAVENDER
+        baseView.backgroundColor = Const.ImageColor().getImageColor(cd: Const.ImageColor.imageColorCd.LAVENDER)
     }
 }
 
