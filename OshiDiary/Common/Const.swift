@@ -42,6 +42,18 @@ class Const {
         }
     }
     
+    class ScreenName {
+        static let SCHEDULE_CALENDAR = "ScheduleCalendar"
+        static let SCHEDULE_LIST = "ScheduleList"
+        static let DIALY_CALENDAR = "DiaryCalendar"
+        static let DIALY_LIST = "DiaryList"
+    }
+    
+    class Message {
+        static let EDIT_BACK_CONFIRM_MSG = "編集途中の内容は破棄されます。\nよろしいですか？"
+        static let DELTE_CONFIRM_MSG = "削除してもよろしいですか？"
+    }
+    
     class Course {
         class Premium {
             static let BACKGROUND_IMAGE_LIMIT = 10
@@ -79,7 +91,7 @@ class Const {
         }
     }
     
-    class ScheduleIcon {
+    class Schedule {
         class iconCd {
             static let BIRTHDAY = 1
             static let PRESENT = 2
@@ -92,35 +104,35 @@ class Const {
         }
         func getIconName(iconCd: Int, colorCd: Int) -> String {
             switch iconCd {
-            case Const.ScheduleIcon.iconCd.BIRTHDAY:
+            case Const.Schedule.iconCd.BIRTHDAY:
                 switch colorCd {
-                case Const.ScheduleIcon.colorCd.GRAY:
+                case Const.Schedule.colorCd.GRAY:
                     return "birthday_gray"
-                case Const.ScheduleIcon.colorCd.BLUE:
+                case Const.Schedule.colorCd.BLUE:
                     return "birthday_blue"
-                case Const.ScheduleIcon.colorCd.ORANGE:
+                case Const.Schedule.colorCd.ORANGE:
                     return "birthday_orange"
                 default:
                     return ""
                 }
-            case Const.ScheduleIcon.iconCd.PRESENT:
+            case Const.Schedule.iconCd.PRESENT:
                 switch colorCd {
-                case Const.ScheduleIcon.colorCd.GRAY:
+                case Const.Schedule.colorCd.GRAY:
                     return "present_gray"
-                case Const.ScheduleIcon.colorCd.BLUE:
+                case Const.Schedule.colorCd.BLUE:
                     return "present_blue"
-                case Const.ScheduleIcon.colorCd.ORANGE:
+                case Const.Schedule.colorCd.ORANGE:
                     return "present_orange"
                 default:
                     return ""
                 }
-            case Const.ScheduleIcon.iconCd.RIBBON:
+            case Const.Schedule.iconCd.RIBBON:
                 switch colorCd {
-                case Const.ScheduleIcon.colorCd.GRAY:
+                case Const.Schedule.colorCd.GRAY:
                     return "ribbon_gray"
-                case Const.ScheduleIcon.colorCd.BLUE:
+                case Const.Schedule.colorCd.BLUE:
                     return "ribbon_blue"
-                case Const.ScheduleIcon.colorCd.ORANGE:
+                case Const.Schedule.colorCd.ORANGE:
                     return "ribbon_orange"
                 default:
                     return ""
@@ -129,19 +141,15 @@ class Const {
                 return ""
             }
         }
+        
+        class repeatCd {
+            static let NO_REPEAT = 1
+            static let YEAR = 2
+            static let MONTH = 3
+            static let WEEK = 4
+        }
     }
     
-    class ScreenName {
-        static let SCHEDULE_CALENDAR = "ScheduleCalendar"
-        static let SCHEDULE_LIST = "ScheduleList"
-        static let DIALY_CALENDAR = "DiaryCalendar"
-        static let DIALY_LIST = "DiaryList"
-    }
-    
-    class Message {
-        static let EDIT_BACK_CONFIRM_MSG = "編集途中の内容は破棄されます。\nよろしいですか？"
-        static let DELTE_CONFIRM_MSG = "削除してもよろしいですか？"
-    }
     
     class DateFormatt {
         static let yyyyMdWHmmss = 1
@@ -198,5 +206,7 @@ class Const {
             }
             return ret
         }
+        // 繰り返し
+        static let REPEAT_ARRAY = ["なし","毎年","毎月","毎週"]
     }
 }

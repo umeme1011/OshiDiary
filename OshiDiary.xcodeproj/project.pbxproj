@@ -19,6 +19,8 @@
 		C310CD9F2A4828DD0049C510 /* ImageDetailCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C310CD9E2A4828DC0049C510 /* ImageDetailCollectionViewCell.swift */; };
 		C310CDA12A491D6A0049C510 /* Menu.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C310CDA02A491D690049C510 /* Menu.storyboard */; };
 		C310CDA32A491DA00049C510 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C310CDA22A491DA00049C510 /* MenuViewController.swift */; };
+		C32BF1D82A62E6AA00D2CCB0 /* ScheduleEditMemo.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C32BF1D72A62E6AA00D2CCB0 /* ScheduleEditMemo.storyboard */; };
+		C32BF1DA2A62E74E00D2CCB0 /* ScheduleEditMemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C32BF1D92A62E74E00D2CCB0 /* ScheduleEditMemoViewController.swift */; };
 		C33B47EA2A5AFF22006DD8B9 /* DiarySearch.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C33B47E92A5AFF22006DD8B9 /* DiarySearch.storyboard */; };
 		C33B47EC2A5AFF43006DD8B9 /* DiarySearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C33B47EB2A5AFF43006DD8B9 /* DiarySearchViewController.swift */; };
 		C346B2D82A60E80400C780B5 /* Schedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C346B2D72A60E80400C780B5 /* Schedule.swift */; };
@@ -71,6 +73,8 @@
 		C310CD9E2A4828DC0049C510 /* ImageDetailCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ImageDetailCollectionViewCell.swift; path = OshiDiary/ImageDetailCollectionViewCell.swift; sourceTree = SOURCE_ROOT; };
 		C310CDA02A491D690049C510 /* Menu.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Menu.storyboard; sourceTree = "<group>"; };
 		C310CDA22A491DA00049C510 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
+		C32BF1D72A62E6AA00D2CCB0 /* ScheduleEditMemo.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ScheduleEditMemo.storyboard; sourceTree = "<group>"; };
+		C32BF1D92A62E74E00D2CCB0 /* ScheduleEditMemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleEditMemoViewController.swift; sourceTree = "<group>"; };
 		C33B47E92A5AFF22006DD8B9 /* DiarySearch.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = DiarySearch.storyboard; sourceTree = "<group>"; };
 		C33B47EB2A5AFF43006DD8B9 /* DiarySearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiarySearchViewController.swift; sourceTree = "<group>"; };
 		C346B2D72A60E80400C780B5 /* Schedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Schedule.swift; sourceTree = "<group>"; };
@@ -202,6 +206,7 @@
 				C3F598422A4C7F7D00705BE0 /* OshiList.storyboard */,
 				C35B953B2A49DCA9008BB23F /* ScheduleCalendar.storyboard */,
 				C35B95412A4B1D7B008BB23F /* ScheduleEdit.storyboard */,
+				C32BF1D72A62E6AA00D2CCB0 /* ScheduleEditMemo.storyboard */,
 				C3F598362A4BFD1C00705BE0 /* ScheduleList.storyboard */,
 				C3F5983C2A4C074C00705BE0 /* Setting.storyboard */,
 			);
@@ -223,6 +228,7 @@
 				C3F598442A4C803000705BE0 /* OshiListViewController.swift */,
 				C35B953F2A4AD24E008BB23F /* ScheduleCalendarOverViewControlle.swift */,
 				C35B953D2A49DCC8008BB23F /* ScheduleCalendarViewController.swift */,
+				C32BF1D92A62E74E00D2CCB0 /* ScheduleEditMemoViewController.swift */,
 				C35B95432A4B1D9E008BB23F /* ScheduleEditViewController.swift */,
 				C3F598382A4BFD5F00705BE0 /* ScheduleListOverViewController.swift */,
 				C3F5983A2A4BFD7C00705BE0 /* ScheduleListViewController.swift */,
@@ -324,6 +330,7 @@
 				C310CD8C2A44051E0049C510 /* DiaryList.storyboard in Resources */,
 				C310CD932A441DE00049C510 /* DiaryEdit.storyboard in Resources */,
 				C3F598372A4BFD1C00705BE0 /* ScheduleList.storyboard in Resources */,
+				C32BF1D82A62E6AA00D2CCB0 /* ScheduleEditMemo.storyboard in Resources */,
 				C3F5983D2A4C074C00705BE0 /* Setting.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -405,6 +412,7 @@
 				C369D8642A42E69D00DBDE8A /* SceneDelegate.swift in Sources */,
 				C3F254152A5672DD00A113E7 /* Diary.swift in Sources */,
 				C3F598412A4C226800705BE0 /* ImageAddCollectionViewCell.swift in Sources */,
+				C32BF1DA2A62E74E00D2CCB0 /* ScheduleEditMemoViewController.swift in Sources */,
 				C3F5983B2A4BFD7C00705BE0 /* ScheduleListViewController.swift in Sources */,
 				C310CD8A2A43E5B30049C510 /* ListTableViewCell.swift in Sources */,
 				C310CD8E2A44053F0049C510 /* DiaryListViewController.swift in Sources */,

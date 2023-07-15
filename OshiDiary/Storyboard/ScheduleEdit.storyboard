@@ -72,7 +72,7 @@
                                 <rect key="frame" x="0.0" y="50" width="375" height="617"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="Q92-ZK-N4v">
-                                        <rect key="frame" x="16" y="8" width="343" height="609"/>
+                                        <rect key="frame" x="16" y="8" width="343" height="593"/>
                                         <subviews>
                                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="PEJ-Y6-kyf">
                                                 <rect key="frame" x="0.0" y="0.0" width="343" height="40"/>
@@ -531,7 +531,7 @@
                                                         <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="毎年" borderStyle="roundedRect" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="W3A-QT-wKL">
+                                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="毎年" borderStyle="roundedRect" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="W3A-QT-wKL" customClass="CustomTextField" customModule="OshiDiary" customModuleProvider="target">
                                                         <rect key="frame" x="263" y="0.0" width="80" height="34"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
@@ -544,25 +544,46 @@
                                                     </textField>
                                                 </subviews>
                                             </stackView>
-                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="6oB-ys-UtZ" customClass="PlaceHolderTextView" customModule="OshiDiary" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="406" width="343" height="203"/>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QFb-hy-rrm">
+                                                <rect key="frame" x="0.0" y="406" width="343" height="187"/>
+                                                <subviews>
+                                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="6oB-ys-UtZ" customClass="PlaceHolderTextView" customModule="OshiDiary" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="0.0" width="343" height="187"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                                    </textView>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="57y-hf-xsS">
+                                                        <rect key="frame" x="0.0" y="0.0" width="343" height="187"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain"/>
+                                                        <connections>
+                                                            <segue destination="Fek-F7-Rlw" kind="presentation" identifier="toScheduleEditMemo" id="BCv-AU-cBk"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                            </textView>
+                                                <constraints>
+                                                    <constraint firstItem="6oB-ys-UtZ" firstAttribute="top" secondItem="QFb-hy-rrm" secondAttribute="top" id="E4J-sE-R2R"/>
+                                                    <constraint firstItem="6oB-ys-UtZ" firstAttribute="leading" secondItem="QFb-hy-rrm" secondAttribute="leading" id="IpS-Ga-jvz"/>
+                                                    <constraint firstAttribute="bottom" secondItem="57y-hf-xsS" secondAttribute="bottom" id="Iu0-aC-uz3"/>
+                                                    <constraint firstItem="57y-hf-xsS" firstAttribute="top" secondItem="QFb-hy-rrm" secondAttribute="top" id="J5n-Ll-Eoo"/>
+                                                    <constraint firstAttribute="trailing" secondItem="6oB-ys-UtZ" secondAttribute="trailing" id="YBK-uT-xb2"/>
+                                                    <constraint firstAttribute="bottom" secondItem="6oB-ys-UtZ" secondAttribute="bottom" id="btD-LZ-dcb"/>
+                                                    <constraint firstAttribute="trailing" secondItem="57y-hf-xsS" secondAttribute="trailing" id="fSk-XT-6BB"/>
+                                                    <constraint firstItem="57y-hf-xsS" firstAttribute="leading" secondItem="QFb-hy-rrm" secondAttribute="leading" id="pvz-Zh-fvL"/>
+                                                </constraints>
+                                            </view>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstAttribute="trailing" secondItem="6oB-ys-UtZ" secondAttribute="trailing" id="PVG-Bl-8Qp"/>
-                                            <constraint firstItem="6oB-ys-UtZ" firstAttribute="leading" secondItem="Q92-ZK-N4v" secondAttribute="leading" id="nF9-0N-7VZ"/>
-                                        </constraints>
                                     </stackView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="Q92-ZK-N4v" firstAttribute="leading" secondItem="RQz-Nc-4Mx" secondAttribute="leading" constant="16" id="Hge-Lf-oeO"/>
-                                    <constraint firstAttribute="bottom" secondItem="Q92-ZK-N4v" secondAttribute="bottom" id="YhB-bY-c6V"/>
+                                    <constraint firstAttribute="bottom" secondItem="Q92-ZK-N4v" secondAttribute="bottom" constant="16" id="YhB-bY-c6V"/>
                                     <constraint firstAttribute="trailing" secondItem="Q92-ZK-N4v" secondAttribute="trailing" constant="16" id="cPJ-gc-AuY"/>
                                     <constraint firstItem="Q92-ZK-N4v" firstAttribute="top" secondItem="RQz-Nc-4Mx" secondAttribute="top" constant="8" id="lL9-mj-f11"/>
                                 </constraints>
@@ -592,8 +613,8 @@
                         <outlet property="iconIV1" destination="mfP-sC-c5A" id="MU4-Nr-n6F"/>
                         <outlet property="iconIV2" destination="sWM-Ps-0Iw" id="47D-sh-atb"/>
                         <outlet property="iconIV3" destination="3n2-Jf-fAu" id="Kg5-E7-tds"/>
-                        <outlet property="memoTV" destination="6oB-ys-UtZ" id="Rik-64-3h3"/>
-                        <outlet property="repeatTF" destination="W3A-QT-wKL" id="Jl9-op-D49"/>
+                        <outlet property="memoTV" destination="6oB-ys-UtZ" id="ul3-bB-ppQ"/>
+                        <outlet property="repeatTF" destination="W3A-QT-wKL" id="b5X-8a-HLg"/>
                         <outlet property="startDateTF" destination="N7Q-fy-aks" id="x7m-YC-X30"/>
                         <outlet property="startTimeTF" destination="l5I-Im-GwP" id="Kbo-L0-NdK"/>
                         <outlet property="titleTF" destination="PEJ-Y6-kyf" id="u7W-s3-BOo"/>
@@ -602,6 +623,14 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="88.799999999999997" y="-2.2488755622188905"/>
+        </scene>
+        <!--ScheduleEditMemo-->
+        <scene sceneID="MdV-eH-cmp">
+            <objects>
+                <viewControllerPlaceholder storyboardName="ScheduleEditMemo" id="Fek-F7-Rlw" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QdS-tJ-vNb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="697" y="149"/>
         </scene>
     </scenes>
     <resources>

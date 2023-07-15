@@ -10,6 +10,8 @@ import UIKit
 class ScheduleEditViewController: UIViewController, UITextViewDelegate {
     
     @IBOutlet weak var baseView: UIView!
+//    @IBOutlet weak var subView: UIView!
+//    @IBOutlet weak var stackView: UIStackView!
     
     @IBOutlet weak var titleTF: UITextField!
     @IBOutlet weak var memoTV: PlaceHolderTextView!
@@ -32,6 +34,7 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
     var myUD: MyUserDefaults!
     var datePV: UIPickerView = UIPickerView()
     var timePV: UIPickerView = UIPickerView()
+    var repeatPV: UIPickerView = UIPickerView()
     var selectedDate: Date = Date()
     var isNew: Bool = true
 
@@ -41,6 +44,7 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
     var dayArray: [String] = [String]()
     var hourArray: [String] = [String]()
     var minutsArray: [String] = [String]()
+    var repeatArray: [String] = [String]()
 
     // Schedule登録用
     var iconCd: Int!
@@ -48,6 +52,7 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
     var allDay: Bool = true
     var startDate: Date = Date()
     var endDate: Date = Date()
+    var repeatCd: Int!
     
     let ICON_SELECTED_COLOR = UIColor(red: 214/255, green: 214/255, blue: 214/255, alpha: 1)
     
@@ -58,6 +63,8 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
         datePV.dataSource = self
         timePV.delegate = self
         timePV.dataSource = self
+        repeatPV.delegate = self
+        repeatPV.dataSource = self
         
         myUD = MyUserDefaults.init()
         
@@ -67,6 +74,7 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
         dayArray = Const.Array.DAY_ARRAY
         hourArray = Const.Array.HOUR_ARRAY
         minutsArray = Const.Array().getMinutsArrayPerFive()
+        repeatArray = Const.Array.REPEAT_ARRAY
         
         // イメージカラー設定
         baseView.backgroundColor = Const.ImageColor().getImageColor(cd: myUD.getImageColorCd())
@@ -83,7 +91,7 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
         startTimeTF.borderStyle = .none
         endDateTF.borderStyle = .none
         endTimeTF.borderStyle = .none
-        repeatTF.layer.borderWidth = 0
+        repeatTF.borderStyle = .none
         memoTV.layer.borderColor = UIColor(red:0.76, green:0.76, blue:0.76, alpha:1.0).cgColor
         memoTV.layer.borderWidth = 1.0
         memoTV.layer.cornerRadius = 5.0
@@ -91,7 +99,9 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
         // プレースホルダー
         titleTF.attributedPlaceholder = NSAttributedString(string: "タイトルを記入",
                                                                 attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-        memoTV.placeHolder = "メモを記入"
+        if memoTV.text.isEmpty {
+            memoTV.placeHolder = "メモを記入"
+        }
 
         //***********************
         // startDateTF toolbar
@@ -133,6 +143,16 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
         endTimeTF.inputView = timePV
         endTimeTF.inputAccessoryView = endTimeToolbar
 
+        //***********************
+        // repeatTF toolbar
+        let repeatToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 40))
+        let repeatCancelItem = UIBarButtonItem(title: "キャンセル", style: .plain, target: self, action: #selector(tapRepeatCancelBtn))
+        let repeatSpacelItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        let repeatDoneItem = UIBarButtonItem(title: "決定", style: .plain, target: self, action: #selector(tapRepeatDoneBtn))
+        repeatToolbar.setItems([repeatCancelItem, repeatSpacelItem, repeatDoneItem], animated: true)
+        repeatTF.inputView = repeatPV
+        repeatTF.inputAccessoryView = repeatToolbar
+
         // 年月日初期値
         startDateTF.text = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.yyyyMdW)
         endDateTF.text = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.yyyyMdW)
@@ -162,11 +182,14 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
             startTimeTF.isHidden = true
             endTimeTF.isHidden = true
             // アイコン初期値選択
-            iconCd = Const.ScheduleIcon.iconCd.BIRTHDAY
+            iconCd = Const.Schedule.iconCd.BIRTHDAY
             iconIV1.backgroundColor = ICON_SELECTED_COLOR
             // アイコンカラー初期値選択
-            iconColorCd = Const.ScheduleIcon.colorCd.GRAY
+            iconColorCd = Const.Schedule.colorCd.GRAY
             colorBtn1.setTitle("✓", for: .normal)
+            // 繰り返し初期値
+            repeatTF.text = repeatArray.first
+            repeatPV.selectRow(0, inComponent: 0, animated: true)
         } else {
             
         }
@@ -176,26 +199,34 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
      キーボード表示
      */
     @objc func keyboardWillShow(notification: NSNotification) {
-        // キーボードの高さに合わせてViewのボトムを上に上げる
-        if let keyboadSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            let tabBarHeight = tabBarController?.tabBar.frame.size.height ?? 0
-            contentsViewBottomConstraint.constant = keyboadSize.height + tabBarHeight
-        }
+//        let keyboardFrame = (notification.userInfo![UIResponder.keyboardFrameEndUserInfoKey]as AnyObject).cgRectValue
+//        // キーボードの一番上の座標（Y座標）
+//        guard let keyboardMinY = keyboardFrame?.minY else {return}
+//        // Viewの一番下の座標（Y座標）
+//        let baseViewMaxY = baseView.frame.maxY
+//        let distance = baseViewMaxY - keyboardMinY
+//        let transform = CGAffineTransform(translationX: 0, y: -distance)
+//        //ビューを上げる時のアニメーション
+//        UIView.animate(withDuration: 0.5, delay:0, usingSpringWithDamping:1, initialSpringVelocity:1, options:[], animations: {
+//            self.view.transform = transform
+//        })
     }
     
     /**
      キーボード非表示
      */
     @objc func keyboardWillHide() {
-        // Viewのボトムをもとに戻す
-        contentsViewBottomConstraint.constant = 0
+//        //ビューを下げる時のアニメーション
+//        UIView.animate(withDuration: 0.5, delay:0, usingSpringWithDamping:1, initialSpringVelocity:1, options:[], animations: {
+//            self.view.transform = .identity
+//        })
     }
 
     /**
      キャンセルボタン押下
      */
     @IBAction func tapCancelBtn(_ sender: Any) {
-        let alert = UIAlertController(title: "", message: "編集途中の内容は破棄されます。\nよろしいですか？", preferredStyle: .alert)
+        let alert = UIAlertController(title: "", message: Const.Message.EDIT_BACK_CONFIRM_MSG, preferredStyle: .alert)
         let cancel = UIAlertAction(title: "いいえ", style: .default, handler: { (action) -> Void in
             // アラートを閉じる
             alert.dismiss(animated: true)
@@ -210,47 +241,47 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
     }
     
     @IBAction func tapIconBtn1(_ sender: Any) {
-        iconCd = Const.ScheduleIcon.iconCd.BIRTHDAY
+        iconCd = Const.Schedule.iconCd.BIRTHDAY
         iconIV1.backgroundColor = ICON_SELECTED_COLOR
         iconIV2.backgroundColor = UIColor.clear
         iconIV3.backgroundColor = UIColor.clear
     }
     
     @IBAction func tapIconBtn2(_ sender: Any) {
-        iconCd = Const.ScheduleIcon.iconCd.PRESENT
+        iconCd = Const.Schedule.iconCd.PRESENT
         iconIV1.backgroundColor = UIColor.clear
         iconIV2.backgroundColor = ICON_SELECTED_COLOR
         iconIV3.backgroundColor = UIColor.clear
     }
     @IBAction func tapIconBtn3(_ sender: Any) {
-        iconCd = Const.ScheduleIcon.iconCd.RIBBON
+        iconCd = Const.Schedule.iconCd.RIBBON
         iconIV1.backgroundColor = UIColor.clear
         iconIV2.backgroundColor = UIColor.clear
         iconIV3.backgroundColor = ICON_SELECTED_COLOR
     }
     @IBAction func tapColorBtn1(_ sender: Any) {
-        iconColorCd = Const.ScheduleIcon.colorCd.GRAY
+        iconColorCd = Const.Schedule.colorCd.GRAY
         colorBtn1.setTitle("✓", for: .normal)
         colorBtn2.setTitle("", for: .normal)
         colorBtn3.setTitle("", for: .normal)
-        iconIV1.image = UIImage(named: Const.ScheduleIcon()
-            .getIconName(iconCd: Const.ScheduleIcon.iconCd.BIRTHDAY, colorCd: iconColorCd))
-        iconIV2.image = UIImage(named: Const.ScheduleIcon()
-            .getIconName(iconCd: Const.ScheduleIcon.iconCd.PRESENT, colorCd: iconColorCd))
-        iconIV3.image = UIImage(named: Const.ScheduleIcon()
-            .getIconName(iconCd: Const.ScheduleIcon.iconCd.RIBBON, colorCd: iconColorCd))
+        iconIV1.image = UIImage(named: Const.Schedule()
+            .getIconName(iconCd: Const.Schedule.iconCd.BIRTHDAY, colorCd: iconColorCd))
+        iconIV2.image = UIImage(named: Const.Schedule()
+            .getIconName(iconCd: Const.Schedule.iconCd.PRESENT, colorCd: iconColorCd))
+        iconIV3.image = UIImage(named: Const.Schedule()
+            .getIconName(iconCd: Const.Schedule.iconCd.RIBBON, colorCd: iconColorCd))
     }
     @IBAction func tapColorBtn2(_ sender: Any) {
-        iconColorCd = Const.ScheduleIcon.colorCd.BLUE
+        iconColorCd = Const.Schedule.colorCd.BLUE
         colorBtn1.setTitle("", for: .normal)
         colorBtn2.setTitle("✓", for: .normal)
         colorBtn3.setTitle("", for: .normal)
-        iconIV1.image = UIImage(named: Const.ScheduleIcon()
-            .getIconName(iconCd: Const.ScheduleIcon.iconCd.BIRTHDAY, colorCd: iconColorCd))
-        iconIV2.image = UIImage(named: Const.ScheduleIcon()
-            .getIconName(iconCd: Const.ScheduleIcon.iconCd.PRESENT, colorCd: iconColorCd))
-        iconIV3.image = UIImage(named: Const.ScheduleIcon()
-            .getIconName(iconCd: Const.ScheduleIcon.iconCd.RIBBON, colorCd: iconColorCd))
+        iconIV1.image = UIImage(named: Const.Schedule()
+            .getIconName(iconCd: Const.Schedule.iconCd.BIRTHDAY, colorCd: iconColorCd))
+        iconIV2.image = UIImage(named: Const.Schedule()
+            .getIconName(iconCd: Const.Schedule.iconCd.PRESENT, colorCd: iconColorCd))
+        iconIV3.image = UIImage(named: Const.Schedule()
+            .getIconName(iconCd: Const.Schedule.iconCd.RIBBON, colorCd: iconColorCd))
     }
     
     /**
@@ -270,6 +301,16 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
         }
     }
     
+    /**
+     値渡し
+     */
+    override func prepare(for segue: UIStoryboardSegue, sender: Any!) {
+        if (segue.identifier == "toScheduleEditMemo") {
+            let vc:ScheduleEditMemoViewController = segue.destination as? ScheduleEditMemoViewController ?? ScheduleEditMemoViewController()
+            vc.memo = memoTV.text
+        }
+    }
+
 }
 
 extension ScheduleEditViewController: UIPickerViewDelegate, UIPickerViewDataSource {
@@ -282,6 +323,8 @@ extension ScheduleEditViewController: UIPickerViewDelegate, UIPickerViewDataSour
             cnt = 3
         case timePV:
             cnt = 3
+        case repeatPV:
+            cnt = 1
         default:
             fatalError()
         }
@@ -314,6 +357,8 @@ extension ScheduleEditViewController: UIPickerViewDelegate, UIPickerViewDataSour
             default:
                 cnt = 0
             }
+        case repeatPV:
+            cnt = repeatArray.count
         default:
             fatalError()
         }
@@ -346,6 +391,8 @@ extension ScheduleEditViewController: UIPickerViewDelegate, UIPickerViewDataSour
             default:
                 item = ""
             }
+        case repeatPV:
+            item = repeatArray[row]
         default:
             fatalError()
         }
@@ -376,6 +423,8 @@ extension ScheduleEditViewController: UIPickerViewDelegate, UIPickerViewDataSour
             default:
                 ret = (UIScreen.main.bounds.size.width-100)/2
             }
+        case repeatPV:
+            ret = UIScreen.main.bounds.size.width
         default:
             fatalError()
         }
@@ -464,6 +513,19 @@ extension ScheduleEditViewController: UIPickerViewDelegate, UIPickerViewDataSour
     /// cancel button
     @objc func tapEndTimeCancelBtn() {
         endTimeTF.endEditing(true)
+    }
+
+    /// Done button
+    @objc func tapRepeatDoneBtn() {
+        repeatTF.endEditing(true)
+        // TFに設定
+        repeatTF.text = repeatArray[repeatPV.selectedRow(inComponent: 0)]
+        repeatCd = repeatArray.firstIndex(of: repeatTF.text!)
+    }
+
+    /// cancel button
+    @objc func tapRepeatCancelBtn() {
+        repeatTF.endEditing(true)
     }
 
 }
