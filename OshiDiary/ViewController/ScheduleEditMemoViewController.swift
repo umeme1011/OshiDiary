@@ -10,8 +10,9 @@ import UIKit
 class ScheduleEditMemoViewController: UIViewController {
     
     @IBOutlet var baseView: UIView!
-    @IBOutlet weak var memoTV: PlaceHolderTextView!
     @IBOutlet weak var contentsViewBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var memoTV: UITextView!
+    @IBOutlet weak var placeHolderLbl: UILabel!
     
     var myUD: MyUserDefaults!
     var memo: String!
@@ -32,10 +33,11 @@ class ScheduleEditMemoViewController: UIViewController {
 
         // プレースホルダー
         if memo.isEmpty {
-            memoTV.placeHolder = "メモを記入"
+            placeHolderLbl.isHidden = false
         } else {
             // 初期値設定
             memoTV.text = memo
+            placeHolderLbl.isHidden = true
         }
         
         // キーボード開閉時アクション設定
@@ -88,12 +90,23 @@ class ScheduleEditMemoViewController: UIViewController {
         let vc: ScheduleEditViewController = self.presentingViewController as! ScheduleEditViewController
         vc.memoTV.text = memoTV.text
         if !memoTV.text.isEmpty {
-            // 元画面のプレースホルダーを消す
-            vc.memoTV.placeHolder = ""
+            vc.placeHolderLbl.isHidden = true
+        } else {
+            vc.placeHolderLbl.isHidden = false
         }
         self.dismiss(animated: true)
     }
 }
 
 extension ScheduleEditMemoViewController: UITextViewDelegate {
+    /**
+     変更あったとき
+     */
+    func textViewDidChange(_ textView: UITextView) {
+        if memoTV.text.count > 0 {
+            placeHolderLbl.isHidden = true
+        } else {
+            placeHolderLbl.isHidden = false
+        }
+    }
 }

@@ -6,15 +6,13 @@
 //
 
 import UIKit
+import RealmSwift
 
-class ScheduleEditViewController: UIViewController, UITextViewDelegate {
+class ScheduleEditViewController: UIViewController {
     
     @IBOutlet weak var baseView: UIView!
-//    @IBOutlet weak var subView: UIView!
-//    @IBOutlet weak var stackView: UIStackView!
     
     @IBOutlet weak var titleTF: UITextField!
-    @IBOutlet weak var memoTV: PlaceHolderTextView!
     @IBOutlet weak var contentsViewBottomConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var startDateTF: UITextField!
@@ -22,6 +20,8 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var endDateTF: UITextField!
     @IBOutlet weak var endTimeTF: UITextField!
     @IBOutlet weak var repeatTF: UITextField!
+    @IBOutlet weak var memoTV: UITextView!
+    @IBOutlet weak var placeHolderLbl: UILabel!
     
     @IBOutlet weak var iconIV1: UIImageView!
     @IBOutlet weak var iconIV2: UIImageView!
@@ -37,6 +37,9 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
     var repeatPV: UIPickerView = UIPickerView()
     var selectedDate: Date = Date()
     var isNew: Bool = true
+    var oshiId: Int!
+    var oshiRealm: Realm!
+    var scheduleId: Int!
 
     // pickerView用
     var yearArray: [String] = [String]()
@@ -67,7 +70,9 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
         repeatPV.dataSource = self
         
         myUD = MyUserDefaults.init()
-        
+        oshiId = myUD.getOshiId()
+        oshiRealm = CommonMethod.createOshiRealm(oshiId: oshiId)
+
         // pickerView用配列作成
         yearArray = Const.Array().getYearArray()
         monthArray = Const.Array.MONTH_ARRAY
@@ -79,10 +84,6 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
         // イメージカラー設定
         baseView.backgroundColor = Const.ImageColor().getImageColor(cd: myUD.getImageColorCd())
 
-        // キーボード開閉アクション設定
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-        
         // 枠線
         titleTF.layer.borderColor  = UIColor(red:0.76, green:0.76, blue:0.76, alpha:1.0).cgColor
         titleTF.layer.borderWidth = 1.0
@@ -99,9 +100,6 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
         // プレースホルダー
         titleTF.attributedPlaceholder = NSAttributedString(string: "タイトルを記入",
                                                                 attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-        if memoTV.text.isEmpty {
-            memoTV.placeHolder = "メモを記入"
-        }
 
         //***********************
         // startDateTF toolbar
@@ -190,38 +188,19 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
             // 繰り返し初期値
             repeatTF.text = repeatArray.first
             repeatPV.selectRow(0, inComponent: 0, animated: true)
+            
+            // ScheduleID発行
+            scheduleId = 1
+            if let schedule: Schedule = oshiRealm.objects(Schedule.self)
+                .sorted(byKeyPath: Schedule.Types.id.rawValue, ascending: false).first {
+                scheduleId = schedule.id + 1
+            }
+
         } else {
             
         }
     }
     
-    /**
-     キーボード表示
-     */
-    @objc func keyboardWillShow(notification: NSNotification) {
-//        let keyboardFrame = (notification.userInfo![UIResponder.keyboardFrameEndUserInfoKey]as AnyObject).cgRectValue
-//        // キーボードの一番上の座標（Y座標）
-//        guard let keyboardMinY = keyboardFrame?.minY else {return}
-//        // Viewの一番下の座標（Y座標）
-//        let baseViewMaxY = baseView.frame.maxY
-//        let distance = baseViewMaxY - keyboardMinY
-//        let transform = CGAffineTransform(translationX: 0, y: -distance)
-//        //ビューを上げる時のアニメーション
-//        UIView.animate(withDuration: 0.5, delay:0, usingSpringWithDamping:1, initialSpringVelocity:1, options:[], animations: {
-//            self.view.transform = transform
-//        })
-    }
-    
-    /**
-     キーボード非表示
-     */
-    @objc func keyboardWillHide() {
-//        //ビューを下げる時のアニメーション
-//        UIView.animate(withDuration: 0.5, delay:0, usingSpringWithDamping:1, initialSpringVelocity:1, options:[], animations: {
-//            self.view.transform = .identity
-//        })
-    }
-
     /**
      キャンセルボタン押下
      */
@@ -311,6 +290,44 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
         }
     }
 
+    /**
+     保存ボタン押下
+     */
+    @IBAction func tapSaveBtn(_ sender: Any) {
+        // データがすでに存在していたら更新
+        if let schedule: Schedule = oshiRealm.objects(Schedule.self)
+            .filter("\(Schedule.Types.id.rawValue) = %@", scheduleId!).first {
+            try! oshiRealm.write {
+                schedule.title = titleTF.text ?? ""
+                schedule.iconCd = iconCd
+                schedule.iconColorCd = iconColorCd
+                schedule.allDay = allDay
+                schedule.startDate = startDate
+                schedule.endDate = endDate
+                schedule.repeatCd = repeatCd
+                schedule.memo = memoTV.text
+                schedule.updateDate = Date()
+            }
+
+        // 存在しない場合は登録
+            // 2023/07/16登録確認〜
+        } else {
+            let schedule = Schedule()
+            try! oshiRealm.write {
+                schedule.id = scheduleId
+                schedule.title = titleTF.text ?? ""
+                schedule.iconCd = iconCd
+                schedule.iconColorCd = iconColorCd
+                schedule.allDay = allDay
+                schedule.startDate = startDate
+                schedule.endDate = endDate
+                schedule.repeatCd = repeatCd
+                schedule.memo = memoTV.text
+                oshiRealm.add(schedule)
+            }
+        }
+        self.dismiss(animated: true)
+    }
 }
 
 extension ScheduleEditViewController: UIPickerViewDelegate, UIPickerViewDataSource {
@@ -529,3 +546,17 @@ extension ScheduleEditViewController: UIPickerViewDelegate, UIPickerViewDataSour
     }
 
 }
+
+extension ScheduleEditViewController: UITextViewDelegate {
+    /**
+     変更あったとき
+     */
+    func textViewDidChange(_ textView: UITextView) {
+        if memoTV.text.count > 0 {
+            placeHolderLbl.isHidden = true
+        } else {
+            placeHolderLbl.isHidden = false
+        }
+    }
+}
+

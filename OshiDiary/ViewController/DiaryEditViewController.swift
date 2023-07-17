@@ -13,12 +13,14 @@ class DiaryEditViewController: UIViewController {
     
     @IBOutlet weak var baseView: UIView!
     @IBOutlet weak var titleTF: UITextField!
-    @IBOutlet weak var contentTV: PlaceHolderTextView!
     @IBOutlet weak var contentsViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var imageCV: UICollectionView!
     @IBOutlet weak var deleteBtn: UIButton!
     @IBOutlet weak var dateTF: UITextField!
     @IBOutlet weak var timeTF: UITextField!
+    @IBOutlet weak var editAndSaveBtn: UIButton!
+    @IBOutlet weak var placeholderLbl: UILabel!
+    @IBOutlet weak var contentTV: UITextView!
     
     var imageArray: [UIImage] = [UIImage]()
     var selectedNo: Int!
@@ -27,6 +29,7 @@ class DiaryEditViewController: UIViewController {
     var oshiRealm: Realm!
     var diary: Diary!
     var isNew: Bool = true
+    var isEdit: Bool = false
     var diaryId: Int!
     var selectedDate: Date = Date()
     var datePV: UIPickerView = UIPickerView()
@@ -122,7 +125,6 @@ class DiaryEditViewController: UIViewController {
             // プレースホルダー
             titleTF.attributedPlaceholder = NSAttributedString(string: "タイトルを記入",
                                                                     attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-            contentTV.placeHolder = "推しとの思い出をのこそう♡"
             
             // DiaryID発行
             diaryId = 1
@@ -132,11 +134,33 @@ class DiaryEditViewController: UIViewController {
             }
             // ゴミ箱非表示
             deleteBtn.isHidden = true
+            // 編集フラグ
+            isEdit = true
+            // 保存ボタン画像にする
+            editAndSaveBtn.setImage(UIImage(systemName: "checkmark"), for: .normal)
         
         // 既存データ編集
         } else {
+            // 初期値設定
             titleTF.text = diary.title
+            if titleTF.text?.count == 0 {
+                // プレースホルダー
+                titleTF.attributedPlaceholder = NSAttributedString(string: "タイトルを記入",
+                                                                        attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+            }
             contentTV.text = diary.content
+            if contentTV.text.count > 0 {
+                placeholderLbl.isHidden = true
+            } else {
+                placeholderLbl.isHidden = false
+            }
+            
+            // 初期表示は編集不可
+            titleTF.isEnabled = false
+            contentTV.isEditable = false
+            contentTV.isSelectable = false
+            dateTF.isEnabled = false
+            timeTF.isEnabled = false
             
             // DiaryId設定
             diaryId = diary.id
@@ -176,18 +200,25 @@ class DiaryEditViewController: UIViewController {
      戻るボタン押下
      */
     @IBAction func tapBackBtn(_ sender: Any) {
-        let alert = UIAlertController(title: "", message: Const.Message.EDIT_BACK_CONFIRM_MSG, preferredStyle: .alert)
-        let cancel = UIAlertAction(title: "いいえ", style: .default, handler: { (action) -> Void in
-            // アラートを閉じる
-            alert.dismiss(animated: true)
-        })
-        let ok = UIAlertAction(title: "はい", style: .default, handler: { (action) -> Void in
-            // 画面を閉じる
+        
+        if !isEdit {
             self.dismiss(animated: true)
-        })
-        alert.addAction(cancel)
-        alert.addAction(ok)
-        self.present(alert, animated: true, completion: nil)
+            
+        // 編集状態は確認アラームを表示
+        } else {
+            let alert = UIAlertController(title: "", message: Const.Message.EDIT_BACK_CONFIRM_MSG, preferredStyle: .alert)
+            let cancel = UIAlertAction(title: "いいえ", style: .default, handler: { (action) -> Void in
+                // アラートを閉じる
+                alert.dismiss(animated: true)
+            })
+            let ok = UIAlertAction(title: "はい", style: .default, handler: { (action) -> Void in
+                // 画面を閉じる
+                self.dismiss(animated: true)
+            })
+            alert.addAction(cancel)
+            alert.addAction(ok)
+            self.present(alert, animated: true, completion: nil)
+        }
     }
     
     /**
@@ -228,64 +259,92 @@ class DiaryEditViewController: UIViewController {
     }
     
     /**
-     投稿ボタン押下
+     編集、保存ボタン押下
      */
-    @IBAction func tapPostBtn(_ sender: Any) {
+    @IBAction func tapSaveBtn(_ sender: Any) {
         
-        let oshiIdStr: String = String(oshiId)
-        let diaryIdStr: String = String(diaryId)
-        // 日記用のディレクトリ削除、作成
-        let dirName: String = Const.File.OSHI_DIR_NAME + oshiIdStr
-                            + "/" + Const.File.Diary.DIARY_DIR_NAME + diaryIdStr
-        CommonMethod.removeFile(name: dirName)
-        CommonMethod.createDir(name: dirName)
-        
-        // 日記画像保存
-        var cnt = 0
-        for image in imageArray {
-            cnt += 1
-            let cntStr: String = String(cnt)
-            let fileName: String = Const.File.Diary.DIARY_IMAGE_FILE_NAME
-                        + diaryIdStr + "_" + cntStr + ".jpg"
-            CommonMethod.saveImageFile(image: image, name: dirName + "/" + fileName)
-        }
-        
-        // 日時をフォーマット
-        let dateString = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.yyyyMdW)
-        let ymString = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.yyyyM)
-        
-        // データがすでに存在していたら更新
-        if let diary: Diary = oshiRealm.objects(Diary.self)
-            .filter("\(Diary.Types.id.rawValue) = %@", diaryId!).first {
-            try! oshiRealm.write {
-                diary.date = selectedDate
-                diary.dateString = dateString
-                diary.ymString = ymString
-                diary.title = titleTF.text ?? ""
-                diary.content = contentTV.text
-                diary.updateDate = Date()
-            }
-
-        // 存在しない場合は登録
+        // 編集ボタン押下
+        if !isEdit {
+            // ボタン画像をチェックマークに変更
+            editAndSaveBtn.setImage(UIImage(systemName: "checkmark"), for: .normal)
+            // 編集可能にする
+            titleTF.isEnabled = true
+            contentTV.isEditable = true
+            contentTV.isSelectable = true
+            contentTV.isScrollEnabled = true
+            dateTF.isEnabled = true
+            timeTF.isEnabled = true
+            // 編集フラグ
+            isEdit = true
+            // 画像ボタン表示
+            imageCV.reloadData()
+        // 保存ボタン押下
         } else {
-            let newDiary = Diary()
-            try! oshiRealm.write {
-                newDiary.id = diaryId
-                newDiary.date = selectedDate
-                newDiary.dateString = dateString
-                newDiary.ymString = ymString
-                newDiary.title = titleTF.text ?? ""
-                newDiary.content = contentTV.text
-
-                oshiRealm.add(newDiary)
+            let oshiIdStr: String = String(oshiId)
+            let diaryIdStr: String = String(diaryId)
+            // 日記用のディレクトリ削除、作成
+            let dirName: String = Const.File.OSHI_DIR_NAME + oshiIdStr
+                                + "/" + Const.File.Diary.DIARY_DIR_NAME + diaryIdStr
+            CommonMethod.removeFile(name: dirName)
+            CommonMethod.createDir(name: dirName)
+            
+            // 日記画像保存
+            var cnt = 0
+            for image in imageArray {
+                cnt += 1
+                let cntStr: String = String(cnt)
+                let fileName: String = Const.File.Diary.DIARY_IMAGE_FILE_NAME
+                            + diaryIdStr + "_" + cntStr + ".jpg"
+                CommonMethod.saveImageFile(image: image, name: dirName + "/" + fileName)
             }
+            
+            // 日時をフォーマット
+            let dateString = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.yyyyMdW)
+            let ymString = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.yyyyM)
+            
+            // データがすでに存在していたら更新
+            if let diary: Diary = oshiRealm.objects(Diary.self)
+                .filter("\(Diary.Types.id.rawValue) = %@", diaryId!).first {
+                try! oshiRealm.write {
+                    diary.date = selectedDate
+                    diary.dateString = dateString
+                    diary.ymString = ymString
+                    diary.title = titleTF.text ?? ""
+                    diary.content = contentTV.text
+                    diary.updateDate = Date()
+                }
+
+            // 存在しない場合は登録
+            } else {
+                let newDiary = Diary()
+                try! oshiRealm.write {
+                    newDiary.id = diaryId
+                    newDiary.date = selectedDate
+                    newDiary.dateString = dateString
+                    newDiary.ymString = ymString
+                    newDiary.title = titleTF.text ?? ""
+                    newDiary.content = contentTV.text
+
+                    oshiRealm.add(newDiary)
+                }
+            }
+            self.dismiss(animated: true)
         }
-        self.dismiss(animated: true)
     }
     
 }
 
 extension DiaryEditViewController: UITextViewDelegate {
+    /**
+     変更あったとき
+     */
+    func textViewDidChange(_ textView: UITextView) {
+        if contentTV.text.count > 0 {
+            placeholderLbl.isHidden = true
+        } else {
+            placeholderLbl.isHidden = false
+        }
+    }
 }
 
 extension DiaryEditViewController: UITextFieldDelegate {
@@ -323,8 +382,8 @@ extension DiaryEditViewController: PHPickerViewControllerDelegate {
 extension DiaryEditViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if imageArray.count == myUD.getDiaryImageLimit() {
-            // 上限に達している場合は写真ボタン表示しない
+        if (imageArray.count == myUD.getDiaryImageLimit()) || !isEdit {
+            // 上限に達している場合、参照の場合は写真ボタン表示しない
             return imageArray.count
 
         } else {
@@ -349,10 +408,15 @@ extension DiaryEditViewController: UICollectionViewDelegate, UICollectionViewDat
             if !imageArray.isEmpty {
                 cell.imageIV.image = imageArray[indexPath.row]
                 
-                // 削除ボタン押下アクションセット
-                cell.deleteBtn.tag = indexPath.row
-                cell.deleteBtn.addTarget(self, action: #selector(tapDeleteBtn), for: .touchUpInside)
-
+                // 参照の場合は削除ボタン非表示
+                if !isEdit {
+                    cell.deleteBtn.isHidden = true
+                } else {
+                    cell.deleteBtn.isHidden = false
+                    // 削除ボタン押下アクションセット
+                    cell.deleteBtn.tag = indexPath.row
+                    cell.deleteBtn.addTarget(self, action: #selector(tapDeleteBtn), for: .touchUpInside)
+                }
             }
             return cell
         }

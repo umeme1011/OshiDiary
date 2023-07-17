@@ -31,7 +31,9 @@
                                             <constraint firstAttribute="width" constant="45" id="LeH-uO-9Sy"/>
                                         </constraints>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" image="arrow.uturn.backward" catalog="system"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="arrow.uturn.backward" catalog="system">
+                                            <color key="baseForegroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </buttonConfiguration>
                                         <connections>
                                             <action selector="tapCancelBtn:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="MhB-Hm-Fck"/>
                                         </connections>
@@ -41,9 +43,14 @@
                                         <constraints>
                                             <constraint firstAttribute="width" constant="45" id="42y-ZT-PS0"/>
                                         </constraints>
-                                        <color key="tintColor" systemColor="tintColor"/>
+                                        <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" image="checkmark" catalog="system"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="checkmark" catalog="system">
+                                            <color key="baseForegroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </buttonConfiguration>
+                                        <connections>
+                                            <action selector="tapSaveBtn:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="o7D-GN-uNF"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C3v-Tx-UfE">
                                         <rect key="frame" x="285" y="8" width="45" height="34"/>
@@ -52,7 +59,9 @@
                                         </constraints>
                                         <color key="tintColor" systemColor="tintColor"/>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" image="trash" catalog="system"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="trash" catalog="system">
+                                            <color key="baseForegroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </buttonConfiguration>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -547,7 +556,7 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QFb-hy-rrm">
                                                 <rect key="frame" x="0.0" y="406" width="343" height="187"/>
                                                 <subviews>
-                                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="6oB-ys-UtZ" customClass="PlaceHolderTextView" customModule="OshiDiary" customModuleProvider="target">
+                                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="6oB-ys-UtZ">
                                                         <rect key="frame" x="0.0" y="0.0" width="343" height="187"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -563,6 +572,12 @@
                                                             <segue destination="Fek-F7-Rlw" kind="presentation" identifier="toScheduleEditMemo" id="BCv-AU-cBk"/>
                                                         </connections>
                                                     </button>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="メモを記入" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1c8-2f-Rv2">
+                                                        <rect key="frame" x="6" y="8" width="87" height="20.5"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
@@ -572,7 +587,9 @@
                                                     <constraint firstItem="57y-hf-xsS" firstAttribute="top" secondItem="QFb-hy-rrm" secondAttribute="top" id="J5n-Ll-Eoo"/>
                                                     <constraint firstAttribute="trailing" secondItem="6oB-ys-UtZ" secondAttribute="trailing" id="YBK-uT-xb2"/>
                                                     <constraint firstAttribute="bottom" secondItem="6oB-ys-UtZ" secondAttribute="bottom" id="btD-LZ-dcb"/>
+                                                    <constraint firstItem="1c8-2f-Rv2" firstAttribute="leading" secondItem="QFb-hy-rrm" secondAttribute="leading" constant="6" id="ejd-Pc-4XE"/>
                                                     <constraint firstAttribute="trailing" secondItem="57y-hf-xsS" secondAttribute="trailing" id="fSk-XT-6BB"/>
+                                                    <constraint firstItem="1c8-2f-Rv2" firstAttribute="top" secondItem="QFb-hy-rrm" secondAttribute="top" constant="8" id="pO3-UD-dgM"/>
                                                     <constraint firstItem="57y-hf-xsS" firstAttribute="leading" secondItem="QFb-hy-rrm" secondAttribute="leading" id="pvz-Zh-fvL"/>
                                                 </constraints>
                                             </view>
@@ -613,7 +630,8 @@
                         <outlet property="iconIV1" destination="mfP-sC-c5A" id="MU4-Nr-n6F"/>
                         <outlet property="iconIV2" destination="sWM-Ps-0Iw" id="47D-sh-atb"/>
                         <outlet property="iconIV3" destination="3n2-Jf-fAu" id="Kg5-E7-tds"/>
-                        <outlet property="memoTV" destination="6oB-ys-UtZ" id="ul3-bB-ppQ"/>
+                        <outlet property="memoTV" destination="6oB-ys-UtZ" id="J95-6W-1hI"/>
+                        <outlet property="placeHolderLbl" destination="1c8-2f-Rv2" id="TuU-eQ-Ee9"/>
                         <outlet property="repeatTF" destination="W3A-QT-wKL" id="b5X-8a-HLg"/>
                         <outlet property="startDateTF" destination="N7Q-fy-aks" id="x7m-YC-X30"/>
                         <outlet property="startTimeTF" destination="l5I-Im-GwP" id="Kbo-L0-NdK"/>

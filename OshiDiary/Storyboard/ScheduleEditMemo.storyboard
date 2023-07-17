@@ -63,19 +63,29 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0sf-qU-7en">
                                 <rect key="frame" x="0.0" y="109" width="393" height="709"/>
                                 <subviews>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="2vd-6C-bl3" customClass="PlaceHolderTextView" customModule="OshiDiary" customModuleProvider="target">
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="2vd-6C-bl3">
                                         <rect key="frame" x="16" y="16" width="361" height="677"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="メモを記入" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kOy-vZ-ghI">
+                                        <rect key="frame" x="20" y="24" width="87" height="20.666666666666671"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="2vd-6C-bl3" secondAttribute="trailing" constant="16" id="Dgg-a8-8OV"/>
+                                    <constraint firstItem="kOy-vZ-ghI" firstAttribute="top" secondItem="0sf-qU-7en" secondAttribute="top" constant="24" id="GFg-zM-j3m"/>
                                     <constraint firstItem="2vd-6C-bl3" firstAttribute="leading" secondItem="0sf-qU-7en" secondAttribute="leading" constant="16" id="Jpo-Tz-9qh"/>
                                     <constraint firstAttribute="bottom" secondItem="2vd-6C-bl3" secondAttribute="bottom" constant="16" id="Mh7-fJ-rzv"/>
+                                    <constraint firstItem="kOy-vZ-ghI" firstAttribute="leading" secondItem="0sf-qU-7en" secondAttribute="leading" constant="20" id="THR-iZ-FlP"/>
+                                    <constraint firstItem="2vd-6C-bl3" firstAttribute="leading" secondItem="0sf-qU-7en" secondAttribute="leading" constant="16" id="cPh-VL-riR"/>
+                                    <constraint firstItem="2vd-6C-bl3" firstAttribute="top" secondItem="0sf-qU-7en" secondAttribute="top" constant="16" id="okm-0b-xTH"/>
                                     <constraint firstItem="2vd-6C-bl3" firstAttribute="top" secondItem="0sf-qU-7en" secondAttribute="top" constant="16" id="sqC-S9-dhw"/>
                                 </constraints>
                             </view>
@@ -95,7 +105,8 @@
                     <connections>
                         <outlet property="baseView" destination="5EZ-qb-Rvc" id="p7M-D3-nzp"/>
                         <outlet property="contentsViewBottomConstraint" destination="aKT-Wf-CVs" id="L75-oX-MmK"/>
-                        <outlet property="memoTV" destination="2vd-6C-bl3" id="ied-41-58d"/>
+                        <outlet property="memoTV" destination="2vd-6C-bl3" id="OEC-3p-w1O"/>
+                        <outlet property="placeHolderLbl" destination="kOy-vZ-ghI" id="xmE-1b-GKI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
