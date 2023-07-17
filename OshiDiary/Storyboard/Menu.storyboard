@@ -177,6 +177,7 @@
                                             <constraint firstAttribute="height" constant="35" id="TNy-Vr-C3D"/>
                                             <constraint firstAttribute="width" constant="50" id="eSB-kz-S8D"/>
                                         </constraints>
+                                        <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" image="arrow.left.arrow.right" catalog="system"/>
                                         <connections>

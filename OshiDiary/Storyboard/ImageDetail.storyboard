@@ -85,6 +85,7 @@
                                         <constraints>
                                             <constraint firstAttribute="height" constant="35" id="g7T-9g-IOr"/>
                                         </constraints>
+                                        <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="閉じる"/>
                                         <connections>

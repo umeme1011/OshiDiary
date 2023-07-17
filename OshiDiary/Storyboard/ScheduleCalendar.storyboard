@@ -76,6 +76,7 @@
                                             <constraint firstAttribute="height" constant="45" id="HzN-Fz-ed0"/>
                                             <constraint firstAttribute="width" constant="45" id="bl4-Yo-ewC"/>
                                         </constraints>
+                                        <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" image="list.bullet.rectangle" catalog="system"/>
                                         <connections>

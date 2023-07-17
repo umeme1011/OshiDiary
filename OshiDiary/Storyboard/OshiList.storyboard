@@ -26,6 +26,7 @@
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q2g-2M-dJ7">
                                         <rect key="frame" x="8" y="8" width="76" height="34.333333333333336"/>
+                                        <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="閉じる"/>
                                         <connections>
@@ -34,6 +35,7 @@
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TCH-vS-hHr">
                                         <rect key="frame" x="326" y="7.6666666666666714" width="59" height="35"/>
+                                        <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="編集"/>
                                         <connections>
@@ -81,8 +83,8 @@
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="imageView:XaM-kp-6EN:image" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="XaM-kp-6EN">
-                                                    <rect key="frame" x="337" y="21" width="20" height="18.666666666666671"/>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="imageView:XaM-kp-6EN:image" translatesAutoresizingMaskIntoConstraints="NO" id="XaM-kp-6EN">
+                                                    <rect key="frame" x="337" y="20" width="20" height="20"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="20" id="0HK-wV-q5M"/>
                                                         <constraint firstAttribute="height" constant="20" id="C8b-A0-Sto"/>
@@ -115,6 +117,7 @@
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lGx-ry-lwa">
                                                     <rect key="frame" x="20" y="12.666666666666664" width="111" height="35"/>
+                                                    <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <state key="normal" title="Button"/>
                                                     <buttonConfiguration key="configuration" style="plain" title="推しを追加"/>
                                                     <connections>
@@ -13875,7 +13878,7 @@ eE4ADHhQAAyJ8AAMifUADIoCAAyKBQAMihIADIoXAAyKHwAMiiIADIonAAyKLwAAAAAAAAQBAAAAAAAA
 AGgAAAAAAAAAAAAAAAAADIoyA
 </mutableData>
         </image>
-        <image name="imageView:XaM-kp-6EN:image" catalog="system" width="128" height="123">
+        <image name="imageView:XaM-kp-6EN:image" width="128" height="123">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMSAAGGoF8QD05T
 S2V5ZWRBcmNoaXZlctEICVRyb290gAGvEBELDBscIRkmKywzNjlDS0xQU1UkbnVsbNcNDg8QERITFBUW

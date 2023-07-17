@@ -55,7 +55,7 @@ class ScheduleEditViewController: UIViewController {
     var allDay: Bool = true
     var startDate: Date = Date()
     var endDate: Date = Date()
-    var repeatCd: Int!
+    var repeatCd: Int = 0
     
     let ICON_SELECTED_COLOR = UIColor(red: 214/255, green: 214/255, blue: 214/255, alpha: 1)
     
@@ -310,7 +310,6 @@ class ScheduleEditViewController: UIViewController {
             }
 
         // 存在しない場合は登録
-            // 2023/07/16登録確認〜
         } else {
             let schedule = Schedule()
             try! oshiRealm.write {
@@ -537,7 +536,7 @@ extension ScheduleEditViewController: UIPickerViewDelegate, UIPickerViewDataSour
         repeatTF.endEditing(true)
         // TFに設定
         repeatTF.text = repeatArray[repeatPV.selectedRow(inComponent: 0)]
-        repeatCd = repeatArray.firstIndex(of: repeatTF.text!)
+        repeatCd = repeatArray.firstIndex(of: repeatTF.text!) ?? 0
     }
 
     /// cancel button

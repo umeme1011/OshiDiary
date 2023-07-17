@@ -156,12 +156,7 @@ class DiaryEditViewController: UIViewController {
             }
             
             // 初期表示は編集不可
-            titleTF.isEnabled = false
-            contentTV.isEditable = false
-            contentTV.isSelectable = false
-            dateTF.isEnabled = false
-            timeTF.isEnabled = false
-            
+            changeEditable(bool: false)
             // DiaryId設定
             diaryId = diary.id
             // 日記画像読込
@@ -268,12 +263,7 @@ class DiaryEditViewController: UIViewController {
             // ボタン画像をチェックマークに変更
             editAndSaveBtn.setImage(UIImage(systemName: "checkmark"), for: .normal)
             // 編集可能にする
-            titleTF.isEnabled = true
-            contentTV.isEditable = true
-            contentTV.isSelectable = true
-            contentTV.isScrollEnabled = true
-            dateTF.isEnabled = true
-            timeTF.isEnabled = true
+            changeEditable(bool: true)
             // 編集フラグ
             isEdit = true
             // 画像ボタン表示
@@ -328,8 +318,23 @@ class DiaryEditViewController: UIViewController {
                     oshiRealm.add(newDiary)
                 }
             }
-            self.dismiss(animated: true)
+            // 参照状態に戻す
+            isEdit = false
+            imageCV.reloadData()
+            changeEditable(bool: false)
+            editAndSaveBtn.setImage(UIImage(systemName: "pencil.and.ellipsis.rectangle"), for: .normal)
         }
+    }
+    
+    /**
+     編集、参照を切り替える
+     */
+    private func changeEditable(bool: Bool) {
+        titleTF.isEnabled = bool
+        contentTV.isEditable = bool
+        contentTV.isSelectable = bool
+        dateTF.isEnabled = bool
+        timeTF.isEnabled = bool
     }
     
 }
