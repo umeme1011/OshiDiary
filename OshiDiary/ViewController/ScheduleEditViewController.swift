@@ -155,27 +155,18 @@ class ScheduleEditViewController: UIViewController {
         startDateTF.text = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.yyyyMdW)
         endDateTF.text = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.yyyyMdW)
         
-        // 時刻初期値 0:00
-        let calendar = Calendar(identifier: .gregorian)
-        let tmp = calendar.dateComponents([.year, .month, .day], from: selectedDate)
-        let date = calendar.date(from: tmp)
-        startTimeTF.text = CommonMethod.dateFormatter(date: date!, formattKind: Const.DateFormatt.Hmm)
-        endTimeTF.text = CommonMethod.dateFormatter(date: date!, formattKind: Const.DateFormatt.Hmm)
-        
-        // PickerView初期値
-        let yearStr = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.yyyy)
-        let monthStr = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.M)
-        let dayStr = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.d)
-        let hourStr = CommonMethod.dateFormatter(date: date!, formattKind: Const.DateFormatt.H)
-        let minutsStr = CommonMethod.dateFormatter(date: date!, formattKind: Const.DateFormatt.mm)
-        datePV.selectRow(yearArray.firstIndex(of: yearStr)!, inComponent: 0, animated: true)
-        datePV.selectRow(monthArray.firstIndex(of: monthStr)!, inComponent: 1, animated: true)
-        datePV.selectRow(dayArray.firstIndex(of: dayStr)!, inComponent: 2, animated: true)
-        timePV.selectRow(hourArray.firstIndex(of: hourStr)!, inComponent: 0, animated: true)
-        timePV.selectRow(minutsArray.firstIndex(of: minutsStr)!, inComponent: 2, animated: true)
-
         // 新規作成
+        var date: Date!     // 選択日付 新規作成時は時刻が0:00
         if isNew {
+            // 時刻初期値 0:00
+            let calendar = Calendar(identifier: .gregorian)
+            let tmp = calendar.dateComponents([.year, .month, .day], from: selectedDate)
+            date = calendar.date(from: tmp)
+            startDate = date
+            endDate = date
+            startTimeTF.text = CommonMethod.dateFormatter(date: date!, formattKind: Const.DateFormatt.Hmm)
+            endTimeTF.text = CommonMethod.dateFormatter(date: date!, formattKind: Const.DateFormatt.Hmm)
+            
             // 時刻非表示
             startTimeTF.isHidden = true
             endTimeTF.isHidden = true
@@ -199,6 +190,20 @@ class ScheduleEditViewController: UIViewController {
         } else {
             
         }
+        
+        // PickerView初期値
+        let yearStr = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.yyyy)
+        let monthStr = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.M)
+        let dayStr = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.d)
+        let hourStr = CommonMethod.dateFormatter(date: date!, formattKind: Const.DateFormatt.H)
+        let minutsStr = CommonMethod.dateFormatter(date: date!, formattKind: Const.DateFormatt.mm)
+        datePV.selectRow(yearArray.firstIndex(of: yearStr)!, inComponent: 0, animated: true)
+        datePV.selectRow(monthArray.firstIndex(of: monthStr)!, inComponent: 1, animated: true)
+        datePV.selectRow(dayArray.firstIndex(of: dayStr)!, inComponent: 2, animated: true)
+        timePV.selectRow(hourArray.firstIndex(of: hourStr)!, inComponent: 0, animated: true)
+        timePV.selectRow(minutsArray.firstIndex(of: minutsStr)!, inComponent: 2, animated: true)
+
+
     }
     
     /**
@@ -294,9 +299,12 @@ class ScheduleEditViewController: UIViewController {
      保存ボタン押下
      */
     @IBAction func tapSaveBtn(_ sender: Any) {
+        
         // データがすでに存在していたら更新
         if let schedule: Schedule = oshiRealm.objects(Schedule.self)
             .filter("\(Schedule.Types.id.rawValue) = %@", scheduleId!).first {
+            
+            // スケジュールTBL更新
             try! oshiRealm.write {
                 schedule.title = titleTF.text ?? ""
                 schedule.iconCd = iconCd
@@ -308,9 +316,23 @@ class ScheduleEditViewController: UIViewController {
                 schedule.memo = memoTV.text
                 schedule.updateDate = Date()
             }
-
+            // スケジュール詳細TBLは削除→登録
+            let scheduleDetails: Results<ScheduleDetail> = oshiRealm.objects(ScheduleDetail.self)
+                .filter("\(ScheduleDetail.Types.scheduleId.rawValue) = %@", scheduleId!)
+            // 削除
+            do {
+                try self.oshiRealm.write {
+                    self.oshiRealm.delete(scheduleDetails)
+                }
+            } catch {
+                print("削除失敗", error)
+            }
+            // 登録
+            saveScheduleDetail()
+            
         // 存在しない場合は登録
         } else {
+            // スケジュールTBL
             let schedule = Schedule()
             try! oshiRealm.write {
                 schedule.id = scheduleId
@@ -324,8 +346,52 @@ class ScheduleEditViewController: UIViewController {
                 schedule.memo = memoTV.text
                 oshiRealm.add(schedule)
             }
+            
+            // スケジュール詳細TBL
+            saveScheduleDetail()
         }
         self.dismiss(animated: true)
+    }
+    
+    /**
+     スケジュール詳細TBL登録
+     */
+    private func saveScheduleDetail() {
+        let calendar = Calendar(identifier: .gregorian)
+
+        // 開始日〜終了日を１日ごと配列に格納
+        // 開始日と終了日のみ時刻を設定、中間日は0:00とする
+        var dateArray: [Date] = [Date]()
+        var startDateTmp = calendar.date(from: calendar.dateComponents([.year, .month, .day], from: startDate))!
+        let endDateTmp = calendar.date(from: calendar.dateComponents([.year, .month, .day], from: endDate))!
+        while startDateTmp <= endDateTmp {
+            dateArray.append(startDateTmp)
+            startDateTmp = Calendar.current.date(byAdding: .day, value: 1, to: startDateTmp)!
+        }
+        dateArray[0] = startDate
+        dateArray[dateArray.count - 1] = endDate
+        
+        // スケジュール詳細ID発行
+        var scheduleDetailId = 1
+        if let scheduleDetail: ScheduleDetail = oshiRealm.objects(ScheduleDetail.self)
+            .sorted(byKeyPath: ScheduleDetail.Types.id.rawValue, ascending: false).first {
+            scheduleDetailId = scheduleDetail.id + 1
+        }
+        // 登録
+        try! oshiRealm.write {
+            var dayNo = 1
+            for date in dateArray {
+                let scheduleDetail = ScheduleDetail()
+                scheduleDetail.id = scheduleDetailId
+                scheduleDetail.scheduleId = scheduleId
+                scheduleDetail.dayNo = dayNo
+                scheduleDetail.date = date
+                scheduleDetail.ymString = CommonMethod.dateFormatter(date: date, formattKind: Const.DateFormatt.yyyyM)
+                oshiRealm.add(scheduleDetail)
+                scheduleDetailId += 1
+                dayNo += 1
+            }
+        }
     }
 }
 
@@ -519,7 +585,7 @@ extension ScheduleEditViewController: UIPickerViewDelegate, UIPickerViewDataSour
         // TFに設定
         endTimeTF.text = timeStr
         // 年月日と結合
-        timeStr = (startDateTF.text?.components(separatedBy: "(")[0])! + timeStr
+        timeStr = (endDateTF.text?.components(separatedBy: "(")[0])! + timeStr
         // dateに変換
         let date = CommonMethod.dateFormatter(str: timeStr, formattStr: "yyyy年M月d日H:mm")
         // endDateに格納

@@ -8,6 +8,7 @@
 import UIKit
 import FSCalendar
 import CalculateCalendarLogic
+import RealmSwift
 
 class ScheduleCalendarViewController: UIViewController {
     
@@ -18,6 +19,13 @@ class ScheduleCalendarViewController: UIViewController {
     var backgroundImageArray: [UIImage] = [UIImage]()
     var myUD: MyUserDefaults!
     var oshiId: Int!
+    var oshiRealm: Realm!
+    var schedules: Results<Schedule>!
+    var schedule: Schedule!
+    var scheduleDic: Dictionary = Dictionary<String, [Schedule]>()
+    var keyArray: [String] = [String]()
+    var selectedDate: Date!
+    var currentPage: Date!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,13 +58,37 @@ class ScheduleCalendarViewController: UIViewController {
         // calendarの曜日部分の色を変更
         calendar.calendarWeekdayView.weekdayLabels[0].textColor = .systemRed
         calendar.calendarWeekdayView.weekdayLabels[6].textColor = .systemBlue
-        
-        
-        // ランダムに背景画像を設定
+     
+        // カレンダー表示月を格納
+        currentPage = calendar.currentPage
+
+    }
+    
+    /**
+     画面再描画
+     */
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         self.changeVisual()
     }
     
     func changeVisual() {
+        // diaryDic初期化
+        scheduleDic.removeAll()
+        
+        // oshiRealm生成
+        oshiId = myUD.getOshiId()
+        oshiRealm = CommonMethod.createOshiRealm(oshiId: oshiId)
+        
+        // 表示月の年月を取得
+        let ymString: String = CommonMethod.dateFormatter(date: currentPage, formattKind: Const.DateFormatt.yyyyM)
+
+        // 日記データ取得
+//        schedules = oshiRealm.objects(Schedule.self)
+//            .filter("\(Schedule.Types.ymString.rawValue) = %@", ymString)
+//            .sorted(byKeyPath: Diary.Types.date.rawValue, ascending: true)
+        
+
         // ランダムに背景画像を設定
         backgroundIV.image = CommonMethod.roadBackgroundImage(oshiId: myUD.getOshiId()).randomElement()
     }

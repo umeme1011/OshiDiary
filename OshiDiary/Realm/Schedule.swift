@@ -14,11 +14,7 @@ class Schedule: RealmSwift.Object {
     @objc dynamic var iconColorCd: Int = 0
     @objc dynamic var allDay: Bool = true
     @objc dynamic var startDate: Date = Date()
-    @objc dynamic var startDateStr: String = ""
-    @objc dynamic var startTimeStr: String = ""
     @objc dynamic var endDate: Date = Date()
-    @objc dynamic var endDateStr: String = ""
-    @objc dynamic var endTimeStr: String = ""
     @objc dynamic var repeatCd: Int = 0
     @objc dynamic var notificationCd: Int = 0
     @objc dynamic var memo: String = ""
@@ -38,11 +34,7 @@ class Schedule: RealmSwift.Object {
         case iconColorCd
         case allDay
         case startDate
-        case startDateStr
-        case startTimeStr
         case endDate
-        case endDateStr
-        case endTimeStr
         case repeatCd
         case notificationCd
         case memo

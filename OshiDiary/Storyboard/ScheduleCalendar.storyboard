@@ -188,9 +188,13 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="yoongi3" translatesAutoresizingMaskIntoConstraints="NO" id="cdd-Ty-R1y">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="663"/>
                             </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uub-0k-Rsq">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="663"/>
+                                <color key="backgroundColor" white="1" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EPI-jJ-pz0" customClass="FSCalendar">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="300"/>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.69503996239999999" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="300" id="zTJ-O4-Cm9"/>
@@ -352,7 +356,7 @@
                                                 <constraint firstAttribute="trailing" secondItem="phX-zB-obX" secondAttribute="trailing" constant="16" id="s1D-Nz-LSY"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <outlet property="dateLbl" destination="u7a-x0-9aW" id="1gk-ei-Tr6"/>
                                             <outlet property="iconIV" destination="Jhr-uC-pz8" id="4gk-Ps-k6D"/>
@@ -375,10 +379,14 @@
                             <constraint firstItem="bPu-PH-C9b" firstAttribute="bottom" secondItem="0mg-fu-UDv" secondAttribute="bottom" id="Pvc-im-fGl"/>
                             <constraint firstItem="cdd-Ty-R1y" firstAttribute="leading" secondItem="0mg-fu-UDv" secondAttribute="leading" id="QLG-9w-o29"/>
                             <constraint firstItem="bPu-PH-C9b" firstAttribute="leading" secondItem="0mg-fu-UDv" secondAttribute="leading" id="Tcq-aA-kay"/>
+                            <constraint firstItem="uub-0k-Rsq" firstAttribute="leading" secondItem="0mg-fu-UDv" secondAttribute="leading" id="USj-jr-8EE"/>
                             <constraint firstItem="EPI-jJ-pz0" firstAttribute="top" secondItem="KLs-MU-JtE" secondAttribute="top" id="ZyK-Ff-uZf"/>
+                            <constraint firstItem="0mg-fu-UDv" firstAttribute="trailing" secondItem="uub-0k-Rsq" secondAttribute="trailing" id="a7Y-5v-CC1"/>
+                            <constraint firstItem="0mg-fu-UDv" firstAttribute="bottom" secondItem="uub-0k-Rsq" secondAttribute="bottom" id="ePF-KO-4hj"/>
                             <constraint firstItem="EPI-jJ-pz0" firstAttribute="leading" secondItem="KLs-MU-JtE" secondAttribute="leading" id="fPg-Yb-Hcq"/>
                             <constraint firstItem="bPu-PH-C9b" firstAttribute="trailing" secondItem="0mg-fu-UDv" secondAttribute="trailing" id="huU-yy-Biw"/>
                             <constraint firstItem="cdd-Ty-R1y" firstAttribute="top" secondItem="KLs-MU-JtE" secondAttribute="top" id="hwI-j9-xiu"/>
+                            <constraint firstItem="uub-0k-Rsq" firstAttribute="top" secondItem="KLs-MU-JtE" secondAttribute="top" id="mJz-md-F12"/>
                         </constraints>
                     </view>
                     <connections>

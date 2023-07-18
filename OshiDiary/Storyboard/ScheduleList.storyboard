@@ -200,6 +200,10 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="yoongi3" translatesAutoresizingMaskIntoConstraints="NO" id="4Xa-S6-Etv">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="663"/>
                             </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QZ0-tR-ZwW">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="663"/>
+                                <color key="backgroundColor" white="1" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="70" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="81K-uo-Ql7">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="663"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -347,7 +351,7 @@
                                                 <constraint firstItem="1TN-NY-7J8" firstAttribute="leading" secondItem="lQw-ae-ABu" secondAttribute="leading" constant="16" id="hEA-0s-UCs"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <outlet property="dateLbl" destination="TG1-m6-GYZ" id="eUR-aa-udM"/>
                                             <outlet property="iconIV" destination="APE-K5-HLO" id="ZyJ-QB-wHm"/>
@@ -364,12 +368,16 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="81K-uo-Ql7" firstAttribute="top" secondItem="MuG-bC-gXa" secondAttribute="top" id="0BE-ai-Xm3"/>
+                            <constraint firstItem="QZ0-tR-ZwW" firstAttribute="leading" secondItem="9Ez-Fk-70G" secondAttribute="leading" id="7ln-EY-gmc"/>
                             <constraint firstItem="4Xa-S6-Etv" firstAttribute="leading" secondItem="MuG-bC-gXa" secondAttribute="leading" id="SYR-g8-IKG"/>
+                            <constraint firstItem="QZ0-tR-ZwW" firstAttribute="top" secondItem="MuG-bC-gXa" secondAttribute="top" id="UMg-GY-F2X"/>
+                            <constraint firstItem="9Ez-Fk-70G" firstAttribute="bottom" secondItem="QZ0-tR-ZwW" secondAttribute="bottom" id="VZ3-mI-2n4"/>
                             <constraint firstAttribute="bottom" secondItem="4Xa-S6-Etv" secondAttribute="bottom" id="fME-aO-mP7"/>
                             <constraint firstAttribute="bottom" secondItem="81K-uo-Ql7" secondAttribute="bottom" id="g2p-e7-y5R"/>
                             <constraint firstAttribute="trailing" secondItem="4Xa-S6-Etv" secondAttribute="trailing" id="l0b-qb-Cex"/>
                             <constraint firstItem="4Xa-S6-Etv" firstAttribute="top" secondItem="MuG-bC-gXa" secondAttribute="top" id="pGp-6n-Sop"/>
                             <constraint firstAttribute="trailing" secondItem="81K-uo-Ql7" secondAttribute="trailing" id="uga-BE-pJL"/>
+                            <constraint firstItem="9Ez-Fk-70G" firstAttribute="trailing" secondItem="QZ0-tR-ZwW" secondAttribute="trailing" id="y6p-o2-s0x"/>
                             <constraint firstItem="81K-uo-Ql7" firstAttribute="leading" secondItem="MuG-bC-gXa" secondAttribute="leading" id="z1I-a2-0Tm"/>
                         </constraints>
                     </view>
@@ -380,7 +388,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pFr-AG-Q8E" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="888" y="-2"/>
+            <point key="canvasLocation" x="887.78625954198469" y="-2.4647887323943665"/>
         </scene>
     </scenes>
     <resources>
