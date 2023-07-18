@@ -15,6 +15,7 @@ class Schedule: RealmSwift.Object {
     @objc dynamic var allDay: Bool = true
     @objc dynamic var startDate: Date = Date()
     @objc dynamic var endDate: Date = Date()
+    @objc dynamic var days: Int = 0
     @objc dynamic var repeatCd: Int = 0
     @objc dynamic var notificationCd: Int = 0
     @objc dynamic var memo: String = ""
@@ -35,6 +36,7 @@ class Schedule: RealmSwift.Object {
         case allDay
         case startDate
         case endDate
+        case days
         case repeatCd
         case notificationCd
         case memo

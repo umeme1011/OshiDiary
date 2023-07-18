@@ -21,8 +21,9 @@ class ScheduleCalendarViewController: UIViewController {
     var oshiId: Int!
     var oshiRealm: Realm!
     var schedules: Results<Schedule>!
+    var scheduleDetails: Results<ScheduleDetail>!
     var schedule: Schedule!
-    var scheduleDic: Dictionary = Dictionary<String, [Schedule]>()
+    var scheduleDetailDic: Dictionary = Dictionary<String, [ScheduleDetail]>()
     var keyArray: [String] = [String]()
     var selectedDate: Date!
     var currentPage: Date!
@@ -73,8 +74,8 @@ class ScheduleCalendarViewController: UIViewController {
     }
     
     func changeVisual() {
-        // diaryDic初期化
-        scheduleDic.removeAll()
+        // scheduleDetailDic初期化
+        scheduleDetailDic.removeAll()
         
         // oshiRealm生成
         oshiId = myUD.getOshiId()
@@ -83,11 +84,38 @@ class ScheduleCalendarViewController: UIViewController {
         // 表示月の年月を取得
         let ymString: String = CommonMethod.dateFormatter(date: currentPage, formattKind: Const.DateFormatt.yyyyM)
 
-        // 日記データ取得
-//        schedules = oshiRealm.objects(Schedule.self)
-//            .filter("\(Schedule.Types.ymString.rawValue) = %@", ymString)
-//            .sorted(byKeyPath: Diary.Types.date.rawValue, ascending: true)
+        // スケジュールデータ取得
+        scheduleDetails = oshiRealm.objects(ScheduleDetail.self)
+            .filter("\(ScheduleDetail.Types.ymString.rawValue) = %@", ymString)
+            .sorted(byKeyPath: ScheduleDetail.Types.date.rawValue, ascending: true)
         
+        // 日付ごとに分類しDictionaryに格納
+        if !scheduleDetails.isEmpty {
+            var tmpDate = ""
+            var scheduleDetailArray: [ScheduleDetail] = [ScheduleDetail]()
+            for scheduleDetail in scheduleDetails {
+                if tmpDate == scheduleDetail.dateString {
+                    scheduleDetailArray.append(scheduleDetail)
+                } else {
+                    if !scheduleDetailArray.isEmpty {
+                        scheduleDetailDic[tmpDate] = scheduleDetailArray
+                        scheduleDetailArray.removeAll()
+                    }
+                    scheduleDetailArray.append(scheduleDetail)
+                }
+                tmpDate = scheduleDetail.dateString
+            }
+            scheduleDetailDic[tmpDate] = scheduleDetailArray
+        }
+        // キー（日付）配列
+        keyArray = [String](scheduleDetailDic.keys)
+        // キーをソート
+        keyArray.sort()
+
+        // listTVリロード（アニメーションつき）
+        UIView.transition(with: listTV, duration: 0.1, options: [.transitionCrossDissolve, .curveLinear], animations: {self.listTV.reloadData()})
+        // カレンダーリロード
+        calendar.reloadData()
 
         // ランダムに背景画像を設定
         backgroundIV.image = CommonMethod.roadBackgroundImage(oshiId: myUD.getOshiId()).randomElement()
@@ -100,6 +128,11 @@ extension ScheduleCalendarViewController: FSCalendarDelegate, FSCalendarDataSour
      土日や祝日の日の文字色を変える
      */
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, titleDefaultColorFor date: Date) -> UIColor? {
+        //  現在表示されているページの月とセルの月が異なる場合には nil を戻す
+        if Calendar.current.compare(date, to: calendar.currentPage, toGranularity: .month) != .orderedSame {
+            return nil
+        }
+        
         //祝日判定をする（祝日は赤色で表示する）
         if judgeHoliday(date){
             return UIColor.red
@@ -150,24 +183,174 @@ extension ScheduleCalendarViewController: FSCalendarDelegate, FSCalendarDataSour
         let tmpCalendar = Calendar(identifier: .gregorian)
         return tmpCalendar.component(.weekday, from: date)
     }
-}
+    
+    /**
+     イベントある日に点を付ける
+     */
+    func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int{
+        var ret: Int = 0
+        
+        // 登録日付と比較するために日付を年月日曜日にフォーマット
+        let dateString: String = CommonMethod.dateFormatter(date: date, formattKind: Const.DateFormatt.yyyyMdW)
+        
+        for scheduleDetail in scheduleDetails {
+            if scheduleDetail.dateString == dateString {
+                ret += 1
+            }
+        }
+        return ret
+    }
 
-extension ScheduleCalendarViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+    /**
+     セルをタップ
+     */
+    func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+        // 選択した日付
+        selectedDate = date
+        // リストをスクロール
+        let dateStr = CommonMethod.dateFormatter(date: date, formattKind: Const.DateFormatt.yyyyMdW)
+        scroll(dateStr: dateStr)
     }
     
+    /**
+     月を変更
+     */
+    func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
+        // 表示月を格納
+        currentPage = calendar.currentPage
+        // 画面表示更新
+        self.changeVisual()
+    }
+
+}
+
+
+extension ScheduleCalendarViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    /**
+     セクション数
+     */
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return keyArray.count
+    }
+    
+    /**
+     セクション内容
+     */
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view: UIView = UIView()
+        let label: UILabel = UILabel()
+        
+        let cnt = scheduleDetailDic[keyArray[section]]?.count
+        label.text = "\(keyArray[section])  \(cnt ?? 0)件"
+
+        // Viewデザイン
+        let screenWidth:CGFloat = listTV.frame.size.width
+        view.layer.borderColor = UIColor.white.cgColor
+        view.layer.borderWidth = 0.0
+        view.frame = CGRect(x:0, y:0, width:screenWidth, height:25)
+        view.backgroundColor = Const.ImageColor().getImageColor(cd: myUD.getImageColorCd())
+        // labelデザイン
+        label.sizeToFit()
+        label.font = UIFont.systemFont(ofSize: 13)
+        label.frame = CGRect(x:10, y:0, width:screenWidth-10, height:25)
+        label.textColor = UIColor.darkGray
+        
+        view.addSubview(label)
+        
+        // セクションのビューに対応する番号を設定する
+        view.tag = section
+        
+        return view
+    }
+
+    /**
+     セクション高さ
+     */
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 25
+    }
+    
+    /**
+     セル数
+     */
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return scheduleDetailDic[keyArray[section]]?.count ?? 0
+    }
+
+    /**
+     セル内容
+     */
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier:  "cell", for:indexPath as IndexPath)
-        as! ListTableViewCell
+            as! ListTableViewCell
+
+        // キーをもとにScheduleDetailを取得
+        let scheduleDetailArray: [ScheduleDetail] = scheduleDetailDic[keyArray[indexPath.section]]!
         
-        cell.dateLbl.text = "31"
-        cell.weekLbl.text = "金"
-        cell.titleLbl.text = "ああああああああああ"
-        cell.timeLbl.text = "10:00 〜 21:00"
-        cell.memoLbl.text = "めもめもめも"
+        if indexPath.row < scheduleDetailArray.count {
+            let scheduleDetail: ScheduleDetail = scheduleDetailArray[indexPath.row]
+            
+            // スケジュールIDをもとにスケジュールTBLを取得
+            let schedule: Schedule = oshiRealm.objects(Schedule.self)
+                .filter("\(Schedule.Types.id.rawValue) = %@", scheduleDetail.scheduleId).first!
+            
+            // タイトル
+            // 複数日にまたがる場合は(n/n日目)を追加する
+            if schedule.days > 1 {
+                let dayStr = String(scheduleDetail.dayNo)
+                let daysStr = String(schedule.days)
+                cell.titleLbl.text = schedule.title + "(" + dayStr + "/" + daysStr + "日目)"
+            } else {
+                cell.titleLbl.text = schedule.title
+            }
+
+            // 時刻
+            // 終日
+            if schedule.allDay {
+                cell.timeLbl.text = "終日"
+            // 時刻指定
+            } else {
+                // １日
+                if schedule.days == 1 {
+                    cell.timeLbl.text = CommonMethod.dateFormatter(date: schedule.startDate, formattKind: Const.DateFormatt.Hmm)
+                    + "〜" + CommonMethod.dateFormatter(date: schedule.endDate, formattKind: Const.DateFormatt.Hmm)
+                // 複数日
+                } else {
+                    // １日め
+                    if scheduleDetail.dayNo == 1 {
+                        cell.timeLbl.text = CommonMethod.dateFormatter(date: scheduleDetail.date, formattKind: Const.DateFormatt.Hmm) + "〜"
+                    // 最終日
+                    } else if scheduleDetail.dayNo == schedule.days {
+                        cell.timeLbl.text = "〜" + CommonMethod.dateFormatter(date: scheduleDetail.date, formattKind: Const.DateFormatt.Hmm)
+                    // 中間日
+                    } else {
+                        cell.timeLbl.text = "終日"
+                    }
+                }
+            }
+            
+            let current = Calendar.current
+            cell.dateLbl.text = String(current.component(.day, from: scheduleDetail.date))
+            cell.weekLbl.text = CommonMethod.weekFormatter(date: scheduleDetail.date)
+            cell.memoLbl.text = schedule.memo
+            
+            // アイコン
+            let iconName = Const.Schedule().getIconName(iconCd: schedule.iconCd, colorCd: schedule.iconColorCd)
+            cell.iconIV.image = UIImage(named: iconName)
+        }
         
         return cell
+    }
+    
+    /**
+     指定の日付までスクロールする
+     */
+    private func scroll(dateStr: String) {
+        if let index = keyArray.firstIndex(of: dateStr) {
+            let indexPath = IndexPath(row: 0, section: index)
+            listTV.scrollToRow(at: indexPath, at: .top, animated: true)
+        }
     }
 }
 

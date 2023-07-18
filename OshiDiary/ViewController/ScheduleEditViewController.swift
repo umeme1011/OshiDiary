@@ -300,6 +300,19 @@ class ScheduleEditViewController: UIViewController {
      */
     @IBAction func tapSaveBtn(_ sender: Any) {
         
+        // 開始日〜終了日を１日ごと配列に格納
+        // 開始日と終了日のみ時刻を設定、中間日は0:00とする
+        let calendar = Calendar(identifier: .gregorian)
+        var dateArray: [Date] = [Date]()
+        var startDateTmp = calendar.date(from: calendar.dateComponents([.year, .month, .day], from: startDate))!
+        let endDateTmp = calendar.date(from: calendar.dateComponents([.year, .month, .day], from: endDate))!
+        while startDateTmp <= endDateTmp {
+            dateArray.append(startDateTmp)
+            startDateTmp = Calendar.current.date(byAdding: .day, value: 1, to: startDateTmp)!
+        }
+        dateArray[0] = startDate
+        dateArray[dateArray.count - 1] = endDate
+        
         // データがすでに存在していたら更新
         if let schedule: Schedule = oshiRealm.objects(Schedule.self)
             .filter("\(Schedule.Types.id.rawValue) = %@", scheduleId!).first {
@@ -312,6 +325,7 @@ class ScheduleEditViewController: UIViewController {
                 schedule.allDay = allDay
                 schedule.startDate = startDate
                 schedule.endDate = endDate
+                schedule.days = dateArray.count
                 schedule.repeatCd = repeatCd
                 schedule.memo = memoTV.text
                 schedule.updateDate = Date()
@@ -328,7 +342,7 @@ class ScheduleEditViewController: UIViewController {
                 print("削除失敗", error)
             }
             // 登録
-            saveScheduleDetail()
+            saveScheduleDetail(dateArray: dateArray)
             
         // 存在しない場合は登録
         } else {
@@ -342,13 +356,14 @@ class ScheduleEditViewController: UIViewController {
                 schedule.allDay = allDay
                 schedule.startDate = startDate
                 schedule.endDate = endDate
+                schedule.days = dateArray.count
                 schedule.repeatCd = repeatCd
                 schedule.memo = memoTV.text
                 oshiRealm.add(schedule)
             }
             
             // スケジュール詳細TBL
-            saveScheduleDetail()
+            saveScheduleDetail(dateArray: dateArray)
         }
         self.dismiss(animated: true)
     }
@@ -356,21 +371,8 @@ class ScheduleEditViewController: UIViewController {
     /**
      スケジュール詳細TBL登録
      */
-    private func saveScheduleDetail() {
-        let calendar = Calendar(identifier: .gregorian)
+    private func saveScheduleDetail(dateArray: [Date]) {
 
-        // 開始日〜終了日を１日ごと配列に格納
-        // 開始日と終了日のみ時刻を設定、中間日は0:00とする
-        var dateArray: [Date] = [Date]()
-        var startDateTmp = calendar.date(from: calendar.dateComponents([.year, .month, .day], from: startDate))!
-        let endDateTmp = calendar.date(from: calendar.dateComponents([.year, .month, .day], from: endDate))!
-        while startDateTmp <= endDateTmp {
-            dateArray.append(startDateTmp)
-            startDateTmp = Calendar.current.date(byAdding: .day, value: 1, to: startDateTmp)!
-        }
-        dateArray[0] = startDate
-        dateArray[dateArray.count - 1] = endDate
-        
         // スケジュール詳細ID発行
         var scheduleDetailId = 1
         if let scheduleDetail: ScheduleDetail = oshiRealm.objects(ScheduleDetail.self)
@@ -386,6 +388,7 @@ class ScheduleEditViewController: UIViewController {
                 scheduleDetail.scheduleId = scheduleId
                 scheduleDetail.dayNo = dayNo
                 scheduleDetail.date = date
+                scheduleDetail.dateString = CommonMethod.dateFormatter(date: date, formattKind: Const.DateFormatt.yyyyMdW)
                 scheduleDetail.ymString = CommonMethod.dateFormatter(date: date, formattKind: Const.DateFormatt.yyyyM)
                 oshiRealm.add(scheduleDetail)
                 scheduleDetailId += 1
