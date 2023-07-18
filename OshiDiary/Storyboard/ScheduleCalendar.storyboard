@@ -123,7 +123,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="schedule_new"/>
                                 <connections>
-                                    <segue destination="swX-Cg-6s0" kind="presentation" identifier="toScheduleEdit" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="5yd-Eq-ZLq"/>
+                                    <segue destination="swX-Cg-6s0" kind="presentation" identifier="toScheduleEditNew" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="5yd-Eq-ZLq"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -159,7 +159,7 @@
                 <viewControllerPlaceholder storyboardName="Menu" id="xaa-ki-myf" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="k9h-He-WT2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="110" y="412"/>
+            <point key="canvasLocation" x="11" y="413"/>
         </scene>
         <!--ScheduleEdit-->
         <scene sceneID="1ww-Hw-c0j">
@@ -167,7 +167,7 @@
                 <viewControllerPlaceholder storyboardName="ScheduleEdit" id="swX-Cg-6s0" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9lK-FI-x9n" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="523" y="362"/>
+            <point key="canvasLocation" x="560" y="413"/>
         </scene>
         <!--ScheduleList-->
         <scene sceneID="C3m-74-Cfd">
@@ -175,7 +175,7 @@
                 <viewControllerPlaceholder storyboardName="ScheduleList" id="c4u-Ow-5h9" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6o2-xq-S8A" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="361" y="428"/>
+            <point key="canvasLocation" x="277" y="413"/>
         </scene>
         <!--Schedule Calendar View Controller-->
         <scene sceneID="0HZ-So-ij6">
@@ -393,6 +393,7 @@
                         <outlet property="backgroundIV" destination="cdd-Ty-R1y" id="yNn-JR-lhF"/>
                         <outlet property="calendar" destination="EPI-jJ-pz0" id="13D-zI-KvF"/>
                         <outlet property="listTV" destination="bPu-PH-C9b" id="H0w-QI-Nnp"/>
+                        <segue destination="swX-Cg-6s0" kind="presentation" identifier="toScheduleEdit" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="4rr-Ea-p35"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UMb-BB-QlO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -400,6 +401,9 @@
             <point key="canvasLocation" x="788.54961832061065" y="-2.4647887323943665"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="4rr-Ea-p35"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <image name="heart" width="64" height="64"/>
         <image name="kuma_default" width="120" height="120"/>

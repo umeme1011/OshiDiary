@@ -35,5 +35,20 @@ class ScheduleCalendarOverViewControlle: UIViewController {
         // アイコン画像設定
         iconIV.image = CommonMethod.roadIconImage(oshiId: myUD.getOshiId())
     }
+    
+    /**
+     データ渡し
+     */
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // 編集画面にデータを渡す（新規）
+        if segue.identifier == "toScheduleEditNew" {
+            let vc: ScheduleCalendarViewController = self.children[0] as! ScheduleCalendarViewController
+            let selectedDate = vc.selectedDate
+            let vc2: ScheduleEditViewController = segue.destination as! ScheduleEditViewController
+            vc2.isNew = true
+            vc2.selectedDate = selectedDate ?? Date()
+        }
+    }
+
 }
 

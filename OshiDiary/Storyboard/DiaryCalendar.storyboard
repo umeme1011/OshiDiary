@@ -461,11 +461,11 @@
                 <viewControllerPlaceholder storyboardName="DiaryEdit" id="Mpx-OK-b0h" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OcH-0e-Wyi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="469" y="421"/>
+            <point key="canvasLocation" x="464" y="420"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="1TG-KC-BeR"/>
+        <segue reference="Co8-Ib-CrH"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="diary_new" width="80" height="80"/>

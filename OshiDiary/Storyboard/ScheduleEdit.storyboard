@@ -126,6 +126,7 @@
                                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yct-rB-xd9">
                                                                                 <rect key="frame" x="0.0" y="0.0" width="50.5" height="30"/>
                                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                 <state key="normal" title="Button"/>
                                                                                 <buttonConfiguration key="configuration" style="plain"/>
                                                                                 <connections>
@@ -161,10 +162,10 @@
                                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lf4-BX-1z0">
                                                                                 <rect key="frame" x="0.0" y="0.0" width="50.5" height="30"/>
                                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                 <state key="normal" title="Button"/>
                                                                                 <buttonConfiguration key="configuration" style="plain"/>
                                                                                 <connections>
-                                                                                    <action selector="tapIconBtn1:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="gvX-nA-15h"/>
                                                                                     <action selector="tapIconBtn2:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="ENO-YT-rqh"/>
                                                                                 </connections>
                                                                             </button>
@@ -197,10 +198,10 @@
                                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4KO-VX-CMs">
                                                                                 <rect key="frame" x="0.0" y="0.0" width="51" height="30"/>
                                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                 <state key="normal" title="Button"/>
                                                                                 <buttonConfiguration key="configuration" style="plain"/>
                                                                                 <connections>
-                                                                                    <action selector="tapIconBtn1:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="JtA-i8-j4C"/>
                                                                                     <action selector="tapIconBtn3:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="mdH-7G-bxC"/>
                                                                                 </connections>
                                                                             </button>
@@ -326,6 +327,7 @@
                                                                 <subviews>
                                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2tg-Eb-aJJ">
                                                                         <rect key="frame" x="0.0" y="0.0" width="46.5" height="25"/>
+                                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <state key="normal" title="Button"/>
                                                                         <buttonConfiguration key="configuration" style="gray">
                                                                             <color key="baseBackgroundColor" systemColor="systemGrayColor"/>
@@ -336,6 +338,7 @@
                                                                     </button>
                                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dfc-pG-tLg">
                                                                         <rect key="frame" x="51.5" y="0.0" width="46.5" height="25"/>
+                                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <state key="normal" title="Button"/>
                                                                         <buttonConfiguration key="configuration" style="gray">
                                                                             <color key="baseBackgroundColor" red="0.15655463929999999" green="0.63256955150000005" blue="0.81618595120000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

@@ -104,7 +104,7 @@ extension DiarySearchViewController: UITextFieldDelegate {
             let predicate = NSPredicate(format: "\(Diary.Types.title.rawValue) CONTAINS[c] %@ OR \(Diary.Types.content.rawValue) CONTAINS[c] %@", text.trimmingCharacters(in: .whitespaces), text.trimmingCharacters(in: .whitespaces))
             predicates.append(predicate)
         }
-        var diaries = oshiRealm.objects(Diary.self).filter(NSCompoundPredicate(andPredicateWithSubpredicates: predicates))
+        let diaries = oshiRealm.objects(Diary.self).filter(NSCompoundPredicate(andPredicateWithSubpredicates: predicates))
             .sorted(byKeyPath: Diary.Types.date.rawValue, ascending: true)
 
         // 結果を年月で分類しDicに格納

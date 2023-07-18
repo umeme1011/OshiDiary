@@ -27,6 +27,7 @@ class ScheduleCalendarViewController: UIViewController {
     var keyArray: [String] = [String]()
     var selectedDate: Date!
     var currentPage: Date!
+    var scheduleDetail: ScheduleDetail!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -120,6 +121,20 @@ class ScheduleCalendarViewController: UIViewController {
         // ランダムに背景画像を設定
         backgroundIV.image = CommonMethod.roadBackgroundImage(oshiId: myUD.getOshiId()).randomElement()
     }
+    
+    /**
+     データ渡し
+     */
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // 編集画面にデータを渡す
+        if segue.identifier == "toScheduleEdit" {
+            let vc: ScheduleEditViewController = segue.destination as! ScheduleEditViewController
+            vc.scheduleDetail = scheduleDetail
+            vc.isNew = false
+            vc.selectedDate = scheduleDetail.date
+        }
+    }
+
 }
 
 extension ScheduleCalendarViewController: FSCalendarDelegate, FSCalendarDataSource, FSCalendarDelegateAppearance {
@@ -352,5 +367,21 @@ extension ScheduleCalendarViewController: UITableViewDelegate, UITableViewDataSo
             listTV.scrollToRow(at: indexPath, at: .top, animated: true)
         }
     }
+    
+    /**
+     セルがタップされた時の処理
+     */
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        // タップしたセルを取得
+        if let cell: UITableViewCell = listTV.cellForRow(at: indexPath) {
+            // 選択状態を解除
+            cell.isSelected = false
+        }
+        // 編集画面へ遷移
+        scheduleDetail = scheduleDetailDic[keyArray[indexPath.section]]![indexPath.row]
+        performSegue(withIdentifier: "toScheduleEdit", sender: nil)
+    }
+
 }
 

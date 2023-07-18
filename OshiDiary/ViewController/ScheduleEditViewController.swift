@@ -40,6 +40,8 @@ class ScheduleEditViewController: UIViewController {
     var oshiId: Int!
     var oshiRealm: Realm!
     var scheduleId: Int!
+    var scheduleDetail: ScheduleDetail!
+    var schedule: Schedule!
 
     // pickerView用
     var yearArray: [String] = [String]()
@@ -151,31 +153,42 @@ class ScheduleEditViewController: UIViewController {
         repeatTF.inputView = repeatPV
         repeatTF.inputAccessoryView = repeatToolbar
 
-        // 年月日初期値
-        startDateTF.text = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.yyyyMdW)
-        endDateTF.text = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.yyyyMdW)
-        
         // 新規作成
-        var date: Date!     // 選択日付 新規作成時は時刻が0:00
         if isNew {
+            // 年月日初期値
+            startDateTF.text = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.yyyyMdW)
+            endDateTF.text = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.yyyyMdW)
+            
             // 時刻初期値 0:00
             let calendar = Calendar(identifier: .gregorian)
             let tmp = calendar.dateComponents([.year, .month, .day], from: selectedDate)
-            date = calendar.date(from: tmp)
-            startDate = date
-            endDate = date
-            startTimeTF.text = CommonMethod.dateFormatter(date: date!, formattKind: Const.DateFormatt.Hmm)
-            endTimeTF.text = CommonMethod.dateFormatter(date: date!, formattKind: Const.DateFormatt.Hmm)
+            let date = calendar.date(from: tmp)
+            startDate = date ?? Date()
+            endDate = date ?? Date()
+            startTimeTF.text = "0:00"
+            endTimeTF.text = "0:00"
             
+            // PickerView初期値
+            let yearStr = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.yyyy)
+            let monthStr = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.M)
+            let dayStr = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.d)
+            let hourStr = "0"
+            let minutsStr = "00"
+            datePV.selectRow(yearArray.firstIndex(of: yearStr)!, inComponent: 0, animated: true)
+            datePV.selectRow(monthArray.firstIndex(of: monthStr)!, inComponent: 1, animated: true)
+            datePV.selectRow(dayArray.firstIndex(of: dayStr)!, inComponent: 2, animated: true)
+            timePV.selectRow(hourArray.firstIndex(of: hourStr)!, inComponent: 0, animated: true)
+            timePV.selectRow(minutsArray.firstIndex(of: minutsStr)!, inComponent: 2, animated: true)
+
             // 時刻非表示
             startTimeTF.isHidden = true
             endTimeTF.isHidden = true
             // アイコン初期値選択
             iconCd = Const.Schedule.iconCd.BIRTHDAY
-            iconIV1.backgroundColor = ICON_SELECTED_COLOR
+            selectIcon(iconCd: iconCd)
             // アイコンカラー初期値選択
             iconColorCd = Const.Schedule.colorCd.GRAY
-            colorBtn1.setTitle("✓", for: .normal)
+            selectIconColor(iconColorCd: iconColorCd)
             // 繰り返し初期値
             repeatTF.text = repeatArray.first
             repeatPV.selectRow(0, inComponent: 0, animated: true)
@@ -187,23 +200,62 @@ class ScheduleEditViewController: UIViewController {
                 scheduleId = schedule.id + 1
             }
 
+        // 既存編集
         } else {
+            // スケジュールTBL取得
+            schedule = oshiRealm.objects(Schedule.self)
+                .filter("\(Schedule.Types.id.rawValue) = %@", scheduleDetail.scheduleId).first!
             
+            // タイトル
+            titleTF.text = schedule.title
+            // アイコン
+            iconCd = schedule.iconCd
+            selectIcon(iconCd: iconCd)
+            // アイコンカラー
+            iconColorCd = schedule.iconColorCd
+            selectIconColor(iconColorCd: iconColorCd)
+            // 終日
+            allDaySwitch.isOn = schedule.allDay
+            
+            // 年月日
+            startDateTF.text = CommonMethod.dateFormatter(date: schedule.startDate, formattKind: Const.DateFormatt.yyyyMdW)
+            endDateTF.text = CommonMethod.dateFormatter(date: schedule.endDate, formattKind: Const.DateFormatt.yyyyMdW)
+            // 時刻
+            if !schedule.allDay {
+                startTimeTF.text = CommonMethod.dateFormatter(date: schedule.startDate, formattKind: Const.DateFormatt.Hmm)
+                endTimeTF.text = CommonMethod.dateFormatter(date: schedule.endDate, formattKind: Const.DateFormatt.Hmm)
+            } else {
+                startTimeTF.text = "0:00"
+                endTimeTF.text = "0:00"
+                // 非表示
+                startTimeTF.isHidden = true
+                endTimeTF.isHidden = true
+            }
+            
+            // PickerView初期値
+            let yearStr = CommonMethod.dateFormatter(date: schedule.startDate, formattKind: Const.DateFormatt.yyyy)
+            let monthStr = CommonMethod.dateFormatter(date: schedule.startDate, formattKind: Const.DateFormatt.M)
+            let dayStr = CommonMethod.dateFormatter(date: schedule.startDate, formattKind: Const.DateFormatt.d)
+            let hourStr = CommonMethod.dateFormatter(date: schedule.startDate, formattKind: Const.DateFormatt.H)
+            let minutsStr = CommonMethod.dateFormatter(date: schedule.startDate, formattKind: Const.DateFormatt.mm)
+            datePV.selectRow(yearArray.firstIndex(of: yearStr)!, inComponent: 0, animated: true)
+            datePV.selectRow(monthArray.firstIndex(of: monthStr)!, inComponent: 1, animated: true)
+            datePV.selectRow(dayArray.firstIndex(of: dayStr)!, inComponent: 2, animated: true)
+            timePV.selectRow(hourArray.firstIndex(of: hourStr)!, inComponent: 0, animated: true)
+            timePV.selectRow(minutsArray.firstIndex(of: minutsStr)!, inComponent: 2, animated: true)
+
+            // 繰り返し
+            repeatTF.text = repeatArray[schedule.repeatCd]
+            repeatPV.selectRow(schedule.repeatCd, inComponent: 0, animated: true)
+
+            // メモ
+            memoTV.text = schedule.memo
+            if schedule.memo.isEmpty {
+                placeHolderLbl.isHidden = false
+            } else {
+                placeHolderLbl.isHidden = true
+            }
         }
-        
-        // PickerView初期値
-        let yearStr = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.yyyy)
-        let monthStr = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.M)
-        let dayStr = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.d)
-        let hourStr = CommonMethod.dateFormatter(date: date!, formattKind: Const.DateFormatt.H)
-        let minutsStr = CommonMethod.dateFormatter(date: date!, formattKind: Const.DateFormatt.mm)
-        datePV.selectRow(yearArray.firstIndex(of: yearStr)!, inComponent: 0, animated: true)
-        datePV.selectRow(monthArray.firstIndex(of: monthStr)!, inComponent: 1, animated: true)
-        datePV.selectRow(dayArray.firstIndex(of: dayStr)!, inComponent: 2, animated: true)
-        timePV.selectRow(hourArray.firstIndex(of: hourStr)!, inComponent: 0, animated: true)
-        timePV.selectRow(minutsArray.firstIndex(of: minutsStr)!, inComponent: 2, animated: true)
-
-
     }
     
     /**
@@ -226,46 +278,23 @@ class ScheduleEditViewController: UIViewController {
     
     @IBAction func tapIconBtn1(_ sender: Any) {
         iconCd = Const.Schedule.iconCd.BIRTHDAY
-        iconIV1.backgroundColor = ICON_SELECTED_COLOR
-        iconIV2.backgroundColor = UIColor.clear
-        iconIV3.backgroundColor = UIColor.clear
+        selectIcon(iconCd: Const.Schedule.iconCd.BIRTHDAY)
     }
-    
     @IBAction func tapIconBtn2(_ sender: Any) {
         iconCd = Const.Schedule.iconCd.PRESENT
-        iconIV1.backgroundColor = UIColor.clear
-        iconIV2.backgroundColor = ICON_SELECTED_COLOR
-        iconIV3.backgroundColor = UIColor.clear
+        selectIcon(iconCd: Const.Schedule.iconCd.PRESENT)
     }
     @IBAction func tapIconBtn3(_ sender: Any) {
         iconCd = Const.Schedule.iconCd.RIBBON
-        iconIV1.backgroundColor = UIColor.clear
-        iconIV2.backgroundColor = UIColor.clear
-        iconIV3.backgroundColor = ICON_SELECTED_COLOR
+        selectIcon(iconCd: Const.Schedule.iconCd.RIBBON)
     }
     @IBAction func tapColorBtn1(_ sender: Any) {
         iconColorCd = Const.Schedule.colorCd.GRAY
-        colorBtn1.setTitle("✓", for: .normal)
-        colorBtn2.setTitle("", for: .normal)
-        colorBtn3.setTitle("", for: .normal)
-        iconIV1.image = UIImage(named: Const.Schedule()
-            .getIconName(iconCd: Const.Schedule.iconCd.BIRTHDAY, colorCd: iconColorCd))
-        iconIV2.image = UIImage(named: Const.Schedule()
-            .getIconName(iconCd: Const.Schedule.iconCd.PRESENT, colorCd: iconColorCd))
-        iconIV3.image = UIImage(named: Const.Schedule()
-            .getIconName(iconCd: Const.Schedule.iconCd.RIBBON, colorCd: iconColorCd))
+        selectIconColor(iconColorCd: Const.Schedule.colorCd.GRAY)
     }
     @IBAction func tapColorBtn2(_ sender: Any) {
         iconColorCd = Const.Schedule.colorCd.BLUE
-        colorBtn1.setTitle("", for: .normal)
-        colorBtn2.setTitle("✓", for: .normal)
-        colorBtn3.setTitle("", for: .normal)
-        iconIV1.image = UIImage(named: Const.Schedule()
-            .getIconName(iconCd: Const.Schedule.iconCd.BIRTHDAY, colorCd: iconColorCd))
-        iconIV2.image = UIImage(named: Const.Schedule()
-            .getIconName(iconCd: Const.Schedule.iconCd.PRESENT, colorCd: iconColorCd))
-        iconIV3.image = UIImage(named: Const.Schedule()
-            .getIconName(iconCd: Const.Schedule.iconCd.RIBBON, colorCd: iconColorCd))
+        selectIconColor(iconColorCd: Const.Schedule.colorCd.BLUE)
     }
     
     /**
@@ -277,11 +306,25 @@ class ScheduleEditViewController: UIViewController {
             // 時刻を非表示
             startTimeTF.isHidden = true
             endTimeTF.isHidden = true
+            // startDate, endDate設定
+            let startDateStr = (startDateTF.text?.components(separatedBy: "(")[0])! + "0:00"
+            let start = CommonMethod.dateFormatter(str: startDateStr, formattStr: "yyyy年M月d日H:mm")
+            startDate = start
+            let endDateStr = (endDateTF.text?.components(separatedBy: "(")[0])! + "0:00"
+            let end = CommonMethod.dateFormatter(str: endDateStr, formattStr: "yyyy年M月d日H:mm")
+            endDate = end
         } else {
             allDay = false
             // 時刻を表示
             startTimeTF.isHidden = false
             endTimeTF.isHidden = false
+            // startDate, endDate設定
+            let startDateStr = (startDateTF.text?.components(separatedBy: "(")[0])! + startTimeTF.text!
+            let start = CommonMethod.dateFormatter(str: startDateStr, formattStr: "yyyy年M月d日H:mm")
+            startDate = start
+            let endDateStr = (endDateTF.text?.components(separatedBy: "(")[0])! + endTimeTF.text!
+            let end = CommonMethod.dateFormatter(str: endDateStr, formattStr: "yyyy年M月d日H:mm")
+            endDate = end
         }
     }
     
@@ -628,3 +671,62 @@ extension ScheduleEditViewController: UITextViewDelegate {
     }
 }
 
+extension ScheduleEditViewController {
+    
+    /**
+     アイコン選択状態反映
+     */
+    private func selectIcon(iconCd: Int) {
+        
+        switch iconCd {
+        case Const.Schedule.iconCd.BIRTHDAY:
+            iconIV1.backgroundColor = ICON_SELECTED_COLOR
+            iconIV2.backgroundColor = UIColor.clear
+            iconIV3.backgroundColor = UIColor.clear
+        case Const.Schedule.iconCd.PRESENT:
+            iconIV1.backgroundColor = UIColor.clear
+            iconIV2.backgroundColor = ICON_SELECTED_COLOR
+            iconIV3.backgroundColor = UIColor.clear
+        case Const.Schedule.iconCd.RIBBON:
+            iconIV1.backgroundColor = UIColor.clear
+            iconIV2.backgroundColor = UIColor.clear
+            iconIV3.backgroundColor = ICON_SELECTED_COLOR
+        default:
+            iconIV1.backgroundColor = ICON_SELECTED_COLOR
+            iconIV2.backgroundColor = UIColor.clear
+            iconIV3.backgroundColor = UIColor.clear
+        }
+    }
+    
+    /**
+     アイコンカラー選択状態反映
+     */
+    private func selectIconColor(iconColorCd: Int) {
+        
+        switch iconColorCd {
+        case Const.Schedule.colorCd.GRAY:
+            colorBtn1.setTitle("✓", for: .normal)
+            colorBtn2.setTitle("", for: .normal)
+            colorBtn3.setTitle("", for: .normal)
+        case Const.Schedule.colorCd.BLUE:
+            colorBtn1.setTitle("", for: .normal)
+            colorBtn2.setTitle("✓", for: .normal)
+            colorBtn3.setTitle("", for: .normal)
+        case Const.Schedule.colorCd.ORANGE:
+            colorBtn1.setTitle("", for: .normal)
+            colorBtn2.setTitle("", for: .normal)
+            colorBtn3.setTitle("✓", for: .normal)
+        default:
+            colorBtn1.setTitle("✓", for: .normal)
+            colorBtn2.setTitle("", for: .normal)
+            colorBtn3.setTitle("", for: .normal)
+        }
+        // アイコンのカラー反映
+        iconIV1.image = UIImage(named: Const.Schedule()
+            .getIconName(iconCd: Const.Schedule.iconCd.BIRTHDAY, colorCd: iconColorCd))
+        iconIV2.image = UIImage(named: Const.Schedule()
+            .getIconName(iconCd: Const.Schedule.iconCd.PRESENT, colorCd: iconColorCd))
+        iconIV3.image = UIImage(named: Const.Schedule()
+            .getIconName(iconCd: Const.Schedule.iconCd.RIBBON, colorCd: iconColorCd))
+    }
+}
