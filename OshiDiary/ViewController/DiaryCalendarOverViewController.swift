@@ -50,8 +50,17 @@ class DiaryCalendarOverViewController: UIViewController {
      今日ボタン押下
      */
     @IBAction func tapTodayBtn(_ sender: Any) {
+        let today = Date()
         let vc: DiaryCalendarViewController = self.children[0] as! DiaryCalendarViewController
-        vc.calendar.select(Date(), scrollToDate: true)
+        vc.calendar.select(today, scrollToDate: true)
+        vc.selectedDate = today
+        
+        // 今日のデータまでスクロール
+        let ymdStr = CommonMethod.dateFormatter(date: today, formattKind: Const.DateFormatt.yyyyMMdd)
+        if let index = vc.keyArray.firstIndex(of: ymdStr) {
+            let indexPath = IndexPath(row: 0, section: index)
+            vc.listTV.scrollToRow(at: indexPath, at: .top, animated: true)
+        }
     }
     
     func changeVisual() {

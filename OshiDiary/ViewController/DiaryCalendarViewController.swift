@@ -46,7 +46,11 @@ class DiaryCalendarViewController: UIViewController {
         
         myUD = MyUserDefaults.init()
         
-        // calendarの曜日部分を日本語表記に変更
+        // ****** カレンダーデザイン
+        // 月のフォント
+        calendar.appearance.headerTitleFont = UIFont.boldSystemFont(ofSize: 16)
+
+        // calendarの曜日部分
         calendar.calendarWeekdayView.weekdayLabels[0].text = "日"
         calendar.calendarWeekdayView.weekdayLabels[1].text = "月"
         calendar.calendarWeekdayView.weekdayLabels[2].text = "火"
@@ -54,7 +58,6 @@ class DiaryCalendarViewController: UIViewController {
         calendar.calendarWeekdayView.weekdayLabels[4].text = "木"
         calendar.calendarWeekdayView.weekdayLabels[5].text = "金"
         calendar.calendarWeekdayView.weekdayLabels[6].text = "土"
-        
         calendar.calendarWeekdayView.weekdayLabels[0].font = UIFont.boldSystemFont(ofSize: 16)
         calendar.calendarWeekdayView.weekdayLabels[1].font = UIFont.boldSystemFont(ofSize: 16)
         calendar.calendarWeekdayView.weekdayLabels[2].font = UIFont.boldSystemFont(ofSize: 16)
@@ -62,9 +65,12 @@ class DiaryCalendarViewController: UIViewController {
         calendar.calendarWeekdayView.weekdayLabels[4].font = UIFont.boldSystemFont(ofSize: 16)
         calendar.calendarWeekdayView.weekdayLabels[5].font = UIFont.boldSystemFont(ofSize: 16)
         calendar.calendarWeekdayView.weekdayLabels[6].font = UIFont.boldSystemFont(ofSize: 16)
-        
-        // calendarの曜日部分の色を変更
         calendar.calendarWeekdayView.weekdayLabels[0].textColor = .systemRed
+        calendar.calendarWeekdayView.weekdayLabels[1].textColor = .darkGray
+        calendar.calendarWeekdayView.weekdayLabels[2].textColor = .darkGray
+        calendar.calendarWeekdayView.weekdayLabels[3].textColor = .darkGray
+        calendar.calendarWeekdayView.weekdayLabels[4].textColor = .darkGray
+        calendar.calendarWeekdayView.weekdayLabels[5].textColor = .darkGray
         calendar.calendarWeekdayView.weekdayLabels[6].textColor = .systemBlue
         
         // カレンダー表示月を格納
@@ -199,7 +205,9 @@ extension DiaryCalendarViewController: FSCalendarDelegate, FSCalendarDataSource,
         else if weekday == 7 {  //土曜日
             return UIColor.blue
         }
-        return nil
+        else {
+            return UIColor.darkGray
+        }
     }
     
     /**

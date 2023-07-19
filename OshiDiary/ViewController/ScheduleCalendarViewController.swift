@@ -15,6 +15,7 @@ class ScheduleCalendarViewController: UIViewController {
     @IBOutlet weak var calendar: FSCalendar!
     @IBOutlet weak var listTV: UITableView!
     @IBOutlet weak var backgroundIV: UIImageView!
+    @IBOutlet weak var headerTF: CustomTextField!
     
     var backgroundImageArray: [UIImage] = [UIImage]()
     var myUD: MyUserDefaults!
@@ -28,7 +29,13 @@ class ScheduleCalendarViewController: UIViewController {
     var selectedDate: Date!
     var currentPage: Date!
     var scheduleDetail: ScheduleDetail!
+    var yearMonthPV: UIPickerView = UIPickerView()
 
+    // pickerView用
+    var yearArray: [String] = [String]()
+    var monthArray: [String] = [String]()
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -36,11 +43,17 @@ class ScheduleCalendarViewController: UIViewController {
         calendar.dataSource = self
         listTV.delegate = self
         listTV.dataSource = self
-        
+        yearMonthPV.delegate = self
+        yearMonthPV.dataSource = self
+
         myUD = MyUserDefaults.init()
         oshiId = myUD.getOshiId()
-        
-        // calendarの曜日部分を日本語表記に変更
+
+        // ****** カレンダーデザイン
+        // 月のフォント
+        calendar.appearance.headerTitleFont = UIFont.boldSystemFont(ofSize: 16)
+
+        // calendarの曜日部分
         calendar.calendarWeekdayView.weekdayLabels[0].text = "日"
         calendar.calendarWeekdayView.weekdayLabels[1].text = "月"
         calendar.calendarWeekdayView.weekdayLabels[2].text = "火"
@@ -48,7 +61,6 @@ class ScheduleCalendarViewController: UIViewController {
         calendar.calendarWeekdayView.weekdayLabels[4].text = "木"
         calendar.calendarWeekdayView.weekdayLabels[5].text = "金"
         calendar.calendarWeekdayView.weekdayLabels[6].text = "土"
-        
         calendar.calendarWeekdayView.weekdayLabels[0].font = UIFont.boldSystemFont(ofSize: 16)
         calendar.calendarWeekdayView.weekdayLabels[1].font = UIFont.boldSystemFont(ofSize: 16)
         calendar.calendarWeekdayView.weekdayLabels[2].font = UIFont.boldSystemFont(ofSize: 16)
@@ -56,13 +68,39 @@ class ScheduleCalendarViewController: UIViewController {
         calendar.calendarWeekdayView.weekdayLabels[4].font = UIFont.boldSystemFont(ofSize: 16)
         calendar.calendarWeekdayView.weekdayLabels[5].font = UIFont.boldSystemFont(ofSize: 16)
         calendar.calendarWeekdayView.weekdayLabels[6].font = UIFont.boldSystemFont(ofSize: 16)
-        
-        // calendarの曜日部分の色を変更
         calendar.calendarWeekdayView.weekdayLabels[0].textColor = .systemRed
+        calendar.calendarWeekdayView.weekdayLabels[1].textColor = .darkGray
+        calendar.calendarWeekdayView.weekdayLabels[2].textColor = .darkGray
+        calendar.calendarWeekdayView.weekdayLabels[3].textColor = .darkGray
+        calendar.calendarWeekdayView.weekdayLabels[4].textColor = .darkGray
+        calendar.calendarWeekdayView.weekdayLabels[5].textColor = .darkGray
         calendar.calendarWeekdayView.weekdayLabels[6].textColor = .systemBlue
      
         // カレンダー表示月を格納
         currentPage = calendar.currentPage
+
+        // PickerView用配列作成
+        yearArray = Const.Array().getYearArray()
+        monthArray = Const.Array.MONTH_ARRAY
+
+        // PickerView初期値
+        let yearStr = CommonMethod.dateFormatter(date: calendar.selectedDate ?? Date(), formattKind: Const.DateFormatt.yyyy)
+        let monthStr = CommonMethod.dateFormatter(date: calendar.selectedDate ?? Date(), formattKind: Const.DateFormatt.M)
+        yearMonthPV.selectRow(yearArray.firstIndex(of: yearStr)!, inComponent: 0, animated: true)
+        yearMonthPV.selectRow(monthArray.firstIndex(of: monthStr)!, inComponent: 1, animated: true)
+
+        // カレンダーヘッダに重ねたTextFieldの枠線を消す
+        headerTF.borderStyle = .none
+
+        //***********************
+        // yearMonthPV toolbar
+        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 40))
+        let cancelItem = UIBarButtonItem(title: "キャンセル", style: .plain, target: self, action: #selector(tapCancelBtn))
+        let spacelItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        let doneItem = UIBarButtonItem(title: "決定", style: .plain, target: self, action: #selector(tapDoneBtn))
+        toolbar.setItems([cancelItem, spacelItem, doneItem], animated: true)
+        headerTF.inputView = yearMonthPV
+        headerTF.inputAccessoryView = toolbar
 
     }
     
@@ -134,7 +172,6 @@ class ScheduleCalendarViewController: UIViewController {
             vc.selectedDate = scheduleDetail.date
         }
     }
-
 }
 
 extension ScheduleCalendarViewController: FSCalendarDelegate, FSCalendarDataSource, FSCalendarDelegateAppearance {
@@ -160,7 +197,9 @@ extension ScheduleCalendarViewController: FSCalendarDelegate, FSCalendarDataSour
         else if weekday == 7 {  //土曜日
             return UIColor.blue
         }
-        return nil
+        else {
+            return UIColor.darkGray
+        }
     }
     
     /**
@@ -387,3 +426,68 @@ extension ScheduleCalendarViewController: UITableViewDelegate, UITableViewDataSo
 
 }
 
+extension ScheduleCalendarViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+    
+    // 列数
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 2
+    }
+
+    // 行数
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        var cnt: Int = 0
+        switch component {
+        case 0:
+            cnt = yearArray.count
+        case 1:
+            cnt = monthArray.count
+        default:
+            cnt = 0
+        }
+        return cnt
+    }
+
+    // データ
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        var item: String = ""
+        switch component {
+        case 0:
+            item = yearArray[row]
+        case 1:
+            item = monthArray[row]
+        default:
+            item = ""
+        }
+        return item
+    }
+    
+    // 幅のサイズ
+    func pickerView(_ pickerView: UIPickerView, widthForComponent component:Int) -> CGFloat {
+        var ret: CGFloat!
+        switch component {
+        case 0:
+            ret = (UIScreen.main.bounds.size.width-50)/2
+        case 1:
+            ret = (UIScreen.main.bounds.size.width-50)/2
+        default:
+            ret = (UIScreen.main.bounds.size.width-50)/2
+        }
+        return ret
+    }
+
+    /// Done button
+    @objc func tapDoneBtn() {
+        headerTF.endEditing(true)
+        let dateStr = yearArray[yearMonthPV.selectedRow(inComponent: 0)]
+                + monthArray[yearMonthPV.selectedRow(inComponent: 1)]
+        let date = CommonMethod.dateFormatter(str: dateStr, formattStr: "yyyy年M月")
+        // 選択した年月を表示
+        calendar.select(date, scrollToDate: true)
+    }
+
+    /// cancel button
+    @objc func tapCancelBtn() {
+        headerTF.endEditing(true)
+    }
+
+}
