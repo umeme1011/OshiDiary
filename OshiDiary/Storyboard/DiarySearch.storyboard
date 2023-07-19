@@ -58,7 +58,7 @@
                                     <constraint firstItem="vkW-ky-RKo" firstAttribute="leading" secondItem="gzu-CW-kgl" secondAttribute="leading" id="voI-9l-oqd"/>
                                 </constraints>
                             </view>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="KHU-8r-hUn">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="yoongi3" translatesAutoresizingMaskIntoConstraints="NO" id="KHU-8r-hUn">
                                 <rect key="frame" x="0.0" y="109" width="393" height="663"/>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RLY-dC-uwe">
@@ -302,5 +302,6 @@
         <image name="arrow.uturn.backward" catalog="system" width="128" height="113"/>
         <image name="exclamationmark.circle" catalog="system" width="128" height="123"/>
         <image name="yoongi" width="424" height="636"/>
+        <image name="yoongi3" width="718" height="829"/>
     </resources>
 </document>

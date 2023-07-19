@@ -19,7 +19,7 @@ class DiaryEditViewController: UIViewController {
     @IBOutlet weak var dateTF: UITextField!
     @IBOutlet weak var timeTF: UITextField!
     @IBOutlet weak var editAndSaveBtn: UIButton!
-    @IBOutlet weak var placeholderLbl: UILabel!
+    @IBOutlet weak var placeHolderLbl: UILabel!
     @IBOutlet weak var contentTV: UITextView!
     
     var imageArray: [UIImage] = [UIImage]()
@@ -70,9 +70,13 @@ class DiaryEditViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
 
-        // 枠線を消す
+        // 枠線
         dateTF.borderStyle = .none
         timeTF.borderStyle = .none
+        titleTF.layer.borderColor  = UIColor(red:0.76, green:0.76, blue:0.76, alpha:1.0).cgColor
+        titleTF.layer.cornerRadius = 5.0
+        contentTV.layer.borderColor = UIColor(red:0.76, green:0.76, blue:0.76, alpha:1.0).cgColor
+        contentTV.layer.cornerRadius = 5.0
 
         //***********************
         // タイトル、内容用keyboad toolbar
@@ -138,29 +142,26 @@ class DiaryEditViewController: UIViewController {
             isEdit = true
             // 保存ボタン画像にする
             editAndSaveBtn.setImage(UIImage(systemName: "checkmark"), for: .normal)
+            // 枠線
+            titleTF.layer.borderWidth = 1
+            contentTV.layer.borderWidth = 1
         
         // 既存データ編集
         } else {
             // 初期値設定
             titleTF.text = diary.title
-            if titleTF.text?.count == 0 {
-                // プレースホルダー
-                titleTF.attributedPlaceholder = NSAttributedString(string: "タイトルを記入",
-                                                                        attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-            }
             contentTV.text = diary.content
-            if contentTV.text.count > 0 {
-                placeholderLbl.isHidden = true
-            } else {
-                placeholderLbl.isHidden = false
-            }
-            
             // 初期表示は編集不可
             changeEditable(bool: false)
             // DiaryId設定
             diaryId = diary.id
             // 日記画像読込
             imageArray = CommonMethod.roadDiaryImage(oshiId: oshiId, diaryId: diaryId)
+            // 枠線
+            titleTF.layer.borderWidth = 0
+            contentTV.layer.borderWidth = 0
+            // プレースホルダー非表示
+            placeHolderLbl.isHidden = true
         }
     }
     
@@ -219,20 +220,17 @@ class DiaryEditViewController: UIViewController {
     /**
      削除ボタン押下
      */
-    @IBAction func tapDiaryDeleteBtn(_ sender: Any) {
+    @IBAction func tapDeleteBtn(_ sender: Any) {
         let alert = UIAlertController(title: "", message: Const.Message.DELTE_CONFIRM_MSG, preferredStyle: .alert)
         let cancel = UIAlertAction(title: "いいえ", style: .default, handler: { (action) -> Void in
             // アラートを閉じる
             alert.dismiss(animated: true)
         })
         let ok = UIAlertAction(title: "はい", style: .default, handler: { (action) -> Void in
-            // 日記画像ディレクトリ削除
-            let oshiIdStr: String = String(self.oshiId)
-            let diaryIdStr: String = String(self.diaryId)
-            let dirName: String = Const.File.OSHI_DIR_NAME + oshiIdStr
-                                + "/" + Const.File.Diary.DIARY_DIR_NAME + diaryIdStr
-            CommonMethod.removeFile(name: dirName)
             
+            // 日記画像ディレクトリ削除
+            CommonMethod.removeDiaryImage(oshiId: self.oshiId, diaryId: self.diaryId)
+
             // DB物理削除
             if let diary: Diary = self.oshiRealm.objects(Diary.self)
                 .filter("\(Diary.Types.id.rawValue) = %@", self.diaryId!).first {
@@ -268,6 +266,18 @@ class DiaryEditViewController: UIViewController {
             isEdit = true
             // 画像ボタン表示
             imageCV.reloadData()
+            // 枠線
+            titleTF.layer.borderWidth = 1
+            contentTV.layer.borderWidth = 1
+            // プレースホルダー
+            if titleTF.text!.isEmpty {
+                titleTF.attributedPlaceholder = NSAttributedString(string: "タイトルを記入",
+                                                                        attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+            }
+            if contentTV.text.isEmpty {
+                placeHolderLbl.isHidden = false
+            }
+
         // 保存ボタン押下
         } else {
             let oshiIdStr: String = String(oshiId)
@@ -323,6 +333,17 @@ class DiaryEditViewController: UIViewController {
             imageCV.reloadData()
             changeEditable(bool: false)
             editAndSaveBtn.setImage(UIImage(systemName: "pencil.and.ellipsis.rectangle"), for: .normal)
+            // 枠線
+            titleTF.layer.borderWidth = 0
+            contentTV.layer.borderWidth = 0
+            // プレースホルダー
+            if titleTF.text!.isEmpty {
+                titleTF.attributedPlaceholder = NSAttributedString(string: "",
+                                                                        attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+            }
+            if contentTV.text.isEmpty {
+                placeHolderLbl.isHidden = true
+            }
         }
     }
     
@@ -345,9 +366,9 @@ extension DiaryEditViewController: UITextViewDelegate {
      */
     func textViewDidChange(_ textView: UITextView) {
         if contentTV.text.count > 0 {
-            placeholderLbl.isHidden = true
+            placeHolderLbl.isHidden = true
         } else {
-            placeholderLbl.isHidden = false
+            placeHolderLbl.isHidden = false
         }
     }
 }
@@ -420,7 +441,7 @@ extension DiaryEditViewController: UICollectionViewDelegate, UICollectionViewDat
                     cell.deleteBtn.isHidden = false
                     // 削除ボタン押下アクションセット
                     cell.deleteBtn.tag = indexPath.row
-                    cell.deleteBtn.addTarget(self, action: #selector(tapDeleteBtn), for: .touchUpInside)
+                    cell.deleteBtn.addTarget(self, action: #selector(tapImageDeleteBtn), for: .touchUpInside)
                 }
             }
             return cell
@@ -450,7 +471,7 @@ extension DiaryEditViewController: UICollectionViewDelegate, UICollectionViewDat
     /**
      削除ボタン押下
      */
-    @objc private func tapDeleteBtn(_ sender:UIButton) {
+    @objc private func tapImageDeleteBtn(_ sender:UIButton) {
         let row: Int = sender.tag
         imageArray.remove(at: row)
         imageCV.reloadData()

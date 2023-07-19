@@ -57,7 +57,7 @@
                                             <color key="baseForegroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </buttonConfiguration>
                                         <connections>
-                                            <action selector="tapDiaryDeleteBtn:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="3oK-Rs-oIY"/>
+                                            <action selector="tapDeleteBtn:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="QXV-iQ-LBl"/>
                                         </connections>
                                     </button>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KHe-bH-1KN">
@@ -112,17 +112,17 @@
                                 <rect key="frame" x="0.0" y="109" width="393" height="709"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="SUM-8h-aHW">
-                                        <rect key="frame" x="13" y="8" width="367" height="30"/>
+                                        <rect key="frame" x="16" y="8" width="361" height="34"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="30" id="22D-yo-XDZ"/>
+                                            <constraint firstAttribute="height" constant="34" id="22D-yo-XDZ"/>
                                         </constraints>
                                         <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="9ca-vg-tei">
-                                        <rect key="frame" x="16" y="38" width="361" height="535"/>
+                                        <rect key="frame" x="16" y="50" width="361" height="531"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -219,7 +219,7 @@
                                         </cells>
                                     </collectionView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="推しとの思い出をのこそう♡" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1bV-XO-ASa">
-                                        <rect key="frame" x="20" y="46" width="224" height="20.333333333333329"/>
+                                        <rect key="frame" x="20" y="58.000000000000007" width="224" height="20.333333333333336"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -228,17 +228,17 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="9ca-vg-tei" firstAttribute="leading" secondItem="eVK-ye-zd9" secondAttribute="leading" constant="16" id="8sp-Uv-eRJ"/>
-                                    <constraint firstAttribute="trailing" secondItem="SUM-8h-aHW" secondAttribute="trailing" constant="13" id="FOn-EC-HRC"/>
-                                    <constraint firstItem="9ca-vg-tei" firstAttribute="top" secondItem="SUM-8h-aHW" secondAttribute="bottom" id="G9l-KP-1Kw"/>
+                                    <constraint firstAttribute="trailing" secondItem="SUM-8h-aHW" secondAttribute="trailing" constant="16" id="FOn-EC-HRC"/>
+                                    <constraint firstItem="9ca-vg-tei" firstAttribute="top" secondItem="SUM-8h-aHW" secondAttribute="bottom" constant="8" id="G9l-KP-1Kw"/>
                                     <constraint firstItem="1bV-XO-ASa" firstAttribute="leading" secondItem="eVK-ye-zd9" secondAttribute="leading" constant="20" id="HOg-H7-TQ7"/>
                                     <constraint firstItem="SUM-8h-aHW" firstAttribute="top" secondItem="eVK-ye-zd9" secondAttribute="top" constant="8" id="X6V-Ek-mqV"/>
                                     <constraint firstAttribute="trailing" secondItem="LFo-xY-5oX" secondAttribute="trailing" constant="16" id="X7D-2E-XwC"/>
-                                    <constraint firstItem="LFo-xY-5oX" firstAttribute="top" secondItem="9ca-vg-tei" secondAttribute="bottom" constant="16" id="Y7n-sa-0fg"/>
+                                    <constraint firstItem="LFo-xY-5oX" firstAttribute="top" secondItem="9ca-vg-tei" secondAttribute="bottom" constant="8" id="Y7n-sa-0fg"/>
                                     <constraint firstAttribute="bottom" secondItem="LFo-xY-5oX" secondAttribute="bottom" id="bM8-O0-qfa"/>
                                     <constraint firstAttribute="trailing" secondItem="9ca-vg-tei" secondAttribute="trailing" constant="16" id="o7J-W2-KXb"/>
-                                    <constraint firstItem="1bV-XO-ASa" firstAttribute="top" secondItem="SUM-8h-aHW" secondAttribute="bottom" constant="8" id="oJP-XM-17F"/>
+                                    <constraint firstItem="1bV-XO-ASa" firstAttribute="top" secondItem="SUM-8h-aHW" secondAttribute="bottom" constant="16" id="oJP-XM-17F"/>
                                     <constraint firstItem="LFo-xY-5oX" firstAttribute="leading" secondItem="eVK-ye-zd9" secondAttribute="leading" constant="16" id="s8A-RB-C5a"/>
-                                    <constraint firstItem="SUM-8h-aHW" firstAttribute="leading" secondItem="eVK-ye-zd9" secondAttribute="leading" constant="13" id="svx-jf-xdT"/>
+                                    <constraint firstItem="SUM-8h-aHW" firstAttribute="leading" secondItem="eVK-ye-zd9" secondAttribute="leading" constant="16" id="svx-jf-xdT"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -262,7 +262,7 @@
                         <outlet property="deleteBtn" destination="Jyo-1E-WUa" id="fV9-9l-GTs"/>
                         <outlet property="editAndSaveBtn" destination="kMg-od-ilz" id="SDh-1J-npP"/>
                         <outlet property="imageCV" destination="LFo-xY-5oX" id="o5Q-Uy-Gcz"/>
-                        <outlet property="placeholderLbl" destination="1bV-XO-ASa" id="bso-FM-6Af"/>
+                        <outlet property="placeHolderLbl" destination="1bV-XO-ASa" id="bso-FM-6Af"/>
                         <outlet property="timeTF" destination="O1c-Jm-BYk" id="eN9-mp-Lo0"/>
                         <outlet property="titleTF" destination="SUM-8h-aHW" id="Yiy-GE-hXa"/>
                         <segue destination="tms-JR-Aiy" kind="presentation" identifier="toImageDetail" id="6BM-HC-Qdg"/>

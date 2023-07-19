@@ -93,7 +93,6 @@ class ScheduleEditViewController: UIViewController {
 
         // 枠線
         titleTF.layer.borderColor  = UIColor(red:0.76, green:0.76, blue:0.76, alpha:1.0).cgColor
-        titleTF.layer.borderWidth = 1.0
         titleTF.layer.cornerRadius = 5.0
         startDateTF.borderStyle = .none
         startTimeTF.borderStyle = .none
@@ -101,7 +100,6 @@ class ScheduleEditViewController: UIViewController {
         endTimeTF.borderStyle = .none
         repeatTF.borderStyle = .none
         memoTV.layer.borderColor = UIColor(red:0.76, green:0.76, blue:0.76, alpha:1.0).cgColor
-        memoTV.layer.borderWidth = 1.0
         memoTV.layer.cornerRadius = 5.0
         
         //***********************
@@ -520,6 +518,51 @@ class ScheduleEditViewController: UIViewController {
             }
         }
     }
+    
+    /**
+     削除ボタン押下
+     */
+    @IBAction func tapDeleteBtn(_ sender: Any) {
+        let alert = UIAlertController(title: "", message: Const.Message.DELTE_CONFIRM_MSG, preferredStyle: .alert)
+        let cancel = UIAlertAction(title: "いいえ", style: .default, handler: { (action) -> Void in
+            // アラートを閉じる
+            alert.dismiss(animated: true)
+        })
+        let ok = UIAlertAction(title: "はい", style: .default, handler: { (action) -> Void in
+            // スケジュール詳細TBL物理削除
+            let scheduleDetails: Results<ScheduleDetail> = self.oshiRealm.objects(ScheduleDetail.self)
+                .filter("\(ScheduleDetail.Types.scheduleId.rawValue) = %@", self.scheduleId!)
+            
+            if !scheduleDetails.isEmpty {
+                do {
+                    try self.oshiRealm.write {
+                        self.oshiRealm.delete(scheduleDetails)
+                    }
+                } catch {
+                    print("スケジュール詳細TBL削除失敗", error)
+                }
+            }
+            
+            // スケジュールTBL物理削除
+            if let schedule: Schedule = self.oshiRealm.objects(Schedule.self)
+                .filter("\(Schedule.Types.id.rawValue) = %@", self.scheduleId!).first {
+                
+                do {
+                    try self.oshiRealm.write {
+                        self.oshiRealm.delete(schedule)
+                    }
+                } catch {
+                    print("スケジュールTBL削除失敗", error)
+                }
+            }
+            // 画面を閉じる
+            self.dismiss(animated: true)
+        })
+        alert.addAction(cancel)
+        alert.addAction(ok)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
 }
 
 extension ScheduleEditViewController: UIPickerViewDelegate, UIPickerViewDataSource {

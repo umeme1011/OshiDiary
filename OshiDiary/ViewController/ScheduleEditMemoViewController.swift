@@ -50,9 +50,10 @@ class ScheduleEditMemoViewController: UIViewController {
      */
     @objc func keyboardWillShow(notification: NSNotification) {
         // キーボードの高さに合わせてViewのボトムを上に上げる
-        if let keyboadSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            let tabBarHeight = tabBarController?.tabBar.frame.size.height ?? 0
-            contentsViewBottomConstraint.constant = -(keyboadSize.height - tabBarHeight)
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            // テキストビューのBottomAnchor制約にキーボードの高さを設定
+            contentsViewBottomConstraint.constant = keyboardSize.height
+            self.view.layoutIfNeeded()
         }
     }
     
@@ -62,6 +63,7 @@ class ScheduleEditMemoViewController: UIViewController {
     @objc func keyboardWillHide() {
         // Viewのボトムをもとに戻す
         contentsViewBottomConstraint.constant = 0
+        self.view.layoutIfNeeded()
     }
     
     /**

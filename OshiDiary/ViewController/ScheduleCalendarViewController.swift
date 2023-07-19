@@ -223,8 +223,8 @@ extension ScheduleCalendarViewController: FSCalendarDelegate, FSCalendarDataSour
         // 選択した日付
         selectedDate = date
         // リストをスクロール
-        let dateStr = CommonMethod.dateFormatter(date: date, formattKind: Const.DateFormatt.yyyyMdW)
-        scroll(dateStr: dateStr)
+        let ymdStr = CommonMethod.dateFormatter(date: date, formattKind: Const.DateFormatt.yyyyMMdd)
+        scroll(dateStr: ymdStr)
     }
     
     /**

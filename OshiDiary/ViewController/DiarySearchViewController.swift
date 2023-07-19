@@ -109,21 +109,21 @@ extension DiarySearchViewController: UITextFieldDelegate {
 
         // 結果を年月で分類しDicに格納
         if !diaries.isEmpty {
-            var tmpMonth = ""
+            var tmpYmString = ""
             var diaryArray: [Diary] = [Diary]()
             for diary in diaries {
-                if tmpMonth == diary.ymString {
+                if tmpYmString == diary.ymString {
                     diaryArray.append(diary)
                 } else {
                     if !diaryArray.isEmpty {
-                        diaryDic[tmpMonth] = diaryArray
+                        diaryDic[tmpYmString] = diaryArray
                         diaryArray.removeAll()
                     }
                     diaryArray.append(diary)
                 }
-                tmpMonth = diary.ymString
+                tmpYmString = diary.ymString
             }
-            diaryDic[tmpMonth] = diaryArray
+            diaryDic[tmpYmString] = diaryArray
         }
         // キー（日付）配列
         keyArray = [String](diaryDic.keys)
@@ -161,8 +161,10 @@ extension DiarySearchViewController: UITableViewDelegate, UITableViewDataSource 
         let view: UIView = UIView()
         let label: UILabel = UILabel()
         
-        let cnt = diaryDic[keyArray[section]]?.count
-        label.text = "\(keyArray[section])  \(cnt ?? 0)件"
+        // 表示用年月日生成
+        let ym: String = CommonMethod.dateFormatter(date: CommonMethod.dateFormatter(str: keyArray[section], formattStr: "yyyyMM")
+                                                     , formattKind: Const.DateFormatt.yyyyM)
+        label.text = ym
 
         // Viewデザイン
         let screenWidth:CGFloat = listTV.frame.size.width
