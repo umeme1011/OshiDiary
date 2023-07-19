@@ -38,14 +38,14 @@
                                             <action selector="tapCancelBtn:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="MhB-Hm-Fck"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GSO-wn-9D2">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GSO-wn-9D2">
                                         <rect key="frame" x="330" y="8" width="45" height="34"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="45" id="42y-ZT-PS0"/>
                                         </constraints>
                                         <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" image="checkmark" catalog="system">
+                                        <buttonConfiguration key="configuration" style="plain" image="pencil.and.ellipsis.rectangle" catalog="system">
                                             <color key="baseForegroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </buttonConfiguration>
                                         <connections>
@@ -559,7 +559,7 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QFb-hy-rrm">
                                                 <rect key="frame" x="0.0" y="406" width="343" height="187"/>
                                                 <subviews>
-                                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="6oB-ys-UtZ">
+                                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6oB-ys-UtZ">
                                                         <rect key="frame" x="0.0" y="0.0" width="343" height="187"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -599,10 +599,20 @@
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </stackView>
+                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tfM-3o-bQx">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="400"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="400" id="uPS-Mg-1Rm"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
+                                    <constraint firstItem="tfM-3o-bQx" firstAttribute="top" secondItem="RQz-Nc-4Mx" secondAttribute="top" id="FfV-bY-LoW"/>
                                     <constraint firstItem="Q92-ZK-N4v" firstAttribute="leading" secondItem="RQz-Nc-4Mx" secondAttribute="leading" constant="16" id="Hge-Lf-oeO"/>
+                                    <constraint firstAttribute="trailing" secondItem="tfM-3o-bQx" secondAttribute="trailing" id="OhN-mw-lsQ"/>
+                                    <constraint firstItem="tfM-3o-bQx" firstAttribute="leading" secondItem="RQz-Nc-4Mx" secondAttribute="leading" id="Q4h-fK-qg7"/>
                                     <constraint firstAttribute="bottom" secondItem="Q92-ZK-N4v" secondAttribute="bottom" constant="16" id="YhB-bY-c6V"/>
                                     <constraint firstAttribute="trailing" secondItem="Q92-ZK-N4v" secondAttribute="trailing" constant="16" id="cPJ-gc-AuY"/>
                                     <constraint firstItem="Q92-ZK-N4v" firstAttribute="top" secondItem="RQz-Nc-4Mx" secondAttribute="top" constant="8" id="lL9-mj-f11"/>
@@ -628,11 +638,15 @@
                         <outlet property="colorBtn2" destination="dfc-pG-tLg" id="2d1-PF-ztp"/>
                         <outlet property="colorBtn3" destination="s11-Ql-4Ci" id="mwC-Ar-oyL"/>
                         <outlet property="contentsViewBottomConstraint" destination="ICb-wC-kaS" id="icJ-9u-xfy"/>
+                        <outlet property="coverView" destination="tfM-3o-bQx" id="HFg-IJ-e4C"/>
+                        <outlet property="editAndSaveBtn" destination="GSO-wn-9D2" id="IE9-xs-uub"/>
                         <outlet property="endDateTF" destination="cRs-cj-ycQ" id="E12-Tm-007"/>
                         <outlet property="endTimeTF" destination="GEi-7s-KCE" id="U1O-nh-Djq"/>
+                        <outlet property="headerLbl" destination="kod-2k-wc6" id="zMw-wh-BSl"/>
                         <outlet property="iconIV1" destination="mfP-sC-c5A" id="MU4-Nr-n6F"/>
                         <outlet property="iconIV2" destination="sWM-Ps-0Iw" id="47D-sh-atb"/>
                         <outlet property="iconIV3" destination="3n2-Jf-fAu" id="Kg5-E7-tds"/>
+                        <outlet property="memoBtn" destination="57y-hf-xsS" id="qfT-Ts-maX"/>
                         <outlet property="memoTV" destination="6oB-ys-UtZ" id="J95-6W-1hI"/>
                         <outlet property="placeHolderLbl" destination="1c8-2f-Rv2" id="TuU-eQ-Ee9"/>
                         <outlet property="repeatTF" destination="W3A-QT-wKL" id="b5X-8a-HLg"/>
@@ -657,7 +671,7 @@
     <resources>
         <image name="arrow.uturn.backward" catalog="system" width="128" height="113"/>
         <image name="birthday_gray" width="64" height="64"/>
-        <image name="checkmark" catalog="system" width="128" height="114"/>
+        <image name="pencil.and.ellipsis.rectangle" catalog="system" width="128" height="80"/>
         <image name="present_gray" width="64" height="64"/>
         <image name="ribbon_gray" width="64" height="64"/>
         <image name="trash" catalog="system" width="117" height="128"/>

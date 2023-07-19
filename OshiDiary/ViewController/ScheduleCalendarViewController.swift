@@ -83,7 +83,7 @@ class ScheduleCalendarViewController: UIViewController {
         oshiRealm = CommonMethod.createOshiRealm(oshiId: oshiId)
         
         // 表示月の年月を取得
-        let ymString: String = CommonMethod.dateFormatter(date: currentPage, formattKind: Const.DateFormatt.yyyyM)
+        let ymString: String = CommonMethod.dateFormatter(date: currentPage, formattKind: Const.DateFormatt.yyyyMM)
 
         // スケジュールデータ取得
         scheduleDetails = oshiRealm.objects(ScheduleDetail.self)
@@ -92,21 +92,21 @@ class ScheduleCalendarViewController: UIViewController {
         
         // 日付ごとに分類しDictionaryに格納
         if !scheduleDetails.isEmpty {
-            var tmpDate = ""
+            var tmpYmdString = ""
             var scheduleDetailArray: [ScheduleDetail] = [ScheduleDetail]()
             for scheduleDetail in scheduleDetails {
-                if tmpDate == scheduleDetail.dateString {
+                if tmpYmdString == scheduleDetail.ymdString {
                     scheduleDetailArray.append(scheduleDetail)
                 } else {
                     if !scheduleDetailArray.isEmpty {
-                        scheduleDetailDic[tmpDate] = scheduleDetailArray
+                        scheduleDetailDic[tmpYmdString] = scheduleDetailArray
                         scheduleDetailArray.removeAll()
                     }
                     scheduleDetailArray.append(scheduleDetail)
                 }
-                tmpDate = scheduleDetail.dateString
+                tmpYmdString = scheduleDetail.ymdString
             }
-            scheduleDetailDic[tmpDate] = scheduleDetailArray
+            scheduleDetailDic[tmpYmdString] = scheduleDetailArray
         }
         // キー（日付）配列
         keyArray = [String](scheduleDetailDic.keys)
@@ -206,10 +206,10 @@ extension ScheduleCalendarViewController: FSCalendarDelegate, FSCalendarDataSour
         var ret: Int = 0
         
         // 登録日付と比較するために日付を年月日曜日にフォーマット
-        let dateString: String = CommonMethod.dateFormatter(date: date, formattKind: Const.DateFormatt.yyyyMdW)
+        let ymdString: String = CommonMethod.dateFormatter(date: date, formattKind: Const.DateFormatt.yyyyMMdd)
         
         for scheduleDetail in scheduleDetails {
-            if scheduleDetail.dateString == dateString {
+            if scheduleDetail.ymdString == ymdString {
                 ret += 1
             }
         }
@@ -256,8 +256,10 @@ extension ScheduleCalendarViewController: UITableViewDelegate, UITableViewDataSo
         let view: UIView = UIView()
         let label: UILabel = UILabel()
         
-        let cnt = scheduleDetailDic[keyArray[section]]?.count
-        label.text = "\(keyArray[section])  \(cnt ?? 0)件"
+        // 表示用年月日生成
+        let ymd: String = CommonMethod.dateFormatter(date: CommonMethod.dateFormatter(str: keyArray[section], formattStr: "yyyyMMdd")
+                                                     , formattKind: Const.DateFormatt.yyyyMdW)
+        label.text = ymd
 
         // Viewデザイン
         let screenWidth:CGFloat = listTV.frame.size.width

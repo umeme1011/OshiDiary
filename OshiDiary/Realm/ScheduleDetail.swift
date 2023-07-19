@@ -12,7 +12,7 @@ class ScheduleDetail: RealmSwift.Object {
     @objc dynamic var scheduleId: Int = 0
     @objc dynamic var dayNo: Int = 0
     @objc dynamic var date: Date = Date()
-    @objc dynamic var dateString: String = ""
+    @objc dynamic var ymdString: String = ""
     @objc dynamic var ymString: String = ""
     @objc dynamic var createDate = Date()
     @objc dynamic var createUser: String = "system"
@@ -28,7 +28,7 @@ class ScheduleDetail: RealmSwift.Object {
         case scheduleId
         case dayNo
         case date
-        case dateString
+        case ymdString
         case ymString
         case createDate
         case createUser
