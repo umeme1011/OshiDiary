@@ -123,8 +123,10 @@ extension DiaryListViewController: UITableViewDelegate, UITableViewDataSource {
         let view: UIView = UIView()
         let label: UILabel = UILabel()
         
-        let cnt = diaryDic[keyArray[section]]?.count
-        label.text = "\(keyArray[section])  \(cnt ?? 0)件"
+        // 表示用年月日生成
+        let ym: String = CommonMethod.dateFormatter(date: CommonMethod.dateFormatter(str: keyArray[section], formattStr: "yyyyMM")
+                                                     , formattKind: Const.DateFormatt.yyyyM)
+        label.text = ym
 
         // Viewデザイン
         let screenWidth:CGFloat = listTV.frame.size.width

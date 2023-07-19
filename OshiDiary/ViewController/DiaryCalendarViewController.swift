@@ -115,36 +115,36 @@ class DiaryCalendarViewController: UIViewController {
         oshiRealm = CommonMethod.createOshiRealm(oshiId: oshiId)
         
         // 表示月の年月を取得
-        let ymString: String = CommonMethod.dateFormatter(date: currentPage, formattKind: Const.DateFormatt.yyyyM)
+        let ymString: String = CommonMethod.dateFormatter(date: currentPage, formattKind: Const.DateFormatt.yyyyMM)
         
         // 日記データ取得
         diaries = oshiRealm.objects(Diary.self)
             .filter("\(Diary.Types.ymString.rawValue) = %@", ymString)
             .sorted(byKeyPath: Diary.Types.date.rawValue, ascending: true)
-        
+
         // 日付ごとに分類しDictionaryに格納
         if !diaries.isEmpty {
-            var tmpDate = ""
+            var tmpYmdString = ""
             var diaryArray: [Diary] = [Diary]()
             for diary in diaries {
-                if tmpDate == diary.dateString {
+                if tmpYmdString == diary.ymdString {
                     diaryArray.append(diary)
                 } else {
                     if !diaryArray.isEmpty {
-                        diaryDic[tmpDate] = diaryArray
+                        diaryDic[tmpYmdString] = diaryArray
                         diaryArray.removeAll()
                     }
                     diaryArray.append(diary)
                 }
-                tmpDate = diary.dateString
+                tmpYmdString = diary.ymdString
             }
-            diaryDic[tmpDate] = diaryArray
+            diaryDic[tmpYmdString] = diaryArray
         }
         // キー（日付）配列
         keyArray = [String](diaryDic.keys)
         // キーをソート
         keyArray.sort()
-
+        
         // listTVリロード（アニメーションつき）
         UIView.transition(with: listTV, duration: 0.1, options: [.transitionCrossDissolve, .curveLinear], animations: {self.listTV.reloadData()})
         // カレンダーリロード
@@ -245,10 +245,10 @@ extension DiaryCalendarViewController: FSCalendarDelegate, FSCalendarDataSource,
         var ret: Int = 0
         
         // 登録日付と比較するために日付を年月日曜日にフォーマット
-        let dateString: String = CommonMethod.dateFormatter(date: date, formattKind: Const.DateFormatt.yyyyMdW)
+        let ymdString: String = CommonMethod.dateFormatter(date: date, formattKind: Const.DateFormatt.yyyyMMdd)
         
         for diary in diaries {
-            if diary.dateString == dateString {
+            if diary.ymdString == ymdString {
                 ret += 1
             }
         }
@@ -294,8 +294,10 @@ extension DiaryCalendarViewController: UITableViewDelegate, UITableViewDataSourc
         let view: UIView = UIView()
         let label: UILabel = UILabel()
         
-        let cnt = diaryDic[keyArray[section]]?.count
-        label.text = "\(keyArray[section])  \(cnt ?? 0)件"
+        // 表示用年月日生成
+        let ymd: String = CommonMethod.dateFormatter(date: CommonMethod.dateFormatter(str: keyArray[section], formattStr: "yyyyMMdd")
+                                                     , formattKind: Const.DateFormatt.yyyyMdW)
+        label.text = ymd
 
         // Viewデザイン
         let screenWidth:CGFloat = listTV.frame.size.width

@@ -274,10 +274,14 @@ class CommonMethod {
         switch formattKind {
         case Const.DateFormatt.yyyyMdWHmmss:
             formatter.dateFormat = "yyyy年M月d日(" + weekFormatter(date: date) + ") H:mm:ss"
+        case Const.DateFormatt.yyyyMMdd:
+            formatter.dateFormat = "yyyyMMdd"
         case Const.DateFormatt.yyyyMdW:
             formatter.dateFormat = "yyyy年M月d日(" + weekFormatter(date: date) + ")"
         case Const.DateFormatt.yyyyMd:
             formatter.dateFormat = "yyyy年M月d日"
+        case Const.DateFormatt.yyyyMM:
+            formatter.dateFormat = "yyyyMM"
         case Const.DateFormatt.yyyyM:
             formatter.dateFormat = "yyyy年M月"
         case Const.DateFormatt.yyyy:

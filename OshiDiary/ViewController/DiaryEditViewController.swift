@@ -289,15 +289,15 @@ class DiaryEditViewController: UIViewController {
             }
             
             // 日時をフォーマット
-            let dateString = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.yyyyMdW)
-            let ymString = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.yyyyM)
-            
+            let ymdString = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.yyyyMMdd)
+            let ymString = CommonMethod.dateFormatter(date: selectedDate, formattKind: Const.DateFormatt.yyyyMM)
+
             // データがすでに存在していたら更新
             if let diary: Diary = oshiRealm.objects(Diary.self)
                 .filter("\(Diary.Types.id.rawValue) = %@", diaryId!).first {
                 try! oshiRealm.write {
                     diary.date = selectedDate
-                    diary.dateString = dateString
+                    diary.ymdString = ymdString
                     diary.ymString = ymString
                     diary.title = titleTF.text ?? ""
                     diary.content = contentTV.text
@@ -306,16 +306,16 @@ class DiaryEditViewController: UIViewController {
 
             // 存在しない場合は登録
             } else {
-                let newDiary = Diary()
+                let diary = Diary()
                 try! oshiRealm.write {
-                    newDiary.id = diaryId
-                    newDiary.date = selectedDate
-                    newDiary.dateString = dateString
-                    newDiary.ymString = ymString
-                    newDiary.title = titleTF.text ?? ""
-                    newDiary.content = contentTV.text
+                    diary.id = diaryId
+                    diary.date = selectedDate
+                    diary.ymdString = ymdString
+                    diary.ymString = ymString
+                    diary.title = titleTF.text ?? ""
+                    diary.content = contentTV.text
 
-                    oshiRealm.add(newDiary)
+                    oshiRealm.add(diary)
                 }
             }
             // 参照状態に戻す

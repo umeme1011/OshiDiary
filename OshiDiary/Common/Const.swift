@@ -153,16 +153,18 @@ class Const {
     
     class DateFormatt {
         static let yyyyMdWHmmss = 1
-        static let yyyyMdW = 2
-        static let yyyyMd = 3
-        static let yyyyM = 4
-        static let yyyy = 5
-        static let M = 6
-        static let d = 7
-        static let Hmmss = 8
-        static let Hmm = 9
-        static let H = 10
-        static let mm = 11
+        static let yyyyMMdd = 2
+        static let yyyyMdW = 3
+        static let yyyyMd = 4
+        static let yyyyMM = 5
+        static let yyyyM = 6
+        static let yyyy = 7
+        static let M = 8
+        static let d = 9
+        static let Hmmss = 10
+        static let Hmm = 11
+        static let H = 12
+        static let mm = 13
     }
     
     class Array {
