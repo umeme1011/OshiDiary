@@ -21,7 +21,9 @@ class DiaryListViewController: UIViewController {
     var diaryDic: Dictionary = Dictionary<String, [Diary]>()
     var keyArray: [String] = [String]()
     var diary: Diary!
-
+    var pageNumber = 1
+    var pageSize = 10
+    var diaries: Results<Diary>!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,43 +49,15 @@ class DiaryListViewController: UIViewController {
     func changeVisual() {
         // diaryDic初期化
         diaryDic.removeAll()
-        
+
         // oshiRealm生成
         oshiId = myUD.getOshiId()
         oshiRealm = CommonMethod.createOshiRealm(oshiId: oshiId)
-        
-        // 日記データ取得
-        let diaries: Results<Diary> = oshiRealm.objects(Diary.self)
-            .sorted(byKeyPath: Diary.Types.date.rawValue, ascending: true)
 
-        // 年月ごとに分類しDictionaryに格納
-        if !diaries.isEmpty {
-            var tmpMonth = ""
-            var diaryArray: [Diary] = [Diary]()
-            for diary in diaries {
-                if tmpMonth == diary.ymString {
-                    diaryArray.append(diary)
-                } else {
-                    if !diaryArray.isEmpty {
-                        diaryDic[tmpMonth] = diaryArray
-                        diaryArray.removeAll()
-                    }
-                    diaryArray.append(diary)
-                }
-                tmpMonth = diary.ymString
-            }
-            diaryDic[tmpMonth] = diaryArray
-        }
-        // キー（日付）配列
-        keyArray = [String](diaryDic.keys)
-        // キーをソート（年月降順）
-        keyArray.sort { $0 > $1 }
-        
-        // ランダムに背景画像を設定
-        backgroundIV.image = CommonMethod.roadBackgroundImage(oshiId: myUD.getOshiId()).randomElement()
-        // listTVリロード
-        listTV.reloadData()
-        
+        // 日記データ取得
+        diaries = oshiRealm.objects(Diary.self)
+            .sorted(byKeyPath: Diary.Types.date.rawValue, ascending: false)
+
         if !diaries.isEmpty {
             // 日記なしメッセージ非表示
             noMessageSV.isHidden = true
@@ -91,6 +65,13 @@ class DiaryListViewController: UIViewController {
             // 日記なしメッセージ表示
             noMessageSV.isHidden = false
         }
+
+        // ページごとにデータ設定
+        setDiaryDic()
+        
+        // ランダムに背景画像を設定
+        backgroundIV.image = CommonMethod.roadBackgroundImage(oshiId: myUD.getOshiId()).randomElement()
+        
     }
     
     /**
@@ -109,6 +90,7 @@ class DiaryListViewController: UIViewController {
 }
 
 extension DiaryListViewController: UITableViewDelegate, UITableViewDataSource {
+    
     /**
      セクション数
      */
@@ -186,6 +168,25 @@ extension DiaryListViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     /**
+     スクロール時
+     */
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        // すべて表示されたら実施しない
+        if diaries.count >= pageSize * pageNumber {
+            let scrollPosY = scrollView.contentOffset.y //スクロール位置
+            let maxOffsetY = scrollView.contentSize.height - scrollView.frame.size.height //スクロール領域の高さからスクロール画面の高さを引いた値
+            let distanceToBottom = maxOffsetY - scrollPosY //スクロール領域下部までの距離
+
+            //スクロール領域下部に近づいたら追加で記事を取得する
+            if distanceToBottom < 200 {
+                pageNumber += 1
+                setDiaryDic()
+            }
+        }
+    }
+    
+    /**
      セルがタップされた時の処理
      */
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -257,4 +258,54 @@ extension DiaryListViewController: UITableViewDelegate, UITableViewDataSource {
         return UISwipeActionsConfiguration(actions: [delete])
     }
 
+}
+
+extension DiaryListViewController {
+    
+    /**
+     ページごとにデータ設定
+     */
+    private func setDiaryDic() {
+        
+        // 次ページのデータを取得
+        var diaryOffsetArray: [Diary] = [Diary]()
+        for offset in (pageSize * (pageNumber - 1))..<(pageSize * pageNumber) {
+            if offset < diaries.count {
+                diaryOffsetArray.append(diaries[offset])
+            }
+        }
+    
+        // 年月ごとに分類しDictionaryに追加
+        var tmpMonth = ""
+        var diaryArray: [Diary] = [Diary]()
+        for diary in diaryOffsetArray {
+            if tmpMonth == diary.ymString {
+                diaryArray.append(diary)
+            } else {
+                if !diaryArray.isEmpty {
+                    if diaryDic[tmpMonth] != nil {
+                        diaryDic[tmpMonth]! += diaryArray
+                    } else {
+                        diaryDic[tmpMonth] = diaryArray
+                    }
+                    diaryArray.removeAll()
+                }
+                diaryArray.append(diary)
+            }
+            tmpMonth = diary.ymString
+        }
+        if diaryDic[tmpMonth] != nil {
+            diaryDic[tmpMonth]! += diaryArray
+        } else {
+            diaryDic[tmpMonth] = diaryArray
+        }
+
+        // キー（日付）配列
+        keyArray = [String](diaryDic.keys)
+        // キーをソート（年月降順）
+        keyArray.sort { $0 > $1 }
+        
+        // listTVリロード
+        listTV.reloadData()
+    }
 }
