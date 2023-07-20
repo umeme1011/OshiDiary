@@ -91,7 +91,7 @@
                                         </constraints>
                                         <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="今日"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="square.grid.3x3.middleleft.filled" catalog="system"/>
                                         <connections>
                                             <action selector="tapTodayBtn:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="PN7-fN-1aT"/>
                                         </connections>
@@ -473,6 +473,7 @@
         <image name="heart" width="64" height="64"/>
         <image name="kuma_default" width="120" height="120"/>
         <image name="list.bullet.rectangle" catalog="system" width="128" height="93"/>
+        <image name="square.grid.3x3.middleleft.filled" catalog="system" width="128" height="113"/>
         <image name="yoongi2" width="736" height="736"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

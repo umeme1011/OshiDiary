@@ -225,9 +225,10 @@
                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lEy-jC-YHD">
                                                                         <rect key="frame" x="152" y="0.0" width="50.5" height="30"/>
                                                                         <subviews>
-                                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="birthday_gray" translatesAutoresizingMaskIntoConstraints="NO" id="bad-Yg-jxu">
-                                                                                <rect key="frame" x="0.0" y="0.0" width="50.5" height="30"/>
+                                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="teddybear.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="bad-Yg-jxu">
+                                                                                <rect key="frame" x="0.0" y="-1" width="50.5" height="32.5"/>
                                                                                 <color key="backgroundColor" red="0.83741801979999997" green="0.83743780850000005" blue="0.83742713930000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                <color key="tintColor" red="0.64597076180000002" green="0.53466081620000006" blue="0.41205644609999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                                 <userDefinedRuntimeAttributes>
                                                                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                                                                         <integer key="value" value="10"/>
@@ -260,9 +261,10 @@
                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iUz-87-wom">
                                                                         <rect key="frame" x="202.5" y="0.0" width="50.5" height="30"/>
                                                                         <subviews>
-                                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="birthday_gray" translatesAutoresizingMaskIntoConstraints="NO" id="Ajs-eG-u3C">
-                                                                                <rect key="frame" x="0.0" y="0.0" width="50.5" height="30"/>
+                                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="birthday.cake.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Ajs-eG-u3C">
+                                                                                <rect key="frame" x="0.0" y="-0.5" width="50.5" height="31"/>
                                                                                 <color key="backgroundColor" red="0.83741801979999997" green="0.83743780850000005" blue="0.83742713930000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                <color key="tintColor" red="0.88342434169999995" green="0.33716446160000002" blue="0.29319527750000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                                 <userDefinedRuntimeAttributes>
                                                                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                                                                         <integer key="value" value="10"/>
@@ -673,10 +675,12 @@
     </scenes>
     <resources>
         <image name="arrow.uturn.backward" catalog="system" width="128" height="113"/>
+        <image name="birthday.cake.fill" catalog="system" width="128" height="115"/>
         <image name="birthday_gray" width="64" height="64"/>
         <image name="pencil.and.ellipsis.rectangle" catalog="system" width="128" height="80"/>
         <image name="present_gray" width="64" height="64"/>
         <image name="ribbon_gray" width="64" height="64"/>
+        <image name="teddybear.fill" catalog="system" width="126" height="128"/>
         <image name="trash" catalog="system" width="117" height="128"/>
         <systemColor name="systemGrayColor">
             <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

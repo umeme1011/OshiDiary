@@ -58,8 +58,12 @@ class ScheduleListViewController: UIViewController {
         pageNumber = 1
 
         // 日記データ取得
+        let calendar = Calendar(identifier: .gregorian)
+        var tmp = calendar.dateComponents([.year, .month], from: Date())
+        let firstDay = calendar.date(from: tmp)!
         scheduleDetails = oshiRealm.objects(ScheduleDetail.self)
-            .sorted(byKeyPath: ScheduleDetail.Types.date.rawValue, ascending: false)
+            .filter("\(ScheduleDetail.Types.date.rawValue) >= %@", firstDay)
+            .sorted(byKeyPath: ScheduleDetail.Types.date.rawValue, ascending: true)
 
         if !scheduleDetails.isEmpty {
             // 日記なしメッセージ非表示
@@ -248,7 +252,6 @@ extension ScheduleListViewController: UITableViewDelegate, UITableViewDataSource
 
         return UISwipeActionsConfiguration(actions: [delete])
     }
-
 }
 
 extension ScheduleListViewController {
@@ -293,8 +296,8 @@ extension ScheduleListViewController {
 
         // キー（日付）配列
         keyArray = [String](scheduleDetailDic.keys)
-        // キーをソート（年月降順）
-        keyArray.sort { $0 > $1 }
+        // キーをソート（年月昇順）
+        keyArray.sort { $0 < $1 }
         
         // listTVリロード
         listTV.reloadData()

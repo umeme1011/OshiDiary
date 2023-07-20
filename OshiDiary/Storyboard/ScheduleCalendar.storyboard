@@ -27,7 +27,7 @@
                                         </constraints>
                                         <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="今日"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="square.grid.3x3.middleleft.filled" catalog="system"/>
                                         <connections>
                                             <action selector="tapTodayBtn:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="qfg-It-bjj"/>
                                         </connections>
@@ -461,7 +461,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="4rr-Ea-p35"/>
+        <segue reference="5yd-Eq-ZLq"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="exclamationmark.circle" catalog="system" width="128" height="123"/>
@@ -470,6 +470,7 @@
         <image name="list.bullet.rectangle" catalog="system" width="128" height="93"/>
         <image name="ribbon_gray" width="64" height="64"/>
         <image name="schedule_new" width="80" height="80"/>
+        <image name="square.grid.3x3.middleleft.filled" catalog="system" width="128" height="113"/>
         <image name="yoongi3" width="718" height="829"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
