@@ -24,8 +24,13 @@ class ScheduleListViewController: UIViewController {
         
         myUD = MyUserDefaults.init()
         oshiId = myUD.getOshiId()
-        
-        // ランダムに背景画像を設定
+    }
+    
+    /**
+     画面再描画
+     */
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         self.changeVisual()
     }
     

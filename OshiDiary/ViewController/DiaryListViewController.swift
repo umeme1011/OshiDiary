@@ -49,6 +49,8 @@ class DiaryListViewController: UIViewController {
     func changeVisual() {
         // diaryDic初期化
         diaryDic.removeAll()
+        // ページNo初期化
+        pageNumber = 1
 
         // oshiRealm生成
         oshiId = myUD.getOshiId()
@@ -221,31 +223,21 @@ extension DiaryListViewController: UITableViewDelegate, UITableViewDataSource {
 
                 // 日記画像ディレクトリ削除
                 CommonMethod.removeDiaryImage(oshiId: self.oshiId, diaryId: diaryArray[indexPath.row].id)
+                // DiaryTBL削除
+                DiaryCalendarViewController().deleteDiary(oshiRealm: self.oshiRealm, diaryId: diaryArray[indexPath.row].id)
                 
-                // DB物理削除
-                if let diary: Diary = self.oshiRealm.objects(Diary.self)
-                    .filter("\(Diary.Types.id.rawValue) = %@", diaryArray[indexPath.row].id).first {
-                    
-                    do {
-                        try self.oshiRealm.write {
-                            self.oshiRealm.delete(diary)
-                        }
-                    } catch {
-                        print("削除失敗", error)
-                    }
-                    // 削除したデータをDicからも削除
-                    diaryArray.remove(at: indexPath.row)
-                    self.diaryDic[self.keyArray[indexPath.section]] = diaryArray
-                    if diaryArray.isEmpty {
-                        self.diaryDic.removeValue(forKey: self.keyArray[indexPath.section])
-                        self.keyArray.remove(at: indexPath.section)
-                    }
-                    if self.diaryDic.isEmpty {
-                        // 日記なしメッセージ表示
-                        self.noMessageSV.isHidden = false
-                    }
-                    self.listTV.reloadData()
+                // 削除したデータをDicからも削除
+                diaryArray.remove(at: indexPath.row)
+                self.diaryDic[self.keyArray[indexPath.section]] = diaryArray
+                if diaryArray.isEmpty {
+                    self.diaryDic.removeValue(forKey: self.keyArray[indexPath.section])
+                    self.keyArray.remove(at: indexPath.section)
                 }
+                if self.diaryDic.isEmpty {
+                    // 日記なしメッセージ表示
+                    self.noMessageSV.isHidden = false
+                }
+                self.listTV.reloadData()
             })
             alert.addAction(cancel)
             alert.addAction(ok)

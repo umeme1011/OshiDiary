@@ -529,32 +529,10 @@ class ScheduleEditViewController: UIViewController {
             alert.dismiss(animated: true)
         })
         let ok = UIAlertAction(title: "はい", style: .default, handler: { (action) -> Void in
-            // スケジュール詳細TBL物理削除
-            let scheduleDetails: Results<ScheduleDetail> = self.oshiRealm.objects(ScheduleDetail.self)
-                .filter("\(ScheduleDetail.Types.scheduleId.rawValue) = %@", self.scheduleId!)
             
-            if !scheduleDetails.isEmpty {
-                do {
-                    try self.oshiRealm.write {
-                        self.oshiRealm.delete(scheduleDetails)
-                    }
-                } catch {
-                    print("スケジュール詳細TBL削除失敗", error)
-                }
-            }
-            
-            // スケジュールTBL物理削除
-            if let schedule: Schedule = self.oshiRealm.objects(Schedule.self)
-                .filter("\(Schedule.Types.id.rawValue) = %@", self.scheduleId!).first {
-                
-                do {
-                    try self.oshiRealm.write {
-                        self.oshiRealm.delete(schedule)
-                    }
-                } catch {
-                    print("スケジュールTBL削除失敗", error)
-                }
-            }
+            // スケジュール関連TBL削除
+            ScheduleCalendarViewController().deleteSchedule(oshiRealm: self.oshiRealm, scheduleId: self.scheduleId)
+
             // 画面を閉じる
             self.dismiss(animated: true)
         })

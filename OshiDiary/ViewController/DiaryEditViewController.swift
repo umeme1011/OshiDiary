@@ -230,19 +230,9 @@ class DiaryEditViewController: UIViewController {
             
             // 日記画像ディレクトリ削除
             CommonMethod.removeDiaryImage(oshiId: self.oshiId, diaryId: self.diaryId)
-
-            // DB物理削除
-            if let diary: Diary = self.oshiRealm.objects(Diary.self)
-                .filter("\(Diary.Types.id.rawValue) = %@", self.diaryId!).first {
-                
-                do {
-                    try self.oshiRealm.write {
-                        self.oshiRealm.delete(diary)
-                    }
-                } catch {
-                    print("削除失敗", error)
-                }
-            }
+            // DiaryTBL削除
+            DiaryCalendarViewController().deleteDiary(oshiRealm: self.oshiRealm, diaryId: self.diaryId)
+            
             // 画面を閉じる
             self.dismiss(animated: true)
         })

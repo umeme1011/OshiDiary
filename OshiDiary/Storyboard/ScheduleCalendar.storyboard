@@ -398,11 +398,34 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wp5-eK-l7u">
+                                <rect key="frame" x="62.666666666666657" y="320" width="267.66666666666674" height="30"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="exclamationmark.circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="PYA-9p-Hnb">
+                                        <rect key="frame" x="0.0" y="0.99999999999999822" width="25" height="28.666666666666664"/>
+                                        <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="6qH-gJ-sv1"/>
+                                            <constraint firstAttribute="width" constant="25" id="Z7M-qg-ttV"/>
+                                        </constraints>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="スケジュールはまだありません" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ppb-1m-13P">
+                                        <rect key="frame" x="25.000000000000014" y="0.0" width="242.66666666666669" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="oA7-Oi-6Cc"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="0mg-fu-UDv"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="EPI-jJ-pz0" secondAttribute="trailing" id="2yP-qN-oM5"/>
+                            <constraint firstItem="Wp5-eK-l7u" firstAttribute="top" secondItem="EPI-jJ-pz0" secondAttribute="bottom" constant="20" id="51A-rs-QKV"/>
                             <constraint firstItem="7SX-TT-qkY" firstAttribute="trailing" secondItem="0mg-fu-UDv" secondAttribute="trailing" id="7iN-KC-Qba"/>
                             <constraint firstItem="0mg-fu-UDv" firstAttribute="bottom" secondItem="cdd-Ty-R1y" secondAttribute="bottom" id="GL2-Ir-YtV"/>
                             <constraint firstItem="bPu-PH-C9b" firstAttribute="top" secondItem="EPI-jJ-pz0" secondAttribute="bottom" constant="1" id="IsJ-y4-6pd"/>
@@ -418,6 +441,7 @@
                             <constraint firstItem="bPu-PH-C9b" firstAttribute="trailing" secondItem="0mg-fu-UDv" secondAttribute="trailing" id="huU-yy-Biw"/>
                             <constraint firstItem="cdd-Ty-R1y" firstAttribute="top" secondItem="KLs-MU-JtE" secondAttribute="top" id="hwI-j9-xiu"/>
                             <constraint firstItem="7SX-TT-qkY" firstAttribute="top" secondItem="KLs-MU-JtE" secondAttribute="top" id="i41-R1-3on"/>
+                            <constraint firstItem="Wp5-eK-l7u" firstAttribute="centerX" secondItem="KLs-MU-JtE" secondAttribute="centerX" id="jtQ-Y4-dg6"/>
                             <constraint firstItem="uub-0k-Rsq" firstAttribute="top" secondItem="KLs-MU-JtE" secondAttribute="top" id="mJz-md-F12"/>
                             <constraint firstItem="7SX-TT-qkY" firstAttribute="leading" secondItem="0mg-fu-UDv" secondAttribute="leading" id="ooJ-UZ-vqY"/>
                         </constraints>
@@ -427,6 +451,7 @@
                         <outlet property="calendar" destination="EPI-jJ-pz0" id="13D-zI-KvF"/>
                         <outlet property="headerTF" destination="7SX-TT-qkY" id="uL4-RP-Hz9"/>
                         <outlet property="listTV" destination="bPu-PH-C9b" id="H0w-QI-Nnp"/>
+                        <outlet property="noMessageSV" destination="Wp5-eK-l7u" id="8tQ-gI-NPo"/>
                         <segue destination="swX-Cg-6s0" kind="presentation" identifier="toScheduleEdit" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="4rr-Ea-p35"/>
                     </connections>
                 </viewController>
@@ -436,9 +461,10 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="5yd-Eq-ZLq"/>
+        <segue reference="4rr-Ea-p35"/>
     </inferredMetricsTieBreakers>
     <resources>
+        <image name="exclamationmark.circle" catalog="system" width="128" height="123"/>
         <image name="heart" width="64" height="64"/>
         <image name="kuma_default" width="120" height="120"/>
         <image name="list.bullet.rectangle" catalog="system" width="128" height="93"/>

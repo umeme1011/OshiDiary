@@ -16,6 +16,7 @@ class ScheduleCalendarViewController: UIViewController {
     @IBOutlet weak var listTV: UITableView!
     @IBOutlet weak var backgroundIV: UIImageView!
     @IBOutlet weak var headerTF: CustomTextField!
+    @IBOutlet weak var noMessageSV: UIStackView!
     
     var backgroundImageArray: [UIImage] = [UIImage]()
     var myUD: MyUserDefaults!
@@ -158,6 +159,14 @@ class ScheduleCalendarViewController: UIViewController {
 
         // ランダムに背景画像を設定
         backgroundIV.image = CommonMethod.roadBackgroundImage(oshiId: myUD.getOshiId()).randomElement()
+
+        if !scheduleDetails.isEmpty {
+            // スケジュールなしメッセージ非表示
+            noMessageSV.isHidden = true
+        } else {
+            // スケジュールなしメッセージ表示
+            noMessageSV.isHidden = false
+        }
     }
     
     /**
@@ -424,6 +433,53 @@ extension ScheduleCalendarViewController: UITableViewDelegate, UITableViewDataSo
         performSegue(withIdentifier: "toScheduleEdit", sender: nil)
     }
 
+    /**
+     右から左へスワイプ
+     */
+    func tableView(_ tableView: UITableView,
+                   trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        let delete = UIContextualAction(style: .normal,
+                                            title: "削除",
+                                            handler: { (action: UIContextualAction, view: UIView, success :(Bool) -> Void) in
+            
+            let alert = UIAlertController(title: "", message: Const.Message.DELTE_CONFIRM_MSG, preferredStyle: .alert)
+            let cancel = UIAlertAction(title: "いいえ", style: .default, handler: { (action) -> Void in
+                // アラートを閉じる
+                alert.dismiss(animated: true)
+            })
+            let ok = UIAlertAction(title: "はい", style: .default, handler: { (action) -> Void in
+                var scheduleDetailArray: [ScheduleDetail] = self.scheduleDetailDic[self.keyArray[indexPath.section]]!
+                let scheduleId = scheduleDetailArray[indexPath.row].scheduleId
+                
+                // スケジュール関連TBL削除
+                self.deleteSchedule(oshiRealm: self.oshiRealm, scheduleId: scheduleId)
+
+                // 削除したデータをDicからも削除
+                scheduleDetailArray.remove(at: indexPath.row)
+                self.scheduleDetailDic[self.keyArray[indexPath.section]] = scheduleDetailArray
+                if scheduleDetailArray.isEmpty {
+                    self.scheduleDetailDic.removeValue(forKey: self.keyArray[indexPath.section])
+                    self.keyArray.remove(at: indexPath.section)
+                }
+                if self.scheduleDetailDic.isEmpty {
+                    // スケジュールなしメッセージ表示
+                    self.noMessageSV.isHidden = false
+                }
+
+                self.listTV.reloadData()
+                self.calendar.reloadData()
+            })
+            alert.addAction(cancel)
+            alert.addAction(ok)
+            self.present(alert, animated: true, completion: nil)
+            
+            success(true)
+        })
+        delete.backgroundColor = UIColor.systemRed
+
+        return UISwipeActionsConfiguration(actions: [delete])
+    }
 }
 
 extension ScheduleCalendarViewController: UIPickerViewDelegate, UIPickerViewDataSource {
@@ -489,5 +545,40 @@ extension ScheduleCalendarViewController: UIPickerViewDelegate, UIPickerViewData
     @objc func tapCancelBtn() {
         headerTF.endEditing(true)
     }
+}
 
+extension ScheduleCalendarViewController {
+    
+    /**
+     スケジュール関連TBL削除
+     */
+    func deleteSchedule(oshiRealm: Realm, scheduleId: Int) {
+        
+        // スケジュール詳細TBL物理削除
+        let scheduleDetails: Results<ScheduleDetail> = oshiRealm.objects(ScheduleDetail.self)
+            .filter("\(ScheduleDetail.Types.scheduleId.rawValue) = %@", scheduleId)
+        
+        if !scheduleDetails.isEmpty {
+            do {
+                try oshiRealm.write {
+                    oshiRealm.delete(scheduleDetails)
+                }
+            } catch {
+                print("スケジュール詳細TBL削除失敗", error)
+            }
+        }
+
+        // スケジュールTBL物理削除
+        if let schedule: Schedule = oshiRealm.objects(Schedule.self)
+            .filter("\(Schedule.Types.id.rawValue) = %@", scheduleId).first {
+            
+            do {
+                try oshiRealm.write {
+                    oshiRealm.delete(schedule)
+                }
+            } catch {
+                print("スケジュールTBL削除失敗", error)
+            }
+        }
+    }
 }
