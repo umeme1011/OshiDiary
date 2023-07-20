@@ -135,7 +135,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="schedule_new"/>
                                 <connections>
-                                    <segue destination="V4q-tc-RNc" kind="presentation" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="Ejr-a3-Y09"/>
+                                    <segue destination="V4q-tc-RNc" kind="presentation" identifier="toScheduleEditNew" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="Ejr-a3-Y09"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -179,7 +179,7 @@
                 <viewControllerPlaceholder storyboardName="Menu" id="Y0l-c0-6jd" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PAg-Xn-89r" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="526" y="397"/>
+            <point key="canvasLocation" x="528" y="411"/>
         </scene>
         <!--ScheduleEdit-->
         <scene sceneID="x7N-tS-rmx">
@@ -187,7 +187,7 @@
                 <viewControllerPlaceholder storyboardName="ScheduleEdit" id="V4q-tc-RNc" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SlW-mf-k3k" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="793" y="366"/>
+            <point key="canvasLocation" x="853" y="411"/>
         </scene>
         <!--Schedule List View Controller-->
         <scene sceneID="eHk-Wi-cBT">
@@ -363,17 +363,41 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zT7-vV-UYJ">
+                                <rect key="frame" x="62.666666666666657" y="89" width="267.66666666666674" height="30"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="exclamationmark.circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="AQb-Vm-lpy">
+                                        <rect key="frame" x="0.0" y="0.99999999999999822" width="25" height="28.666666666666664"/>
+                                        <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="01S-Ig-w8D"/>
+                                            <constraint firstAttribute="width" constant="25" id="Lwl-XJ-0TY"/>
+                                        </constraints>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="スケジュールはまだありません" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2hr-iJ-hD5">
+                                        <rect key="frame" x="25.000000000000014" y="0.0" width="242.66666666666669" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="b2w-0u-K6T"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="9Ez-Fk-70G"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="81K-uo-Ql7" firstAttribute="top" secondItem="MuG-bC-gXa" secondAttribute="top" id="0BE-ai-Xm3"/>
                             <constraint firstItem="QZ0-tR-ZwW" firstAttribute="leading" secondItem="9Ez-Fk-70G" secondAttribute="leading" id="7ln-EY-gmc"/>
+                            <constraint firstItem="zT7-vV-UYJ" firstAttribute="centerX" secondItem="MuG-bC-gXa" secondAttribute="centerX" id="8dP-LV-7Lu"/>
                             <constraint firstItem="4Xa-S6-Etv" firstAttribute="leading" secondItem="MuG-bC-gXa" secondAttribute="leading" id="SYR-g8-IKG"/>
                             <constraint firstItem="QZ0-tR-ZwW" firstAttribute="top" secondItem="MuG-bC-gXa" secondAttribute="top" id="UMg-GY-F2X"/>
                             <constraint firstItem="9Ez-Fk-70G" firstAttribute="bottom" secondItem="QZ0-tR-ZwW" secondAttribute="bottom" id="VZ3-mI-2n4"/>
                             <constraint firstAttribute="bottom" secondItem="4Xa-S6-Etv" secondAttribute="bottom" id="fME-aO-mP7"/>
                             <constraint firstAttribute="bottom" secondItem="81K-uo-Ql7" secondAttribute="bottom" id="g2p-e7-y5R"/>
+                            <constraint firstItem="zT7-vV-UYJ" firstAttribute="top" secondItem="9Ez-Fk-70G" secondAttribute="top" constant="30" id="kYv-73-WRY"/>
                             <constraint firstAttribute="trailing" secondItem="4Xa-S6-Etv" secondAttribute="trailing" id="l0b-qb-Cex"/>
                             <constraint firstItem="4Xa-S6-Etv" firstAttribute="top" secondItem="MuG-bC-gXa" secondAttribute="top" id="pGp-6n-Sop"/>
                             <constraint firstAttribute="trailing" secondItem="81K-uo-Ql7" secondAttribute="trailing" id="uga-BE-pJL"/>
@@ -384,6 +408,8 @@
                     <connections>
                         <outlet property="backgroundIV" destination="4Xa-S6-Etv" id="dh0-ZY-R1N"/>
                         <outlet property="listTV" destination="81K-uo-Ql7" id="oxr-iQ-Fwo"/>
+                        <outlet property="noMessageSV" destination="zT7-vV-UYJ" id="bJn-It-5hh"/>
+                        <segue destination="V4q-tc-RNc" kind="presentation" identifier="toScheduleEdit" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="ouO-Mr-5Jn"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pFr-AG-Q8E" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -391,8 +417,12 @@
             <point key="canvasLocation" x="887.78625954198469" y="-2.4647887323943665"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="ouO-Mr-5Jn"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <image name="calendar" catalog="system" width="128" height="107"/>
+        <image name="exclamationmark.circle" catalog="system" width="128" height="123"/>
         <image name="heart" width="64" height="64"/>
         <image name="kuma_default" width="120" height="120"/>
         <image name="magnifyingglass" catalog="system" width="128" height="117"/>

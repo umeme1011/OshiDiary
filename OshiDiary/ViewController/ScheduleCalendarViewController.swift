@@ -49,7 +49,11 @@ class ScheduleCalendarViewController: UIViewController {
 
         myUD = MyUserDefaults.init()
         oshiId = myUD.getOshiId()
-
+        
+        // oshiRealm生成
+        oshiId = myUD.getOshiId()
+        oshiRealm = CommonMethod.createOshiRealm(oshiId: oshiId)
+        
         // ****** カレンダーデザイン
         // 月のフォント
         calendar.appearance.headerTitleFont = UIFont.boldSystemFont(ofSize: 16)
@@ -113,13 +117,12 @@ class ScheduleCalendarViewController: UIViewController {
         self.changeVisual()
     }
     
+    /**
+     データ取得、表示
+     */
     func changeVisual() {
         // scheduleDetailDic初期化
         scheduleDetailDic.removeAll()
-        
-        // oshiRealm生成
-        oshiId = myUD.getOshiId()
-        oshiRealm = CommonMethod.createOshiRealm(oshiId: oshiId)
         
         // 表示月の年月を取得
         let ymString: String = CommonMethod.dateFormatter(date: currentPage, formattKind: Const.DateFormatt.yyyyMM)
@@ -359,52 +362,22 @@ extension ScheduleCalendarViewController: UITableViewDelegate, UITableViewDataSo
             // スケジュールIDをもとにスケジュールTBLを取得
             let schedule: Schedule = oshiRealm.objects(Schedule.self)
                 .filter("\(Schedule.Types.id.rawValue) = %@", scheduleDetail.scheduleId).first!
-            
-            // タイトル
-            // 複数日にまたがる場合は(n/n日目)を追加する
-            if schedule.days > 1 {
-                let dayStr = String(scheduleDetail.dayNo)
-                let daysStr = String(schedule.days)
-                cell.titleLbl.text = schedule.title + "(" + dayStr + "/" + daysStr + "日目)"
-            } else {
-                cell.titleLbl.text = schedule.title
-            }
 
-            // 時刻
-            // 終日
-            if schedule.allDay {
-                cell.timeLbl.text = "終日"
-            // 時刻指定
-            } else {
-                // １日
-                if schedule.days == 1 {
-                    cell.timeLbl.text = CommonMethod.dateFormatter(date: schedule.startDate, formattKind: Const.DateFormatt.Hmm)
-                    + "〜" + CommonMethod.dateFormatter(date: schedule.endDate, formattKind: Const.DateFormatt.Hmm)
-                // 複数日
-                } else {
-                    // １日め
-                    if scheduleDetail.dayNo == 1 {
-                        cell.timeLbl.text = CommonMethod.dateFormatter(date: scheduleDetail.date, formattKind: Const.DateFormatt.Hmm) + "〜"
-                    // 最終日
-                    } else if scheduleDetail.dayNo == schedule.days {
-                        cell.timeLbl.text = "〜" + CommonMethod.dateFormatter(date: scheduleDetail.date, formattKind: Const.DateFormatt.Hmm)
-                    // 中間日
-                    } else {
-                        cell.timeLbl.text = "終日"
-                    }
-                }
-            }
-            
+            // 日付
             let current = Calendar.current
             cell.dateLbl.text = String(current.component(.day, from: scheduleDetail.date))
+            // 週
             cell.weekLbl.text = CommonMethod.weekFormatter(date: scheduleDetail.date)
-            cell.memoLbl.text = schedule.memo
-            
             // アイコン
             let iconName = Const.Schedule().getIconName(iconCd: schedule.iconCd, colorCd: schedule.iconColorCd)
             cell.iconIV.image = UIImage(named: iconName)
+            // タイトル
+            cell.titleLbl.text = getDispTileStr(schedule: schedule, scheduleDetail: scheduleDetail)
+            // 時刻
+            cell.timeLbl.text = getDispTimeStr(schedule: schedule, scheduleDetail: scheduleDetail)
+            // メモ
+            cell.memoLbl.text = schedule.memo
         }
-        
         return cell
     }
     
@@ -449,26 +422,13 @@ extension ScheduleCalendarViewController: UITableViewDelegate, UITableViewDataSo
                 alert.dismiss(animated: true)
             })
             let ok = UIAlertAction(title: "はい", style: .default, handler: { (action) -> Void in
-                var scheduleDetailArray: [ScheduleDetail] = self.scheduleDetailDic[self.keyArray[indexPath.section]]!
+                let scheduleDetailArray: [ScheduleDetail] = self.scheduleDetailDic[self.keyArray[indexPath.section]]!
                 let scheduleId = scheduleDetailArray[indexPath.row].scheduleId
                 
                 // スケジュール関連TBL削除
                 self.deleteSchedule(oshiRealm: self.oshiRealm, scheduleId: scheduleId)
-
-                // 削除したデータをDicからも削除
-                scheduleDetailArray.remove(at: indexPath.row)
-                self.scheduleDetailDic[self.keyArray[indexPath.section]] = scheduleDetailArray
-                if scheduleDetailArray.isEmpty {
-                    self.scheduleDetailDic.removeValue(forKey: self.keyArray[indexPath.section])
-                    self.keyArray.remove(at: indexPath.section)
-                }
-                if self.scheduleDetailDic.isEmpty {
-                    // スケジュールなしメッセージ表示
-                    self.noMessageSV.isHidden = false
-                }
-
-                self.listTV.reloadData()
-                self.calendar.reloadData()
+                // データ再取得、再表示
+                self.changeVisual()
             })
             alert.addAction(cancel)
             alert.addAction(ok)
@@ -548,6 +508,45 @@ extension ScheduleCalendarViewController: UIPickerViewDelegate, UIPickerViewData
 }
 
 extension ScheduleCalendarViewController {
+
+    /**
+     スケジュール取得
+     */
+    private func getScheduleDetail() {
+        // scheduleDetailDic初期化
+        scheduleDetailDic.removeAll()
+        
+        // 表示月の年月を取得
+        let ymString: String = CommonMethod.dateFormatter(date: currentPage, formattKind: Const.DateFormatt.yyyyMM)
+
+        // スケジュールデータ取得
+        scheduleDetails = oshiRealm.objects(ScheduleDetail.self)
+            .filter("\(ScheduleDetail.Types.ymString.rawValue) = %@", ymString)
+            .sorted(byKeyPath: ScheduleDetail.Types.date.rawValue, ascending: true)
+        
+        // 日付ごとに分類しDictionaryに格納
+        if !scheduleDetails.isEmpty {
+            var tmpYmdString = ""
+            var scheduleDetailArray: [ScheduleDetail] = [ScheduleDetail]()
+            for scheduleDetail in scheduleDetails {
+                if tmpYmdString == scheduleDetail.ymdString {
+                    scheduleDetailArray.append(scheduleDetail)
+                } else {
+                    if !scheduleDetailArray.isEmpty {
+                        scheduleDetailDic[tmpYmdString] = scheduleDetailArray
+                        scheduleDetailArray.removeAll()
+                    }
+                    scheduleDetailArray.append(scheduleDetail)
+                }
+                tmpYmdString = scheduleDetail.ymdString
+            }
+            scheduleDetailDic[tmpYmdString] = scheduleDetailArray
+        }
+        // キー（日付）配列
+        keyArray = [String](scheduleDetailDic.keys)
+        // キーをソート
+        keyArray.sort()
+    }
     
     /**
      スケジュール関連TBL削除
@@ -578,6 +577,49 @@ extension ScheduleCalendarViewController {
                 }
             } catch {
                 print("スケジュールTBL削除失敗", error)
+            }
+        }
+    }
+    
+    /**
+     タイトル表示文言取得
+     */
+    func getDispTileStr(schedule: Schedule, scheduleDetail: ScheduleDetail) -> String {
+        // 複数日にまたがる場合は(n/n日目)を追加する
+        if schedule.days > 1 {
+            let dayStr = String(scheduleDetail.dayNo)
+            let daysStr = String(schedule.days)
+            return schedule.title + "(" + dayStr + "/" + daysStr + "日目)"
+        } else {
+            return schedule.title
+        }
+    }
+    
+    /**
+     時刻表示文言取得
+     */
+    func getDispTimeStr(schedule: Schedule, scheduleDetail: ScheduleDetail) -> String {
+        // 終日
+        if schedule.allDay {
+             return "終日"
+        // 時刻指定
+        } else {
+            // １日
+            if schedule.days == 1 {
+                return CommonMethod.dateFormatter(date: schedule.startDate, formattKind: Const.DateFormatt.Hmm)
+                + "〜" + CommonMethod.dateFormatter(date: schedule.endDate, formattKind: Const.DateFormatt.Hmm)
+            // 複数日
+            } else {
+                // １日め
+                if scheduleDetail.dayNo == 1 {
+                    return CommonMethod.dateFormatter(date: scheduleDetail.date, formattKind: Const.DateFormatt.Hmm) + "〜"
+                // 最終日
+                } else if scheduleDetail.dayNo == schedule.days {
+                    return "〜" + CommonMethod.dateFormatter(date: scheduleDetail.date, formattKind: Const.DateFormatt.Hmm)
+                // 中間日
+                } else {
+                    return "終日"
+                }
             }
         }
     }

@@ -33,6 +33,10 @@ class DiaryListViewController: UIViewController {
         
         myUD = MyUserDefaults.init()
         oshiId = myUD.getOshiId()
+        
+        // oshiRealm生成
+        oshiId = myUD.getOshiId()
+        oshiRealm = CommonMethod.createOshiRealm(oshiId: oshiId)
     }
     
     /**
@@ -51,10 +55,6 @@ class DiaryListViewController: UIViewController {
         diaryDic.removeAll()
         // ページNo初期化
         pageNumber = 1
-
-        // oshiRealm生成
-        oshiId = myUD.getOshiId()
-        oshiRealm = CommonMethod.createOshiRealm(oshiId: oshiId)
 
         // 日記データ取得
         diaries = oshiRealm.objects(Diary.self)
