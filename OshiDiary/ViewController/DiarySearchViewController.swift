@@ -105,7 +105,7 @@ extension DiarySearchViewController: UITextFieldDelegate {
             predicates.append(predicate)
         }
         let diaries = oshiRealm.objects(Diary.self).filter(NSCompoundPredicate(andPredicateWithSubpredicates: predicates))
-            .sorted(byKeyPath: Diary.Types.date.rawValue, ascending: true)
+            .sorted(byKeyPath: Diary.Types.date.rawValue, ascending: false)
 
         // 結果を年月で分類しDicに格納
         if !diaries.isEmpty {

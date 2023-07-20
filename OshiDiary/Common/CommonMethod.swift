@@ -326,4 +326,21 @@ class CommonMethod {
         return ret
     }
 
+    /**
+     検索ワード取得
+     */
+    static func getSearchWord(text: String) -> [String] {
+        // 検索文字列を空白で分割
+        let trimedText = text.trimmingCharacters(in: .whitespaces)
+        var textArray: [String] = trimedText.components(separatedBy: "　")
+        // 全角スペース、半角スペースどちらもOKにする
+        for i in 0..<textArray.count {
+            if textArray[i].contains(" ") {
+                let array = textArray[i].components(separatedBy: " ")
+                textArray.remove(at: i)
+                textArray += array
+            }
+        }
+        return textArray
+    }
 }

@@ -86,6 +86,9 @@
                                         <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" image="magnifyingglass" catalog="system"/>
+                                        <connections>
+                                            <segue destination="UQH-Ml-gwv" kind="presentation" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="h9b-4m-3tv"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QdH-Vf-VuQ">
                                         <rect key="frame" x="340" y="2.6666666666666643" width="45" height="45"/>
@@ -188,6 +191,14 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SlW-mf-k3k" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="853" y="411"/>
+        </scene>
+        <!--ScheduleSearch-->
+        <scene sceneID="Kqy-xT-joQ">
+            <objects>
+                <viewControllerPlaceholder storyboardName="ScheduleSearch" id="UQH-Ml-gwv" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="owY-fl-5OE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-173" y="411"/>
         </scene>
         <!--Schedule List View Controller-->
         <scene sceneID="eHk-Wi-cBT">
@@ -418,7 +429,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="ouO-Mr-5Jn"/>
+        <segue reference="Ejr-a3-Y09"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="calendar" catalog="system" width="128" height="107"/>

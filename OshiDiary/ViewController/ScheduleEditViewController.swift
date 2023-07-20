@@ -222,6 +222,10 @@ class ScheduleEditViewController: UIViewController {
             schedule = oshiRealm.objects(Schedule.self)
                 .filter("\(Schedule.Types.id.rawValue) = %@", scheduleId!).first!
             
+            // 開始、終了日時
+            startDate = schedule.startDate
+            endDate = schedule.endDate
+            
             // タイトル
             titleTF.text = schedule.title
 
