@@ -143,10 +143,29 @@ class Const {
         }
         
         class repeatCd {
-            static let NO_REPEAT = 1
-            static let YEAR = 2
-            static let MONTH = 3
-            static let WEEK = 4
+            static let NO_REPEAT = 0
+            static let YEAR = 1
+            static let MONTH = 2
+            static let WEEK = 3
+        }
+        class repeatCount {
+            static let YEAR = 10
+            static let MONTH = 120
+            static let WEEK = 480
+        }
+        func getReapeatCount(repeatCd: Int) -> Int {
+            switch repeatCd {
+            case Schedule.repeatCd.NO_REPEAT:
+                return 1
+            case Schedule.repeatCd.YEAR:
+                return Schedule.repeatCount.YEAR
+            case Schedule.repeatCd.MONTH:
+                return Schedule.repeatCount.MONTH
+            case Schedule.repeatCd.WEEK:
+                return Schedule.repeatCount.WEEK
+            default:
+                return 1
+            }
         }
     }
     

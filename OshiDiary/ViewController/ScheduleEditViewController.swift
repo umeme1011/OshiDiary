@@ -447,25 +447,72 @@ class ScheduleEditViewController: UIViewController {
                 
             // 存在しない場合は登録
             } else {
+//                // スケジュールTBL
+//                let schedule = Schedule()
+//                try! oshiRealm.write {
+//                    schedule.id = scheduleId
+//                    schedule.title = titleTF.text ?? ""
+//                    schedule.iconCd = iconCd
+//                    schedule.iconColorCd = iconColorCd
+//                    schedule.allDay = allDay
+//                    schedule.startDate = startDate
+//                    schedule.endDate = endDate
+//                    schedule.days = dateArray.count
+//                    schedule.repeatCd = repeatCd
+//                    schedule.memo = memoTV.text
+//                    oshiRealm.add(schedule)
+//                }
+//
+//                // スケジュール詳細TBL
+//                saveScheduleDetail(dateArray: dateArray)
+                
+                
                 // スケジュールTBL
-                let schedule = Schedule()
+                var scheduleId = self.scheduleId
+                var startDate = self.startDate
+                var endDate = self.endDate
                 try! oshiRealm.write {
-                    schedule.id = scheduleId
-                    schedule.title = titleTF.text ?? ""
-                    schedule.iconCd = iconCd
-                    schedule.iconColorCd = iconColorCd
-                    schedule.allDay = allDay
-                    schedule.startDate = startDate
-                    schedule.endDate = endDate
-                    schedule.days = dateArray.count
-                    schedule.repeatCd = repeatCd
-                    schedule.memo = memoTV.text
-                    oshiRealm.add(schedule)
+                    // 繰り返し登録
+                    for _ in 1...Const.Schedule().getReapeatCount(repeatCd: repeatCd) {
+                        let schedule = Schedule()
+                        schedule.id = scheduleId!
+                        schedule.title = titleTF.text ?? ""
+                        schedule.iconCd = iconCd
+                        schedule.iconColorCd = iconColorCd
+                        schedule.allDay = allDay
+                        schedule.startDate = startDate
+                        schedule.endDate = endDate
+                        schedule.days = dateArray.count
+                        schedule.repeatCd = repeatCd
+                        schedule.memo = memoTV.text
+                        oshiRealm.add(schedule)
+                        
+                        scheduleId! += 1
+                        
+                        // 繰り返し種類により日時に加算する単位を変更
+                        switch repeatCd {
+                        case Const.Schedule.repeatCd.YEAR:
+                            startDate = Calendar.current.date(byAdding: .year, value: 1, to: startDate)!
+                            endDate = Calendar.current.date(byAdding: .year, value: 1, to: endDate)!
+                        case Const.Schedule.repeatCd.MONTH:
+                            startDate = Calendar.current.date(byAdding: .month, value: 1, to: startDate)!
+                            endDate = Calendar.current.date(byAdding: .month, value: 1, to: endDate)!
+                        case Const.Schedule.repeatCd.WEEK:
+                            startDate = Calendar.current.date(byAdding: .weekOfYear, value: 1, to: startDate)!
+                            endDate = Calendar.current.date(byAdding: .weekOfYear, value: 1, to: endDate)!
+                        default:
+                            print("no repeat")
+                        }
+                    }
                 }
                 
                 // スケジュール詳細TBL
                 saveScheduleDetail(dateArray: dateArray)
+                
             }
+            
+            
+            
             // 参照状態に戻す
             isEdit = false
             coverView.isHidden = false
@@ -505,20 +552,66 @@ class ScheduleEditViewController: UIViewController {
             .sorted(byKeyPath: ScheduleDetail.Types.id.rawValue, ascending: false).first {
             scheduleDetailId = scheduleDetail.id + 1
         }
+//        // 登録
+//        try! oshiRealm.write {
+//            var dayNo = 1
+//            for date in dateArray {
+//                let scheduleDetail = ScheduleDetail()
+//                scheduleDetail.id = scheduleDetailId
+//                scheduleDetail.scheduleId = scheduleId
+//                scheduleDetail.dayNo = dayNo
+//                scheduleDetail.date = date
+//                scheduleDetail.ymdString = CommonMethod.dateFormatter(date: date, formattKind: Const.DateFormatt.yyyyMMdd)
+//                scheduleDetail.ymString = CommonMethod.dateFormatter(date: date, formattKind: Const.DateFormatt.yyyyMM)
+//                oshiRealm.add(scheduleDetail)
+//                scheduleDetailId += 1
+//                dayNo += 1
+//            }
+//        }
+        
+        var dates: [Date] = dateArray
+        
         // 登録
+        var scheduleId = self.scheduleId
         try! oshiRealm.write {
-            var dayNo = 1
-            for date in dateArray {
-                let scheduleDetail = ScheduleDetail()
-                scheduleDetail.id = scheduleDetailId
-                scheduleDetail.scheduleId = scheduleId
-                scheduleDetail.dayNo = dayNo
-                scheduleDetail.date = date
-                scheduleDetail.ymdString = CommonMethod.dateFormatter(date: date, formattKind: Const.DateFormatt.yyyyMMdd)
-                scheduleDetail.ymString = CommonMethod.dateFormatter(date: date, formattKind: Const.DateFormatt.yyyyMM)
-                oshiRealm.add(scheduleDetail)
+            // 繰り返し登録
+            for _ in 1...Const.Schedule().getReapeatCount(repeatCd: repeatCd) {
+                var dayNo = 1
+                for date in dates {
+                    let scheduleDetail = ScheduleDetail()
+                    scheduleDetail.id = scheduleDetailId
+                    scheduleDetail.scheduleId = scheduleId!
+                    scheduleDetail.dayNo = dayNo
+                    scheduleDetail.date = date
+                    scheduleDetail.ymdString = CommonMethod.dateFormatter(date: date, formattKind: Const.DateFormatt.yyyyMMdd)
+                    scheduleDetail.ymString = CommonMethod.dateFormatter(date: date, formattKind: Const.DateFormatt.yyyyMM)
+                    oshiRealm.add(scheduleDetail)
+                    scheduleDetailId += 1
+                    dayNo += 1
+                }
+                
                 scheduleDetailId += 1
-                dayNo += 1
+                scheduleId! += 1
+                
+                // 繰り返し種類により日時に加算する単位を変更
+                var nextDateArray: [Date] = [Date]()
+                switch repeatCd {
+                case Const.Schedule.repeatCd.YEAR:
+                    for date in dates {
+                        nextDateArray.append(Calendar.current.date(byAdding: .year, value: 1, to: date)!)
+                    }
+                case Const.Schedule.repeatCd.MONTH:
+                    for date in dates {
+                        nextDateArray.append(Calendar.current.date(byAdding: .month, value: 1, to: date)!)
+                    }
+                case Const.Schedule.repeatCd.WEEK:
+                    for date in dates {
+                        nextDateArray.append(Calendar.current.date(byAdding: .weekOfYear, value: 1, to: date)!)
+                    }
+                default:
+                    print("no repeat")
+                }
+                dates = nextDateArray
             }
         }
     }

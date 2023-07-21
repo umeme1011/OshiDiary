@@ -35,4 +35,16 @@ class ScheduleListOverViewController: UIViewController {
         // アイコン画像設定
         iconIV.image = CommonMethod.roadIconImage(oshiId: myUD.getOshiId())
     }
+    
+    /**
+     データ渡し
+     */
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // 検索画面
+        if segue.identifier == "toScheduleSearch" {
+            let vc: ScheduleSearchViewController = segue.destination as! ScheduleSearchViewController
+            vc.fromList = true
+        }
+    }
+
 }

@@ -22,6 +22,7 @@ class ScheduleSearchViewController: UIViewController {
     var scheduleDetailDic: Dictionary = Dictionary<String, [ScheduleDetail]>()
     var keyArray: [String] = [String]()
     var scheduleDetail: ScheduleDetail!
+    var fromList: Bool!
 
     
     override func viewDidLoad() {
@@ -55,12 +56,17 @@ class ScheduleSearchViewController: UIViewController {
     }
     
     func changeVisual() {
-        // スケジュール検索
-        searchSchedule()
+        // リスト画面からの遷移の場合は検索を行わない
+        if !fromList {
+            // スケジュール検索
+            searchSchedule()
+        }
         // イメージカラー設定
         baseView.backgroundColor = Const.ImageColor().getImageColor(cd: myUD.getImageColorCd())
         // ランダムに背景画像を設定
         backgroundIV.image = CommonMethod.roadBackgroundImage(oshiId: myUD.getOshiId()).randomElement()
+        
+        fromList = false
     }
 
     /**

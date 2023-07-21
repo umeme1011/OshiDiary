@@ -59,7 +59,7 @@ class ScheduleListViewController: UIViewController {
 
         // 日記データ取得
         let calendar = Calendar(identifier: .gregorian)
-        var tmp = calendar.dateComponents([.year, .month], from: Date())
+        let tmp = calendar.dateComponents([.year, .month], from: Date())
         let firstDay = calendar.date(from: tmp)!
         scheduleDetails = oshiRealm.objects(ScheduleDetail.self)
             .filter("\(ScheduleDetail.Types.date.rawValue) >= %@", firstDay)
@@ -84,7 +84,7 @@ class ScheduleListViewController: UIViewController {
      データ渡し
      */
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // 編集画面にデータを渡す
+        // 編集画面
         if segue.identifier == "toScheduleEdit" {
             let vc: ScheduleEditViewController = segue.destination as! ScheduleEditViewController
             vc.scheduleDetail = scheduleDetail
