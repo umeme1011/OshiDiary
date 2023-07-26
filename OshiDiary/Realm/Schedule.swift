@@ -19,6 +19,7 @@ class Schedule: RealmSwift.Object {
     @objc dynamic var repeatCd: Int = 0
     @objc dynamic var notificationCd: Int = 0
     @objc dynamic var memo: String = ""
+    @objc dynamic var parentScheduleId: Int = 0
     @objc dynamic var createDate = Date()
     @objc dynamic var createUser: String = "system"
     @objc dynamic var updateDate = Date()
@@ -40,6 +41,7 @@ class Schedule: RealmSwift.Object {
         case repeatCd
         case notificationCd
         case memo
+        case parentScheduleId
         case createDate
         case createUser
         case updateDate

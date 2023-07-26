@@ -224,33 +224,72 @@ extension ScheduleListViewController: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView,
                    trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
-        let delete = UIContextualAction(style: .normal,
+        let scheduleDetailArray: [ScheduleDetail] = self.scheduleDetailDic[self.keyArray[indexPath.section]]!
+        let scheduleId = scheduleDetailArray[indexPath.row].scheduleId
+        let schedule: Schedule = oshiRealm.objects(Schedule.self)
+            .filter("\(Schedule.Types.id.rawValue) = %@", scheduleId).first!
+        let repeatCd = schedule.repeatCd
+
+        // 繰り返しあり
+        if repeatCd != Const.Schedule.repeatCd.NO_REPEAT {
+            let delete = UIContextualAction(style: .normal,
                                             title: "削除",
                                             handler: { (action: UIContextualAction, view: UIView, success :(Bool) -> Void) in
-            
-            let alert = UIAlertController(title: "", message: Const.Message.DELTE_CONFIRM_MSG, preferredStyle: .alert)
-            let cancel = UIAlertAction(title: "いいえ", style: .default, handler: { (action) -> Void in
-                // アラートを閉じる
-                alert.dismiss(animated: true)
-            })
-            let ok = UIAlertAction(title: "はい", style: .default, handler: { (action) -> Void in
-                let scheduleDetailArray: [ScheduleDetail] = self.scheduleDetailDic[self.keyArray[indexPath.section]]!
-                let scheduleId = scheduleDetailArray[indexPath.row].scheduleId
-                
-                // スケジュール関連TBL削除
-                ScheduleCalendarViewController().deleteSchedule(oshiRealm: self.oshiRealm, scheduleId: scheduleId)
-                // データ再取得、再表示
-                self.changeVisual()
-            })
-            alert.addAction(cancel)
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
-            
-            success(true)
-        })
-        delete.backgroundColor = UIColor.systemRed
 
-        return UISwipeActionsConfiguration(actions: [delete])
+                let alert = UIAlertController(title: "", message: Const.Message.DELTE_CONFIRM_MSG, preferredStyle: .alert)
+                let cancel = UIAlertAction(title: "いいえ", style: .default, handler: { (action) -> Void in
+                    // アラートを閉じる
+                    alert.dismiss(animated: true)
+                })
+                let ok_one = UIAlertAction(title: "この予定のみ", style: .default, handler: { (action) -> Void in
+                    
+                    // スケジュール関連TBL削除
+                    ScheduleCalendarViewController().deleteSchedule(oshiRealm: self.oshiRealm, scheduleId: scheduleId, isAll: false)
+                    // データ再取得、再表示
+                    self.changeVisual()
+                })
+                let ok_all = UIAlertAction(title: "すべての予定", style: .default, handler: { (action) -> Void in
+                    
+                    // スケジュール関連TBL削除
+                    ScheduleCalendarViewController().deleteSchedule(oshiRealm: self.oshiRealm, scheduleId: scheduleId, isAll: true)
+                    // データ再取得、再表示
+                    self.changeVisual()
+                })
+                alert.addAction(cancel)
+                alert.addAction(ok_one)
+                alert.addAction(ok_all)
+                self.present(alert, animated: true, completion: nil)
+                success(true)
+            })
+            delete.backgroundColor = UIColor.systemRed
+            return UISwipeActionsConfiguration(actions: [delete])
+            
+        // 繰り返しなし
+        } else {
+            let delete = UIContextualAction(style: .normal,
+                                            title: "削除",
+                                            handler: { (action: UIContextualAction, view: UIView, success :(Bool) -> Void) in
+                
+                let alert = UIAlertController(title: "", message: Const.Message.DELTE_CONFIRM_MSG, preferredStyle: .alert)
+                let cancel = UIAlertAction(title: "いいえ", style: .default, handler: { (action) -> Void in
+                    // アラートを閉じる
+                    alert.dismiss(animated: true)
+                })
+                let ok = UIAlertAction(title: "はい", style: .default, handler: { (action) -> Void in
+                    
+                    // スケジュール関連TBL削除
+                    ScheduleCalendarViewController().deleteSchedule(oshiRealm: self.oshiRealm, scheduleId: scheduleId, isAll: false)
+                    // データ再取得、再表示
+                    self.changeVisual()
+                })
+                alert.addAction(cancel)
+                alert.addAction(ok)
+                self.present(alert, animated: true, completion: nil)
+                success(true)
+            })
+            delete.backgroundColor = UIColor.systemRed
+            return UISwipeActionsConfiguration(actions: [delete])
+        }
     }
 }
 

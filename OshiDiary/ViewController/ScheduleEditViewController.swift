@@ -196,13 +196,6 @@ class ScheduleEditViewController: UIViewController {
             repeatTF.text = repeatArray.first
             repeatPV.selectRow(0, inComponent: 0, animated: true)
             
-            // ScheduleID発行
-            scheduleId = 1
-            if let schedule: Schedule = oshiRealm.objects(Schedule.self)
-                .sorted(byKeyPath: Schedule.Types.id.rawValue, ascending: false).first {
-                scheduleId = schedule.id + 1
-            }
-            
             // 編集フラグ
             isEdit = true
             // 保存ボタン画像にする
@@ -236,6 +229,7 @@ class ScheduleEditViewController: UIViewController {
             iconColorCd = schedule.iconColorCd
             selectIconColor(iconColorCd: iconColorCd)
             // 終日
+            allDay = schedule.allDay
             allDaySwitch.isOn = schedule.allDay
             
             // 年月日
@@ -266,6 +260,7 @@ class ScheduleEditViewController: UIViewController {
             timePV.selectRow(minutsArray.firstIndex(of: minutsStr)!, inComponent: 2, animated: true)
 
             // 繰り返し
+            repeatCd = schedule.repeatCd
             repeatTF.text = repeatArray[schedule.repeatCd]
             repeatPV.selectRow(schedule.repeatCd, inComponent: 0, animated: true)
 
@@ -378,27 +373,10 @@ class ScheduleEditViewController: UIViewController {
         
         // 編集ボタン押下
         if !isEdit {
-            // ボタン画像をチェックマークに変更
-            editAndSaveBtn.setImage(UIImage(systemName: "checkmark"), for: .normal)
-            // 編集可能にする
-            coverView.isHidden = true
-            memoBtn.isHidden = false
-            // 編集フラグ
-            isEdit = true
-            // ヘッダ文言設定
-            headerLbl.text = "編集"
-            // 枠線
-            titleTF.layer.borderWidth = 1
-            memoTV.layer.borderWidth = 1
-            // プレースホルダー
-            if titleTF.text!.isEmpty {
-                titleTF.attributedPlaceholder = NSAttributedString(string: "タイトルを記入",
-                                                                        attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-            }
-            if memoTV.text.isEmpty {
-                placeHolderLbl.isHidden = false
-            }
-                
+            
+            // 編集モードに変更
+            changeEditMode()
+            
         // 保存ボタン押下
         } else {
             // 開始日〜終了日を１日ごと配列に格納
@@ -414,230 +392,137 @@ class ScheduleEditViewController: UIViewController {
             dateArray[0] = startDate
             dateArray[dateArray.count - 1] = endDate
             
-            // データがすでに存在していたら更新
-            if let schedule: Schedule = oshiRealm.objects(Schedule.self)
-                .filter("\(Schedule.Types.id.rawValue) = %@", scheduleId!).first {
-                
-                // スケジュールTBL更新
-                try! oshiRealm.write {
-                    schedule.title = titleTF.text ?? ""
-                    schedule.iconCd = iconCd
-                    schedule.iconColorCd = iconColorCd
-                    schedule.allDay = allDay
-                    schedule.startDate = startDate
-                    schedule.endDate = endDate
-                    schedule.days = dateArray.count
-                    schedule.repeatCd = repeatCd
-                    schedule.memo = memoTV.text
-                    schedule.updateDate = Date()
-                }
-                // スケジュール詳細TBLは削除→登録
-                let scheduleDetails: Results<ScheduleDetail> = oshiRealm.objects(ScheduleDetail.self)
-                    .filter("\(ScheduleDetail.Types.scheduleId.rawValue) = %@", scheduleId!)
-                // 削除
-                do {
-                    try self.oshiRealm.write {
-                        self.oshiRealm.delete(scheduleDetails)
-                    }
-                } catch {
-                    print("削除失敗", error)
-                }
-                // 登録
-                saveScheduleDetail(dateArray: dateArray)
-                
-            // 存在しない場合は登録
+            // 新規登録
+            if isNew {
+                self.saveSchedule(dateArray: dateArray)
+                self.saveScheduleDetail(dateArray: dateArray, isAll: true, psId: 0) // psId未使用
+
+            // 既存データ更新
             } else {
-//                // スケジュールTBL
-//                let schedule = Schedule()
-//                try! oshiRealm.write {
-//                    schedule.id = scheduleId
-//                    schedule.title = titleTF.text ?? ""
-//                    schedule.iconCd = iconCd
-//                    schedule.iconColorCd = iconColorCd
-//                    schedule.allDay = allDay
-//                    schedule.startDate = startDate
-//                    schedule.endDate = endDate
-//                    schedule.days = dateArray.count
-//                    schedule.repeatCd = repeatCd
-//                    schedule.memo = memoTV.text
-//                    oshiRealm.add(schedule)
-//                }
-//
-//                // スケジュール詳細TBL
-//                saveScheduleDetail(dateArray: dateArray)
-                
-                
-                // スケジュールTBL
-                var scheduleId = self.scheduleId
-                var startDate = self.startDate
-                var endDate = self.endDate
-                try! oshiRealm.write {
-                    // 繰り返し登録
-                    for _ in 1...Const.Schedule().getReapeatCount(repeatCd: repeatCd) {
-                        let schedule = Schedule()
-                        schedule.id = scheduleId!
-                        schedule.title = titleTF.text ?? ""
-                        schedule.iconCd = iconCd
-                        schedule.iconColorCd = iconColorCd
-                        schedule.allDay = allDay
-                        schedule.startDate = startDate
-                        schedule.endDate = endDate
-                        schedule.days = dateArray.count
-                        schedule.repeatCd = repeatCd
-                        schedule.memo = memoTV.text
-                        oshiRealm.add(schedule)
+                if let schedule: Schedule = oshiRealm.objects(Schedule.self)
+                    .filter("\(Schedule.Types.id.rawValue) = %@", scheduleId!).first {
+                    
+                    // 親ID退避
+                    let psId = schedule.parentScheduleId
+                    
+                    // 繰り返し設定あり、かつ繰り返し設定変更なし、かつ日時変更なし
+                    if schedule.repeatCd != Const.Schedule.repeatCd.NO_REPEAT
+                        && schedule.repeatCd == repeatCd
+                        && schedule.startDate == self.startDate && schedule.endDate == self.endDate {
+                        let alert = UIAlertController(title: "", message: "繰り返しスケジュールをすべて更新しますか？", preferredStyle: .alert)
+                        let cancel = UIAlertAction(title: "いいえ", style: .default, handler: { (action) -> Void in
+                            
+                            // スケジュールTBL更新
+                            self.updateSchedule(dateArray: dateArray)
+                            // スケジュール詳細TBL削除、登録
+                            self.deleteScheduleDetail(psId: psId, isAll: false)
+                            self.saveScheduleDetail(dateArray: dateArray, isAll: false, psId: psId)
+                            
+                            alert.dismiss(animated: true)
+                        })
+                        let ok = UIAlertAction(title: "はい", style: .default, handler: { (action) -> Void in
+
+                            // 関連スケジュールTBL全更新
+                            self.updateSchedules(dateArray: dateArray, psId: psId)
+                            
+                            alert.dismiss(animated: true)
+                        })
+                        alert.addAction(cancel)
+                        alert.addAction(ok)
+                        self.present(alert, animated: true, completion: nil)
+
+                    // 繰り返し設定なし、かつ繰り返し設定変更なし
+                    } else if schedule.repeatCd == Const.Schedule.repeatCd.NO_REPEAT
+                                && schedule.repeatCd == self.repeatCd {
                         
-                        scheduleId! += 1
+                        // スケジュールTBL更新
+                        self.updateSchedule(dateArray: dateArray)
+                        // スケジュール詳細TBL削除、登録
+                        self.deleteScheduleDetail(psId: psId, isAll: false)
+                        self.saveScheduleDetail(dateArray: dateArray, isAll: false, psId: psId)
+
+                    // 繰り返し設定変更あり、または日時変更あり
+                    } else if (schedule.repeatCd != repeatCd)
+                                || (schedule.startDate != self.startDate || schedule.endDate != self.endDate) {
                         
-                        // 繰り返し種類により日時に加算する単位を変更
-                        switch repeatCd {
-                        case Const.Schedule.repeatCd.YEAR:
-                            startDate = Calendar.current.date(byAdding: .year, value: 1, to: startDate)!
-                            endDate = Calendar.current.date(byAdding: .year, value: 1, to: endDate)!
-                        case Const.Schedule.repeatCd.MONTH:
-                            startDate = Calendar.current.date(byAdding: .month, value: 1, to: startDate)!
-                            endDate = Calendar.current.date(byAdding: .month, value: 1, to: endDate)!
-                        case Const.Schedule.repeatCd.WEEK:
-                            startDate = Calendar.current.date(byAdding: .weekOfYear, value: 1, to: startDate)!
-                            endDate = Calendar.current.date(byAdding: .weekOfYear, value: 1, to: endDate)!
-                        default:
-                            print("no repeat")
-                        }
+                        let alert = UIAlertController(title: "", message: "開始日時・終了日時・繰り返し設定を変更する場合、変更した日時からのスタートになります。よろしいですか？", preferredStyle: .alert)
+                        let cancel = UIAlertAction(title: "いいえ", style: .default, handler: { (action) -> Void in
+                            
+                            // 編集モードに変更
+                            self.changeEditMode()
+                            
+                            alert.dismiss(animated: true)
+                        })
+                        let ok = UIAlertAction(title: "はい", style: .default, handler: { (action) -> Void in
+
+                            // スケジュールTBL、スケジュール詳細TBL削除、登録
+                            self.deleteSchedule(psId: psId)
+                            self.deleteScheduleDetail(psId: psId, isAll: true)
+                            self.saveSchedule(dateArray: dateArray)
+                            self.saveScheduleDetail(dateArray: dateArray, isAll: true, psId: psId)
+
+                            alert.dismiss(animated: true)
+                        })
+                        alert.addAction(cancel)
+                        alert.addAction(ok)
+                        self.present(alert, animated: true, completion: nil)
+                    
                     }
                 }
-                
-                // スケジュール詳細TBL
-                saveScheduleDetail(dateArray: dateArray)
-                
             }
-            
-            
-            
-            // 参照状態に戻す
-            isEdit = false
-            coverView.isHidden = false
-            memoBtn.isHidden = true
-            editAndSaveBtn.setImage(UIImage(systemName: "pencil.and.ellipsis.rectangle"), for: .normal)
-            // TFの編集状態を解除
-            titleTF.endEditing(true)
-            startDateTF.endEditing(true)
-            startTimeTF.endEditing(true)
-            endDateTF.endEditing(true)
-            endTimeTF.endEditing(true)
-            repeatTF.endEditing(true)
-            // 枠線
-            titleTF.layer.borderWidth = 0
-            memoTV.layer.borderWidth = 0
-            // ヘッダ文言設定
-            headerLbl.text = "参照"
-            // プレースホルダー
-            if titleTF.text!.isEmpty {
-                titleTF.attributedPlaceholder = NSAttributedString(string: "",
-                                                                        attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-            }
-            if memoTV.text.isEmpty {
-                placeHolderLbl.isHidden = true
-            }
+            // 参照モードに変更
+            changeNoEditMode()
         }
     }
     
-    /**
-     スケジュール詳細TBL登録
-     */
-    private func saveScheduleDetail(dateArray: [Date]) {
-
-        // スケジュール詳細ID発行
-        var scheduleDetailId = 1
-        if let scheduleDetail: ScheduleDetail = oshiRealm.objects(ScheduleDetail.self)
-            .sorted(byKeyPath: ScheduleDetail.Types.id.rawValue, ascending: false).first {
-            scheduleDetailId = scheduleDetail.id + 1
-        }
-//        // 登録
-//        try! oshiRealm.write {
-//            var dayNo = 1
-//            for date in dateArray {
-//                let scheduleDetail = ScheduleDetail()
-//                scheduleDetail.id = scheduleDetailId
-//                scheduleDetail.scheduleId = scheduleId
-//                scheduleDetail.dayNo = dayNo
-//                scheduleDetail.date = date
-//                scheduleDetail.ymdString = CommonMethod.dateFormatter(date: date, formattKind: Const.DateFormatt.yyyyMMdd)
-//                scheduleDetail.ymString = CommonMethod.dateFormatter(date: date, formattKind: Const.DateFormatt.yyyyMM)
-//                oshiRealm.add(scheduleDetail)
-//                scheduleDetailId += 1
-//                dayNo += 1
-//            }
-//        }
-        
-        var dates: [Date] = dateArray
-        
-        // 登録
-        var scheduleId = self.scheduleId
-        try! oshiRealm.write {
-            // 繰り返し登録
-            for _ in 1...Const.Schedule().getReapeatCount(repeatCd: repeatCd) {
-                var dayNo = 1
-                for date in dates {
-                    let scheduleDetail = ScheduleDetail()
-                    scheduleDetail.id = scheduleDetailId
-                    scheduleDetail.scheduleId = scheduleId!
-                    scheduleDetail.dayNo = dayNo
-                    scheduleDetail.date = date
-                    scheduleDetail.ymdString = CommonMethod.dateFormatter(date: date, formattKind: Const.DateFormatt.yyyyMMdd)
-                    scheduleDetail.ymString = CommonMethod.dateFormatter(date: date, formattKind: Const.DateFormatt.yyyyMM)
-                    oshiRealm.add(scheduleDetail)
-                    scheduleDetailId += 1
-                    dayNo += 1
-                }
-                
-                scheduleDetailId += 1
-                scheduleId! += 1
-                
-                // 繰り返し種類により日時に加算する単位を変更
-                var nextDateArray: [Date] = [Date]()
-                switch repeatCd {
-                case Const.Schedule.repeatCd.YEAR:
-                    for date in dates {
-                        nextDateArray.append(Calendar.current.date(byAdding: .year, value: 1, to: date)!)
-                    }
-                case Const.Schedule.repeatCd.MONTH:
-                    for date in dates {
-                        nextDateArray.append(Calendar.current.date(byAdding: .month, value: 1, to: date)!)
-                    }
-                case Const.Schedule.repeatCd.WEEK:
-                    for date in dates {
-                        nextDateArray.append(Calendar.current.date(byAdding: .weekOfYear, value: 1, to: date)!)
-                    }
-                default:
-                    print("no repeat")
-                }
-                dates = nextDateArray
-            }
-        }
-    }
     
     /**
      削除ボタン押下
      */
     @IBAction func tapDeleteBtn(_ sender: Any) {
-        let alert = UIAlertController(title: "", message: Const.Message.DELTE_CONFIRM_MSG, preferredStyle: .alert)
-        let cancel = UIAlertAction(title: "いいえ", style: .default, handler: { (action) -> Void in
-            // アラートを閉じる
-            alert.dismiss(animated: true)
-        })
-        let ok = UIAlertAction(title: "はい", style: .default, handler: { (action) -> Void in
-            
-            // スケジュール関連TBL削除
-            ScheduleCalendarViewController().deleteSchedule(oshiRealm: self.oshiRealm, scheduleId: self.scheduleId)
+        
+        // 繰り返しあり
+        if repeatCd != Const.Schedule.repeatCd.NO_REPEAT {
+            let alert = UIAlertController(title: "", message: Const.Message.DELTE_CONFIRM_MSG, preferredStyle: .alert)
+            let cancel = UIAlertAction(title: "いいえ", style: .default, handler: { (action) -> Void in
+                // アラートを閉じる
+                alert.dismiss(animated: true)
+            })
+            let ok_one = UIAlertAction(title: "この予定のみ", style: .default, handler: { (action) -> Void in
+                
+                // スケジュール関連TBL削除
+                ScheduleCalendarViewController().deleteSchedule(oshiRealm: self.oshiRealm, scheduleId: self.scheduleId, isAll: false)
+                self.dismiss(animated: true)
+            })
+            let ok_all = UIAlertAction(title: "すべての予定", style: .default, handler: { (action) -> Void in
+                
+                // スケジュール関連TBL削除
+                ScheduleCalendarViewController().deleteSchedule(oshiRealm: self.oshiRealm, scheduleId: self.scheduleId, isAll: true)
+                self.dismiss(animated: true)
+            })
+            alert.addAction(cancel)
+            alert.addAction(ok_one)
+            alert.addAction(ok_all)
+            self.present(alert, animated: true, completion: nil)
 
-            // 画面を閉じる
-            self.dismiss(animated: true)
-        })
-        alert.addAction(cancel)
-        alert.addAction(ok)
-        self.present(alert, animated: true, completion: nil)
+        // 繰り返しなし
+        } else {
+            let alert = UIAlertController(title: "", message: Const.Message.DELTE_CONFIRM_MSG, preferredStyle: .alert)
+            let cancel = UIAlertAction(title: "いいえ", style: .default, handler: { (action) -> Void in
+                // アラートを閉じる
+                alert.dismiss(animated: true)
+            })
+            let ok = UIAlertAction(title: "はい", style: .default, handler: { (action) -> Void in
+                
+                // スケジュール関連TBL削除
+                ScheduleCalendarViewController().deleteSchedule(oshiRealm: self.oshiRealm, scheduleId: self.scheduleId, isAll: false)
+                self.dismiss(animated: true)
+            })
+            alert.addAction(cancel)
+            alert.addAction(ok)
+            self.present(alert, animated: true, completion: nil)
+        }
     }
-    
 }
 
 extension ScheduleEditViewController: UIPickerViewDelegate, UIPickerViewDataSource {
@@ -928,4 +813,268 @@ extension ScheduleEditViewController {
         iconIV3.image = UIImage(named: Const.Schedule()
             .getIconName(iconCd: Const.Schedule.iconCd.RIBBON, colorCd: iconColorCd))
     }
+    
+    /**
+     編集モードに変更
+     */
+    private func changeEditMode() {
+        // ボタン画像をチェックマークに変更
+        editAndSaveBtn.setImage(UIImage(systemName: "checkmark"), for: .normal)
+        // 編集可能にする
+        coverView.isHidden = true
+        memoBtn.isHidden = false
+        // 編集フラグ
+        isEdit = true
+        // ヘッダ文言設定
+        headerLbl.text = "編集"
+        // 枠線
+        titleTF.layer.borderWidth = 1
+        memoTV.layer.borderWidth = 1
+        // プレースホルダー
+        if titleTF.text!.isEmpty {
+            titleTF.attributedPlaceholder = NSAttributedString(string: "タイトルを記入",
+                                                                    attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+        }
+        if memoTV.text.isEmpty {
+            placeHolderLbl.isHidden = false
+        }
+    }
+    
+    /**
+     参照モードに変更
+     */
+    private func changeNoEditMode() {
+        isEdit = false
+        coverView.isHidden = false
+        memoBtn.isHidden = true
+        editAndSaveBtn.setImage(UIImage(systemName: "pencil.and.ellipsis.rectangle"), for: .normal)
+        // TFの編集状態を解除
+        titleTF.endEditing(true)
+        startDateTF.endEditing(true)
+        startTimeTF.endEditing(true)
+        endDateTF.endEditing(true)
+        endTimeTF.endEditing(true)
+        repeatTF.endEditing(true)
+        // 枠線
+        titleTF.layer.borderWidth = 0
+        memoTV.layer.borderWidth = 0
+        // ヘッダ文言設定
+        headerLbl.text = "参照"
+        // プレースホルダー
+        if titleTF.text!.isEmpty {
+            titleTF.attributedPlaceholder = NSAttributedString(string: "",
+                                                                    attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+        }
+        if memoTV.text.isEmpty {
+            placeHolderLbl.isHidden = true
+        }
+    }
+    
+    /**
+     スケジュールTBL1件更新
+     */
+    private func updateSchedule(dateArray: [Date]) {
+        try! self.oshiRealm.write {
+            schedule.title = self.titleTF.text ?? ""
+            schedule.iconCd = self.iconCd
+            schedule.iconColorCd = self.iconColorCd
+            schedule.allDay = self.allDay
+            schedule.startDate = self.startDate
+            schedule.endDate = self.endDate
+            schedule.days = dateArray.count
+            schedule.repeatCd = self.repeatCd
+            schedule.memo = self.memoTV.text
+            schedule.updateDate = Date()
+        }
+    }
+    
+    /**
+     関連スケジュールTBL全件更新
+     */
+    private func updateSchedules(dateArray: [Date], psId: Int) {
+        
+        let schedules: Results<Schedule> = self.oshiRealm.objects(Schedule.self)
+            .filter("\(Schedule.Types.parentScheduleId.rawValue) = %@", psId)
+
+        try! self.oshiRealm.write {
+            for schedule in schedules {
+                schedule.title = self.titleTF.text ?? ""
+                schedule.iconCd = self.iconCd
+                schedule.iconColorCd = self.iconColorCd
+                schedule.allDay = self.allDay
+//                schedule.startDate = self.startDate
+//                schedule.endDate = self.endDate
+//                schedule.days = dateArray.count
+//                schedule.repeatCd = self.repeatCd
+                schedule.memo = self.memoTV.text
+                schedule.updateDate = Date()
+            }
+        }
+        
+    }
+    
+    /**
+     スケジュールTBL繰り返しデータ全削除
+     */
+    private func deleteSchedule(psId: Int) {
+        // 関連スケジュールTBL全削除
+        let schedules: Results<Schedule> = self.oshiRealm.objects(Schedule.self)
+            .filter("\(Schedule.Types.parentScheduleId.rawValue) = %@", psId)
+        do {
+            try self.oshiRealm.write {
+                self.oshiRealm.delete(schedules)
+            }
+        } catch {
+            print("スケジュールTBL削除失敗", error)
+        }
+    }
+    
+    /**
+     スケジュール詳細TBL削除
+     */
+    private func deleteScheduleDetail(psId: Int, isAll: Bool) {
+        
+        var scheduleDetails: Results<ScheduleDetail>!
+        if isAll {
+            // 繰り返しすべて削除
+            scheduleDetails = self.oshiRealm.objects(ScheduleDetail.self)
+                .filter("\(ScheduleDetail.Types.parentScheduleId.rawValue) = %@", psId)
+        } else {
+            // スケジュールIDに紐づくものを削除
+            scheduleDetails = self.oshiRealm.objects(ScheduleDetail.self)
+                .filter("\(ScheduleDetail.Types.scheduleId.rawValue) = %@", scheduleId!)
+        }
+        
+        do {
+            try self.oshiRealm.write {
+                self.oshiRealm.delete(scheduleDetails)
+            }
+        } catch {
+            print("スケジュール詳細TBL削除失敗", error)
+        }
+    }
+    
+    /**
+     スケジュールTBL登録
+     */
+    private func saveSchedule(dateArray: [Date]) {
+        
+        // ScheduleID発行
+        scheduleId = 1
+        if let schedule: Schedule = oshiRealm.objects(Schedule.self)
+            .sorted(byKeyPath: Schedule.Types.id.rawValue, ascending: false).first {
+            scheduleId = schedule.id + 1
+        }
+
+        // スケジュールTBL
+        var scheduleId = self.scheduleId
+        var startDate = self.startDate
+        var endDate = self.endDate
+        try! oshiRealm.write {
+            // 繰り返し登録
+            for _ in 1...Const.Schedule().getReapeatCount(repeatCd: repeatCd) {
+                let schedule = Schedule()
+                schedule.id = scheduleId!
+                schedule.title = titleTF.text ?? ""
+                schedule.iconCd = iconCd
+                schedule.iconColorCd = iconColorCd
+                schedule.allDay = allDay
+                schedule.startDate = startDate
+                schedule.endDate = endDate
+                schedule.days = dateArray.count
+                schedule.repeatCd = repeatCd
+                schedule.memo = memoTV.text
+                schedule.parentScheduleId = self.scheduleId
+                oshiRealm.add(schedule)
+                
+                scheduleId! += 1
+                
+                // 繰り返し種類により日時に加算する単位を変更
+                switch repeatCd {
+                case Const.Schedule.repeatCd.YEAR:
+                    startDate = Calendar.current.date(byAdding: .year, value: 1, to: startDate)!
+                    endDate = Calendar.current.date(byAdding: .year, value: 1, to: endDate)!
+                case Const.Schedule.repeatCd.MONTH:
+                    startDate = Calendar.current.date(byAdding: .month, value: 1, to: startDate)!
+                    endDate = Calendar.current.date(byAdding: .month, value: 1, to: endDate)!
+                case Const.Schedule.repeatCd.WEEK:
+                    startDate = Calendar.current.date(byAdding: .weekOfYear, value: 1, to: startDate)!
+                    endDate = Calendar.current.date(byAdding: .weekOfYear, value: 1, to: endDate)!
+                default:
+                    print("no repeat")
+                }
+            }
+        }
+    }
+    
+    /**
+     スケジュール詳細TBL登録
+     */
+    private func saveScheduleDetail(dateArray: [Date], isAll: Bool, psId: Int) {
+
+        // スケジュール詳細ID発行
+        var scheduleDetailId = 1
+        if let scheduleDetail: ScheduleDetail = oshiRealm.objects(ScheduleDetail.self)
+            .sorted(byKeyPath: ScheduleDetail.Types.id.rawValue, ascending: false).first {
+            scheduleDetailId = scheduleDetail.id + 1
+        }
+        
+        var dates: [Date] = dateArray
+        
+        // 登録
+        var scheduleId = self.scheduleId
+        try! oshiRealm.write {
+            
+            var max: Int!
+            var parentId: Int!
+            // 繰り返し全件登録
+            if isAll {
+                max = Const.Schedule().getReapeatCount(repeatCd: repeatCd)
+                parentId = self.scheduleId
+            // 1件登録
+            } else {
+                max = 1
+                parentId = psId
+            }
+            // 登録
+            for _ in 1...max {
+                var dayNo = 1
+                for date in dates {
+                    let scheduleDetail = ScheduleDetail()
+                    scheduleDetail.id = scheduleDetailId
+                    scheduleDetail.scheduleId = scheduleId!
+                    scheduleDetail.dayNo = dayNo
+                    scheduleDetail.date = date
+                    scheduleDetail.ymdString = CommonMethod.dateFormatter(date: date, formattKind: Const.DateFormatt.yyyyMMdd)
+                    scheduleDetail.ymString = CommonMethod.dateFormatter(date: date, formattKind: Const.DateFormatt.yyyyMM)
+                    scheduleDetail.parentScheduleId = parentId
+                    oshiRealm.add(scheduleDetail)
+                    scheduleDetailId += 1
+                    dayNo += 1
+                }
+                scheduleId! += 1
+                
+                // 繰り返し種類により日時に加算する単位を変更
+                var nextDateArray: [Date] = [Date]()
+                switch repeatCd {
+                case Const.Schedule.repeatCd.YEAR:
+                    for date in dates {
+                        nextDateArray.append(Calendar.current.date(byAdding: .year, value: 1, to: date)!)
+                    }
+                case Const.Schedule.repeatCd.MONTH:
+                    for date in dates {
+                        nextDateArray.append(Calendar.current.date(byAdding: .month, value: 1, to: date)!)
+                    }
+                case Const.Schedule.repeatCd.WEEK:
+                    for date in dates {
+                        nextDateArray.append(Calendar.current.date(byAdding: .weekOfYear, value: 1, to: date)!)
+                    }
+                default:
+                    print("no repeat")
+                }
+                dates = nextDateArray
+            }
+        }
+    }
+
 }

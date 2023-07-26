@@ -412,33 +412,73 @@ extension ScheduleCalendarViewController: UITableViewDelegate, UITableViewDataSo
     func tableView(_ tableView: UITableView,
                    trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
-        let delete = UIContextualAction(style: .normal,
+        let scheduleDetailArray: [ScheduleDetail] = self.scheduleDetailDic[self.keyArray[indexPath.section]]!
+        let scheduleId = scheduleDetailArray[indexPath.row].scheduleId
+        let schedule: Schedule = oshiRealm.objects(Schedule.self)
+            .filter("\(Schedule.Types.id.rawValue) = %@", scheduleId).first!
+        let repeatCd = schedule.repeatCd
+
+        // 繰り返しあり
+        if repeatCd != Const.Schedule.repeatCd.NO_REPEAT {
+            let delete = UIContextualAction(style: .normal,
                                             title: "削除",
                                             handler: { (action: UIContextualAction, view: UIView, success :(Bool) -> Void) in
-            
-            let alert = UIAlertController(title: "", message: Const.Message.DELTE_CONFIRM_MSG, preferredStyle: .alert)
-            let cancel = UIAlertAction(title: "いいえ", style: .default, handler: { (action) -> Void in
-                // アラートを閉じる
-                alert.dismiss(animated: true)
-            })
-            let ok = UIAlertAction(title: "はい", style: .default, handler: { (action) -> Void in
-                let scheduleDetailArray: [ScheduleDetail] = self.scheduleDetailDic[self.keyArray[indexPath.section]]!
-                let scheduleId = scheduleDetailArray[indexPath.row].scheduleId
-                
-                // スケジュール関連TBL削除
-                self.deleteSchedule(oshiRealm: self.oshiRealm, scheduleId: scheduleId)
-                // データ再取得、再表示
-                self.changeVisual()
-            })
-            alert.addAction(cancel)
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
-            
-            success(true)
-        })
-        delete.backgroundColor = UIColor.systemRed
 
-        return UISwipeActionsConfiguration(actions: [delete])
+                let alert = UIAlertController(title: "", message: Const.Message.DELTE_CONFIRM_MSG, preferredStyle: .alert)
+                let cancel = UIAlertAction(title: "いいえ", style: .default, handler: { (action) -> Void in
+                    // アラートを閉じる
+                    alert.dismiss(animated: true)
+                })
+                let ok_one = UIAlertAction(title: "この予定のみ", style: .default, handler: { (action) -> Void in
+                    
+                    // スケジュール関連TBL削除
+                    self.deleteSchedule(oshiRealm: self.oshiRealm, scheduleId: scheduleId, isAll: false)
+                    // データ再取得、再表示
+                    self.changeVisual()
+                })
+                let ok_all = UIAlertAction(title: "すべての予定", style: .default, handler: { (action) -> Void in
+                    
+                    // スケジュール関連TBL削除
+                    self.deleteSchedule(oshiRealm: self.oshiRealm, scheduleId: scheduleId, isAll: true)
+                    // データ再取得、再表示
+                    self.changeVisual()
+                })
+                alert.addAction(cancel)
+                alert.addAction(ok_one)
+                alert.addAction(ok_all)
+                self.present(alert, animated: true, completion: nil)
+                success(true)
+            })
+            delete.backgroundColor = UIColor.systemRed
+            return UISwipeActionsConfiguration(actions: [delete])
+            
+        // 繰り返しなし
+        } else {
+            
+            let delete = UIContextualAction(style: .normal,
+                                            title: "削除",
+                                            handler: { (action: UIContextualAction, view: UIView, success :(Bool) -> Void) in
+                
+                let alert = UIAlertController(title: "", message: Const.Message.DELTE_CONFIRM_MSG, preferredStyle: .alert)
+                let cancel = UIAlertAction(title: "いいえ", style: .default, handler: { (action) -> Void in
+                    // アラートを閉じる
+                    alert.dismiss(animated: true)
+                })
+                let ok = UIAlertAction(title: "はい", style: .default, handler: { (action) -> Void in
+                    
+                    // スケジュール関連TBL削除
+                    self.deleteSchedule(oshiRealm: self.oshiRealm, scheduleId: scheduleId, isAll: false)
+                    // データ再取得、再表示
+                    self.changeVisual()
+                })
+                alert.addAction(cancel)
+                alert.addAction(ok)
+                self.present(alert, animated: true, completion: nil)
+                success(true)
+            })
+            delete.backgroundColor = UIColor.systemRed
+            return UISwipeActionsConfiguration(actions: [delete])
+        }
     }
 }
 
@@ -551,12 +591,18 @@ extension ScheduleCalendarViewController {
     /**
      スケジュール関連TBL削除
      */
-    func deleteSchedule(oshiRealm: Realm, scheduleId: Int) {
+    func deleteSchedule(oshiRealm: Realm, scheduleId: Int, isAll: Bool) {
         
         // スケジュール詳細TBL物理削除
-        let scheduleDetails: Results<ScheduleDetail> = oshiRealm.objects(ScheduleDetail.self)
+        var scheduleDetails: Results<ScheduleDetail>!
+        scheduleDetails = oshiRealm.objects(ScheduleDetail.self)
             .filter("\(ScheduleDetail.Types.scheduleId.rawValue) = %@", scheduleId)
-        
+        // 繰り返し全削除の場合
+        if isAll {
+            let psId = scheduleDetails.first?.parentScheduleId
+            scheduleDetails = oshiRealm.objects(ScheduleDetail.self)
+                .filter("\(ScheduleDetail.Types.parentScheduleId.rawValue) = %@", psId ?? 0)
+        }
         if !scheduleDetails.isEmpty {
             do {
                 try oshiRealm.write {
@@ -568,17 +614,38 @@ extension ScheduleCalendarViewController {
         }
 
         // スケジュールTBL物理削除
-        if let schedule: Schedule = oshiRealm.objects(Schedule.self)
-            .filter("\(Schedule.Types.id.rawValue) = %@", scheduleId).first {
-            
+        var schedules: Results<Schedule> = oshiRealm.objects(Schedule.self)
+            .filter("\(Schedule.Types.id.rawValue) = %@", scheduleId)
+        // 繰り返し全削除の場合
+        if isAll {
+            let psId = schedules.first?.parentScheduleId
+            schedules = oshiRealm.objects(Schedule.self)
+                .filter("\(Schedule.Types.parentScheduleId.rawValue) = %@", psId ?? 0)
+        }
+        if !schedules.isEmpty {
             do {
                 try oshiRealm.write {
-                    oshiRealm.delete(schedule)
+                    oshiRealm.delete(schedules)
                 }
             } catch {
                 print("スケジュールTBL削除失敗", error)
             }
         }
+
+        
+        
+        
+//        if let schedule: Schedule = oshiRealm.objects(Schedule.self)
+//            .filter("\(Schedule.Types.id.rawValue) = %@", scheduleId).first {
+//
+//            do {
+//                try oshiRealm.write {
+//                    oshiRealm.delete(schedule)
+//                }
+//            } catch {
+//                print("スケジュールTBL削除失敗", error)
+//            }
+//        }
     }
     
     /**
