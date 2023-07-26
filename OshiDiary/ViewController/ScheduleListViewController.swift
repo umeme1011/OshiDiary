@@ -327,10 +327,12 @@ extension ScheduleListViewController {
             }
             tmpMonth = scheduleDetail.ymString
         }
-        if scheduleDetailDic[tmpMonth] != nil {
-            scheduleDetailDic[tmpMonth]! += scheduleDetailArray
-        } else {
-            scheduleDetailDic[tmpMonth] = scheduleDetailArray
+        if tmpMonth != "" {
+            if scheduleDetailDic[tmpMonth] != nil {
+                scheduleDetailDic[tmpMonth]! += scheduleDetailArray
+            } else {
+                scheduleDetailDic[tmpMonth] = scheduleDetailArray
+            }
         }
 
         // キー（日付）配列

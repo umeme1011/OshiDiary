@@ -286,10 +286,12 @@ extension DiaryListViewController {
             }
             tmpMonth = diary.ymString
         }
-        if diaryDic[tmpMonth] != nil {
-            diaryDic[tmpMonth]! += diaryArray
-        } else {
-            diaryDic[tmpMonth] = diaryArray
+        if tmpMonth != "" {
+            if diaryDic[tmpMonth] != nil {
+                diaryDic[tmpMonth]! += diaryArray
+            } else {
+                diaryDic[tmpMonth] = diaryArray
+            }
         }
 
         // キー（日付）配列
