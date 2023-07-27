@@ -119,6 +119,9 @@
                                                         <buttonConfiguration key="configuration" style="plain" title="プロフィール">
                                                             <fontDescription key="titleFontDescription" type="boldSystem" pointSize="18"/>
                                                         </buttonConfiguration>
+                                                        <connections>
+                                                            <segue destination="0wO-8R-1eZ" kind="presentation" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="yCR-h5-hIU"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                             </stackView>
@@ -239,7 +242,7 @@
                 <viewControllerPlaceholder storyboardName="OshiList" id="Xlp-1x-HMa" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ps8-9q-XNV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="620" y="-188"/>
+            <point key="canvasLocation" x="669" y="-187"/>
         </scene>
         <!--ScheduleCalendar-->
         <scene sceneID="djP-Nt-UNd">
@@ -255,7 +258,7 @@
                 <viewControllerPlaceholder storyboardName="DiaryCalendar" id="z3B-XM-c5e" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MqZ-qb-v6q" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="650" y="-31"/>
+            <point key="canvasLocation" x="697" y="-9"/>
         </scene>
         <!--Setting-->
         <scene sceneID="kwr-vj-dru">
@@ -263,7 +266,15 @@
                 <viewControllerPlaceholder storyboardName="Setting" id="3KD-6v-Fmk" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fmb-EY-JUi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="621" y="101"/>
+            <point key="canvasLocation" x="663" y="100"/>
+        </scene>
+        <!--Profile-->
+        <scene sceneID="dBr-WY-yQu">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Profile" id="0wO-8R-1eZ" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Jxk-wa-GsX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="660" y="186"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>

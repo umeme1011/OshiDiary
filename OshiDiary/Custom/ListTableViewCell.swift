@@ -17,4 +17,5 @@ class ListTableViewCell: UITableViewCell {
     @IBOutlet weak var timeLbl: UILabel!
     @IBOutlet weak var memoLbl: UILabel!
     @IBOutlet weak var iconIV: UIImageView!
+    @IBOutlet weak var profileLbl: UILabel!
 }
