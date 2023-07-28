@@ -47,6 +47,9 @@
                                         <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" image="pencil.and.ellipsis.rectangle" catalog="system"/>
+                                        <connections>
+                                            <segue destination="DgI-6V-dyp" kind="presentation" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="Rwt-5V-KBh"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -168,6 +171,14 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="139.69465648854961" y="3.5211267605633805"/>
+        </scene>
+        <!--ProfileEdit-->
+        <scene sceneID="5tz-UJ-enK">
+            <objects>
+                <viewControllerPlaceholder storyboardName="ProfileEdit" id="DgI-6V-dyp" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0hV-De-VdX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="632" y="-180"/>
         </scene>
     </scenes>
     <resources>
