@@ -12,6 +12,7 @@ import RealmSwift
 class SettingViewController: UIViewController {
     
     @IBOutlet weak var baseView: UIView!
+    @IBOutlet weak var scrollView: UIScrollView!
     
     @IBOutlet weak var iconIV: UIImageView!
     @IBOutlet weak var imageCV: UICollectionView!
@@ -40,6 +41,10 @@ class SettingViewController: UIViewController {
         
         myUD = MyUserDefaults.init()
         commonRealm = CommonMethod.createCommonRealm()
+        
+        // キーボード開閉時アクション設定
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         // 新規追加
         if isNew || myUD.getFirstFlg() {
@@ -111,6 +116,23 @@ class SettingViewController: UIViewController {
             }
         }
         
+    }
+    
+    /**
+     キーボード表示
+     */
+    @objc func keyboardWillShow(notification: NSNotification) {
+        guard let userInfo = notification.userInfo else { return }
+        let keyboardSize = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue.height
+        scrollView.contentInset.bottom = keyboardSize
+    }
+    
+    /**
+     キーボード非表示
+     */
+    @objc func keyboardWillHide() {
+        scrollView.contentInset = .zero
+        scrollView.scrollIndicatorInsets = .zero
     }
 
     /**
