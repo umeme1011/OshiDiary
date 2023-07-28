@@ -9,36 +9,43 @@ import UIKit
 
 class ProfileViewController: UIViewController {
     
-    @IBOutlet weak var listTV: UITableView!
+    @IBOutlet weak var profileCV: UICollectionView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        listTV.delegate = self
-        listTV.dataSource = self
         
-        listTV.estimatedRowHeight = 35
-        listTV.rowHeight = UITableView.automaticDimension
+        profileCV.delegate = self
+        profileCV.dataSource = self
+        
+        // レイアウト設定
+        let layout = UICollectionViewFlowLayout()
+        layout.itemSize = CGSize(width: self.view.frame.size.width, height: self.profileCV.frame.size.height)
+        layout.scrollDirection = .horizontal // 横スクロール
+        layout.minimumInteritemSpacing = 0 // 間隔
+        layout.minimumLineSpacing = 0 // 行間
+        self.profileCV.collectionViewLayout = layout
+
     }
 
     
     @IBAction func tapBackBtn(_ sender: Any) {
         self.dismiss(animated: true)
     }
+    
 }
 
-extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+extension ProfileViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 3
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier:  "cell", for:indexPath as IndexPath)
-            as! ListTableViewCell
-
-        cell.profileLbl.text = "趣味・特技：XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! ProfileCollectionViewCell
+        
+        cell.nameLbl.text = "TTTTTTT"
         
         return cell
     }
     
-    
 }
+
